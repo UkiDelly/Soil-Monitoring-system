@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:thesis/Garden%20and%20plant%20card/Card.dart';
+import 'package:thesis/Garden%20and%20plant%20card/Garden.dart';
+import 'package:thesis/Garden%20and%20plant%20card/Plants.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    int gardenCount;
+    int gardenCount = 4;
     int plantCount;
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -65,12 +66,13 @@ class _HomeState extends State<Home> {
           SizedBox(
               height: MediaQuery.of(context).size.height / 3,
               child: ListView.builder(
-                  itemCount: 3,
+                  itemCount: gardenCount,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
-                    return GardenAndPlantCard(
-                      gardenOrPlant: 1,
-                    );
+                    if (index < gardenCount - 1) {
+                      return GardenCard();
+                    }
+                    return const AddGarden();
                   })),
 
           // Plants
@@ -112,7 +114,7 @@ class _HomeState extends State<Home> {
                 itemCount: 3,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  return GardenAndPlantCard();
+                  return PlantCard();
                 }),
           ),
 
