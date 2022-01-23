@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:thesis/Garden%20and%20plant%20card/Garden.dart';
-import 'package:thesis/Garden%20and%20plant%20card/Plants.dart';
+import 'package:thesis/Garden%20and%20plant%20card/Garden%20card.dart';
+import 'package:thesis/Garden%20and%20plant%20card/Plant%20card.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -95,10 +95,14 @@ class _HomeState extends State<Home> {
                             fontWeight: FontWeight.bold)),
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: MediaQuery.of(context).size.width / 2.1,
                       ),
                       SizedBox(
-                        child: SvgPicture.asset("assets/setting_2.svg"),
+                        child: IconButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {},
+                            icon: SvgPicture.asset("assets/setting.svg")),
                       )
                     ],
                   ),
