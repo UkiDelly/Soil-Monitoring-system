@@ -14,8 +14,11 @@ class _GardenState extends State<Garden> {
       backgroundColor: const Color(0xff669D6B),
       body: SafeArea(
           bottom: false,
-          child: SizedBox(
+          child: Container(
             height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [],
+            ),
           )),
     );
   }

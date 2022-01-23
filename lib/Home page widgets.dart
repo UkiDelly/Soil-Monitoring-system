@@ -14,7 +14,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     int gardenCount;
     int plantCount;
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
@@ -81,17 +81,23 @@ class _HomeState extends State<Home> {
                 children: [
                   Flex(
                     direction: Axis.horizontal,
-                    children: const [
-                      SizedBox(
+                    children: [
+                      const SizedBox(
                         width: 25,
                       ),
-                      Text(
+                      const Text(
                         "Plants",
                         style: (TextStyle(
                             fontFamily: "Readex Pro",
                             fontSize: 40,
                             fontWeight: FontWeight.bold)),
                       ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2,
+                      ),
+                      SizedBox(
+                        child: SvgPicture.asset("assets/setting_2.svg"),
+                      )
                     ],
                   ),
                 ],
@@ -100,7 +106,7 @@ class _HomeState extends State<Home> {
           ),
 
           //Plants card
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height / 2.8,
             child: ListView.builder(
                 itemCount: 3,
