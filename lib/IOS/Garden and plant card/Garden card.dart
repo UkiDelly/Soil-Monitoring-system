@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thesis/Gardens/Garden%20Page.dart';
+import 'package:thesis/IOS/Gardens/Garden%20Page.dart';
 
 class GardenCard extends StatefulWidget {
   GardenCard({Key? key}) : super(key: key);

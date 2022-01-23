@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesis/Home%20page%20widgets.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -29,9 +30,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return const Scaffold(
+        body: SafeArea(bottom: false, child: Home()),
+      );
+    }
     // Safe Area
     return Scaffold(
-      body: SafeArea(bottom: false, child: Home()),
-    );
+        body: Container(
+      color: Colors.grey,
+    ));
   }
 }
