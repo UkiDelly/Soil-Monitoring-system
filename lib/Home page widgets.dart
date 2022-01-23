@@ -44,12 +44,15 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         width: 25,
                       ),
-                      Text(
-                        "My Gardens",
-                        style: (TextStyle(
-                            fontFamily: "Readex Pro",
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold)),
+                      Hero(
+                        tag: "My gardens",
+                        child: Text(
+                          "My Gardens",
+                          style: (TextStyle(
+                              fontFamily: "Readex Pro",
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ],
                   ),
