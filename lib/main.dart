@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thesis/Home%20page%20widgets.dart';
+import 'package:thesis/IOS/IOS%20main%20page.dart';
 import 'dart:io';
 
 void main() {
@@ -30,9 +30,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return const Scaffold(
-        body: SafeArea(bottom: false, child: Home()),
+    if (Platform.isIOS || Platform.isAndroid) {
+      return const Material(
+        type: MaterialType.transparency,
+        child: Scaffold(
+          body: SafeArea(bottom: false, child: Home()),
+        ),
       );
     }
     // Safe Area

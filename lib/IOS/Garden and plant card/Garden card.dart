@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page.dart';
 
 class GardenCard extends StatefulWidget {
-  GardenCard({Key? key}) : super(key: key);
+  const GardenCard({Key? key}) : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
@@ -20,11 +22,42 @@ class _GardenCardState extends State<GardenCard> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         color: const Color(0xff669D6B),
         child: InkWell(
-          onTap: () => Navigator.push(
+          onTap: () => Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (builder) => Garden())),
-          child: Container(
+          child: SizedBox(
             width: 200,
-            //child: ,
+            child: Stack(
+              children: [
+                Positioned(
+                    top: 15,
+                    left: 17,
+                    width: 125,
+                    child: Text("#1",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: "Readex Pro",
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold))),
+                Positioned(
+                  top: 8,
+                  right: 10,
+                  child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      // if there is laking, use warning
+                      child: SvgPicture.asset(
+                        "assets/check.svg",
+                        color: Colors.white,
+                      )),
+                ),
+                const Positioned(
+                    width: 100,
+                    right: 10,
+                    top: 70,
+                    child: Text(
+                        "Summary of the status of the soil and comment will be display here!~~"))
+              ],
+            ),
           ),
         ),
       ),
