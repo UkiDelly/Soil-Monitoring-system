@@ -82,14 +82,10 @@ class Header extends StatelessWidget {
               width: 50,
               height: 50,
               child: IconButton(
+
+                  // go back to the main page
                   onPressed: () {
                     Navigator.pop(context);
-                    // Navigator.pushReplacement(
-                    //     context,
-                    //     PageTransition(
-                    //         child: HomePage(),
-                    //         type:
-                    //         PageTransitionType.leftToRight));
                   },
                   icon: SvgPicture.asset(
                     "assets/back.svg",
@@ -99,7 +95,7 @@ class Header extends StatelessWidget {
                   )),
             ),
 
-            // My garden text
+            // My garden name text
             const Hero(
               tag: "Garden Number",
               child: Text(
@@ -114,7 +110,7 @@ class Header extends StatelessWidget {
             //Space
             const Flexible(fit: FlexFit.tight, child: SizedBox()),
 
-            // graph button
+            // analysist button
             SizedBox(
               width: 50,
               height: 50,
@@ -127,6 +123,7 @@ class Header extends StatelessWidget {
                   )),
             ),
 
+            // setting of the gard page
             SizedBox(
               width: 50,
               height: 50,

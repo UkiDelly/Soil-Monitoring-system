@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page.dart';
 import 'package:animations/animations.dart';
 import 'package:thesis/IOS/Gardens/New%20Garden.dart';
@@ -26,16 +25,20 @@ class _GardenCardState extends State<GardenCard> {
               setState(() {});
             },
             openColor: const Color(0xff669D6B),
-            //Colore when the Container is closed
+            //Color when the Container is closed
             closedColor: const Color(0xff669D6B),
             //Shape of the close Container
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            // If close,
             closedBuilder: (_, openContainer) => _Card(),
+
+            //If open
             openBuilder: (_, closeContainer) => Garden()));
   }
 }
 
+// The actuall Garden card widget
 class _Card extends StatefulWidget {
   const _Card({Key? key}) : super(key: key);
 
@@ -51,6 +54,7 @@ class __CardState extends State<_Card> {
         width: 200,
         child: Stack(
           children: [
+            // Name of the garden
             Positioned(
                 top: 15,
                 left: 17,
@@ -73,6 +77,8 @@ class __CardState extends State<_Card> {
                     color: Colors.white,
                   )),
             ),
+
+            // comment of the garden
             const Positioned(
                 width: 100,
                 right: 10,

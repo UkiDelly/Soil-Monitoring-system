@@ -5,6 +5,7 @@ class NewGardenCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // make a new garden
     return Scaffold();
   }
 }

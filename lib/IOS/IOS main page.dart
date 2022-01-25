@@ -22,10 +22,6 @@ class _HomeState extends State<Home> {
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-            // const SizedBox(
-            //   height: 10,
-            // ),
-
             // Logo
             SizedBox(
               width: 40,
@@ -95,7 +91,11 @@ class _HomeState extends State<Home> {
                           fontSize: 40,
                           fontWeight: FontWeight.bold)),
                     ),
+
+                    // spcae between Plants text and setting icon
                     const Flexible(fit: FlexFit.tight, child: SizedBox()),
+
+                    // Plants setting icon
                     SizedBox(
                       child: IconButton(
                           splashColor: Colors.transparent,

@@ -30,7 +30,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    //check the platform
     if (Platform.isIOS || Platform.isAndroid) {
+      // if mobile
       return const Material(
         type: MaterialType.transparency,
         child: Scaffold(
@@ -39,6 +41,8 @@ class _HomePageState extends State<HomePage> {
       );
     }
     // Safe Area
+
+    //If Web
     return Scaffold(
         body: Container(
       color: Colors.grey,
