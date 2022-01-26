@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:thesis/IOS/IOS%20main%20page.dart';
-import 'dart:io';
+import 'package:thesis/IOS/ios_main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,21 +31,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     //check the platform
-    if (Platform.isIOS || Platform.isAndroid) {
-      // if mobile
-      return const Material(
-        type: MaterialType.transparency,
-        child: Scaffold(
-          body: SafeArea(bottom: false, child: Home()),
-        ),
+    if (!kIsWeb) {
+      return const Scaffold(
+        body: SafeArea(bottom: false, child: Home()),
       );
     }
-    // Safe Area
 
     //If Web
-    return Scaffold(
-        body: Container(
-      color: Colors.grey,
-    ));
+    return Container();
+
+    // Safe Area
   }
 }

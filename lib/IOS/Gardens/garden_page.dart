@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Gardens/History%20Page.dart';
+import 'package:thesis/IOS/Gardens/history_page.dart';
 
 class Garden extends StatefulWidget {
   const Garden({Key? key}) : super(key: key);

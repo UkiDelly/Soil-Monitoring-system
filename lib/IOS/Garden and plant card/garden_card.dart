@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:thesis/IOS/Gardens/Garden%20Page.dart';
+import 'package:thesis/IOS/Gardens/garden_page.dart';
 import 'package:animations/animations.dart';
-import 'package:thesis/IOS/Gardens/History%20Page.dart';
-import 'package:thesis/IOS/Gardens/New%20Garden%20Page.dart';
+import 'package:thesis/IOS/Gardens/new_garden_page.dart';
 
 class GardenCard extends StatefulWidget {
-  const GardenCard({Key? key}) : super(key: key);
+  int? number;
+  GardenCard({Key? key, this.number}) : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
@@ -19,7 +19,7 @@ class _GardenCardState extends State<GardenCard> {
         padding: const EdgeInsets.all(8.0),
         // Open Container
         child: OpenContainer(
-            transitionDuration: const Duration(seconds: 1),
+            transitionDuration: const Duration(milliseconds: 300),
             closedElevation: 5,
             // When the Container is closed
             onClosed: (data) {
@@ -32,7 +32,8 @@ class _GardenCardState extends State<GardenCard> {
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
-            closedBuilder: (_, openContainer) => _Card(),
+            closedBuilder: (_, openContainer) =>
+                _GardenCard(number: widget.number),
 
             //If open
             openBuilder: (_, closeContainer) => Garden()));
@@ -40,14 +41,15 @@ class _GardenCardState extends State<GardenCard> {
 }
 
 // The actuall Garden card widget
-class _Card extends StatefulWidget {
-  const _Card({Key? key}) : super(key: key);
+class _GardenCard extends StatefulWidget {
+  int? number;
+  _GardenCard({Key? key, this.number}) : super(key: key);
 
   @override
-  __CardState createState() => __CardState();
+  __GardenCardState createState() => __GardenCardState();
 }
 
-class __CardState extends State<_Card> {
+class __GardenCardState extends State<_GardenCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -59,7 +61,7 @@ class __CardState extends State<_Card> {
               top: 15,
               left: 17,
               width: 125,
-              child: Text("#1",
+              child: Text("#${widget.number}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontFamily: "Readex Pro",
@@ -68,14 +70,11 @@ class __CardState extends State<_Card> {
           Positioned(
             top: 8,
             right: 10,
-            child: SizedBox(
-                width: 30,
-                height: 30,
-                // if there is laking, use warning
-                child: SvgPicture.asset(
-                  "assets/check.svg",
-                  color: Colors.white,
-                )),
+            child: SvgPicture.asset(
+              'assets/check_status.svg',
+              width: 30,
+              color: const Color(0xfffefefe),
+            ),
           ),
 
           // comment of the garden
@@ -106,7 +105,7 @@ class _AddGardenState extends State<AddGarden> {
 
         // Card
         child: OpenContainer(
-            transitionDuration: const Duration(seconds: 1),
+            transitionDuration: const Duration(milliseconds: 300),
             closedElevation: 5,
             // When the Container is closed
             onClosed: (data) {

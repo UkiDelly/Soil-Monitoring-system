@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class AddNewGarden extends StatelessWidget {
   const AddNewGarden({Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class AddNewGarden extends StatelessWidget {
         ],
       ),
 
-      backgroundColor: Color(0xff669D6B),
+      backgroundColor: const Color(0xff669D6B),
     );
   }
 }

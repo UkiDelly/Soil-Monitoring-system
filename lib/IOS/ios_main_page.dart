@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'Garden and plant card/Garden card.dart';
-import 'Garden and plant card/Plant card.dart';
+import 'Garden and plant card/garden_card.dart';
+import 'Garden and plant card/plant_card.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,7 +14,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     int gardenCount = 4;
-    int plantCount;
     return Material(
       type: MaterialType.transparency,
       child: SizedBox(
@@ -70,8 +68,11 @@ class _HomeState extends State<Home> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       if (index < gardenCount - 1) {
-                        return GardenCard();
+                        return GardenCard(
+                          number: index + 1,
+                        );
                       }
+                      // Add new garden card
                       return const AddGarden();
                     })),
 
