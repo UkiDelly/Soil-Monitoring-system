@@ -140,7 +140,7 @@ class _AddGardenCard extends StatelessWidget {
           ),
           Text(
             "Add New Garden",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           )
         ],
       ),
