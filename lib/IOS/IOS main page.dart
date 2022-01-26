@@ -78,33 +78,19 @@ class _HomeState extends State<Home> {
             // Plants
             Container(
               alignment: Alignment.centerLeft,
-              child: SizedBox(
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    const Text(
-                      "Plants",
-                      style: (TextStyle(
-                          fontFamily: "Readex Pro",
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold)),
-                    ),
-
-                    // spcae between Plants text and setting icon
-                    const Flexible(fit: FlexFit.tight, child: SizedBox()),
-
-                    // Plants setting icon
-                    SizedBox(
-                      child: IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                          icon: SvgPicture.asset("assets/setting.svg")),
-                    ),
-                  ],
-                ),
+              child: Row(
+                children: const [
+                  SizedBox(
+                    width: 25,
+                  ),
+                  Text(
+                    "Plants",
+                    style: (TextStyle(
+                        fontFamily: "Readex Pro",
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold)),
+                  ),
+                ],
               ),
             ),
 
