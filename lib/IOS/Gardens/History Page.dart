@@ -6,7 +6,6 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // make a new garden
     return Scaffold(
       backgroundColor: const Color(0xff669D6B),
       appBar: AppBar(
@@ -23,7 +22,8 @@ class HistoryPage extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           "Soil Status History",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
       body: Container(

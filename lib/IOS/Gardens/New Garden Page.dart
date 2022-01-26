@@ -13,21 +13,34 @@ class AddNewGarden extends StatelessWidget {
 
         // Cancel button
         leading: TextButton(
+          //disable splash
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          ),
           child: const Text(
             "Cancel",
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(
+                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           onPressed: () => Navigator.pop(context),
         ),
         leadingWidth: 90,
+
         elevation: 0,
         actions: [
           // Add button
           TextButton(
+              //disable splash
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
               onPressed: () {},
               child: const Text(
                 "Add",
-                style: TextStyle(color: Color(0xfffefefe), fontSize: 20),
+                style: TextStyle(
+                    color: Color(0xfffefefe),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ))
         ],
       ),
