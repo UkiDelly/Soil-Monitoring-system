@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/IOS/Gardens/History%20Page.dart';
 import 'dart:io';
 
 import 'package:thesis/main.dart';
@@ -115,7 +116,14 @@ class Header extends StatelessWidget {
               width: 50,
               height: 50,
               child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            duration: const Duration(milliseconds: 595),
+                            child: HistoryPage(),
+                            type: PageTransitionType.rightToLeft));
+                  },
                   icon: const Icon(
                     Icons.insert_chart_outlined,
                     color: Colors.white,

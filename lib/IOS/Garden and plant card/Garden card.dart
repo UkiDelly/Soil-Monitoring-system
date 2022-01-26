@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page.dart';
 import 'package:animations/animations.dart';
-import 'package:thesis/IOS/Gardens/New%20Garden.dart';
+import 'package:thesis/IOS/Gardens/History%20Page.dart';
+import 'package:thesis/IOS/Gardens/New%20Garden%20Page.dart';
 
 class GardenCard extends StatefulWidget {
   const GardenCard({Key? key}) : super(key: key);
@@ -118,7 +119,7 @@ class _AddGardenState extends State<AddGarden> {
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             closedBuilder: (_, openBuilder) => _AddGardenCard(),
-            openBuilder: (_, closeBuilder) => NewGardenCard()));
+            openBuilder: (_, closeBuilder) => AddNewGarden()));
   }
 }
 
