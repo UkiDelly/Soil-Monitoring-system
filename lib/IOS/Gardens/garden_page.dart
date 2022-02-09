@@ -1,9 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:thesis/IOS/Gardens/history_page.dart';
+import 'dart:math' as math;
 
 class Garden extends StatefulWidget {
   const Garden({Key? key}) : super(key: key);
@@ -13,9 +13,10 @@ class Garden extends StatefulWidget {
 }
 
 class _GardenState extends State<Garden> {
+  //dump data
   bool isSettingPressed = false;
-
   String gardenName = "Garden";
+  Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
 
   TextEditingController nameControl = TextEditingController();
 
@@ -138,64 +139,13 @@ class _GardenState extends State<Garden> {
                 // Body
                 SizedBox(
                   height: 420,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Plant Image
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              Text(
-                                "Plant",
-                                style: TextStyle(
-                                    fontFamily: "Readex Pro",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-
-                              // Space
-                              SizedBox(height: 10),
-
-                              // Plant image
-                              SizedBox(
-                                  height: 300,
-                                  child: Image.asset(
-                                    'assets/png/plant.png',
-                                    fit: BoxFit.contain,
-                                  ))
-                            ],
-                          )),
-
-                      // Divider
-
-                      // Detail
-                      Expanded(
-                          flex: 1,
-                          child: SizedBox(
-                            child: Column(
-                              children: const [
-                                Text("Detail",
-                                    style: TextStyle(
-                                        fontFamily: "Readex Pro",
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
-                                // space
-                                SizedBox(
-                                  height: 10,
-                                ),
-
-                                Flexible(
-                                    child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "Hidfgsdfsafdasfkasdvhwoefhowfhoiwehwhfwoififhdihbsdihbfsjdfhhsbfiqybjahbsfuajbdjabsdiabsdjddnfaoefnwlejfnkefuhnlfjialsuhbfvlweisufdjwefuwhefiwefiw"),
-                                ))
-                              ],
-                            ),
-                          ))
+                      // NPK status
+                      SizedBox(
+                        child: NPKstatus(dataMap: dataMap),
+                      )
                     ],
                   ),
                 ),
@@ -224,4 +174,33 @@ class _GardenState extends State<Garden> {
           )),
     );
   }
+}
+
+class NPKstatus extends StatefulWidget {
+  late Map<String, double> dataMap;
+  NPKstatus({Key? key, required this.dataMap}) : super(key: key);
+
+  @override
+  _NPKstatusState createState() => _NPKstatusState();
+}
+
+class _NPKstatusState extends State<NPKstatus> {
+  @override
+  Widget build(BuildContext context) {
+    return PieChart(
+      dataMap: widget.dataMap,
+      chartLegendSpacing: 10,
+      chartRadius: 100,
+      chartValuesOptions:
+          const ChartValuesOptions(showChartValuesInPercentage: true),
+    );
+  }
+}
+
+// Random color
+Color randomColor() {
+  var g = math.Random.secure().nextInt(255);
+  var b = math.Random.secure().nextInt(255);
+  var r = math.Random.secure().nextInt(255);
+  return Color.fromARGB(255, r, g, b);
 }

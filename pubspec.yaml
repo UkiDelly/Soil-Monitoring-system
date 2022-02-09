@@ -32,6 +32,7 @@ dependencies:
   flutter_svg:
   page_transition:
   timelines:
+  pie_chart:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
