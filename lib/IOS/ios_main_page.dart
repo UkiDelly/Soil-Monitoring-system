@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:thesis/IOS/Gardens/garden_page.dart';
+import 'package:thesis/IOS/Gardens/new_garden_page.dart';
 import 'Garden and plant card/garden_card.dart';
 import 'Garden and plant card/plant_card.dart';
 
@@ -13,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    int gardenCount = 4;
+    int gardenCount = 2;
     return Material(
       type: MaterialType.transparency,
       child: SizedBox(
@@ -60,25 +62,18 @@ class _HomeState extends State<Home> {
             SizedBox(
                 height: MediaQuery.of(context).size.height / 3,
                 child: ListView.builder(
-                    itemCount: gardenCount,
+                    itemCount: gardenCount < 3 ? gardenCount + 1 : 3,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      if (index < gardenCount - 1) {
-                        //test status
-                        if (index == 0) {
-                          return GardenCard(
-                            number: index + 1,
-                            status: "good",
-                          );
-                        } else {
-                          return GardenCard(
-                            number: index + 1,
-                            status: "warning",
-                          );
-                        }
+                      // AddGarden card at the end of the list if gardenCount is less than 3
+                      if (index == gardenCount && gardenCount < 3) {
+                        return const AddGarden();
                       }
-                      // Add new garden card
-                      return const AddGarden();
+                      // if the list is 3, fill all with the garden cards
+                      return GardenCard(
+                        status: "good",
+                        number: index + 1,
+                      );
                     })),
 
             // Plants
