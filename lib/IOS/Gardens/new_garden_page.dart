@@ -22,7 +22,7 @@ class _AddNewGardenState extends State<AddNewGarden> {
     return GestureDetector(
       //unfocuse eveything if tap the background
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         // App bar
@@ -67,14 +67,15 @@ class _AddNewGardenState extends State<AddNewGarden> {
 
         backgroundColor: const Color(0xff669D6B),
 
-        body: SizedBox(
+        body: Container(
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Name
               const Padding(
-                padding: EdgeInsets.only(left: 45, bottom: 10),
+                padding: EdgeInsets.only(left: 45, bottom: 5),
                 child: Text(
                   "Name",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -82,12 +83,14 @@ class _AddNewGardenState extends State<AddNewGarden> {
               ),
 
               // Name text field
-              Padding(
+              Container(
+                height: 30,
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 child: TextField(
                   style: const TextStyle(fontSize: 20),
                   controller: nameControl,
                   decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 10),
                       filled: true,
                       fillColor: Color(0xfffefefe),
                       enabledBorder: OutlineInputBorder(
@@ -102,9 +105,16 @@ class _AddNewGardenState extends State<AddNewGarden> {
               ),
 
               // Avail sensor
-
-              const SizedBox(
-                height: 500,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width,
+                  height: 500,
+                  decoration: const BoxDecoration(
+                      color: Color(0xfffefefe),
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                ),
               )
             ],
           ),

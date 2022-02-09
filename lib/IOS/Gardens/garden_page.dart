@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,10 +14,16 @@ class Garden extends StatefulWidget {
 
 class _GardenState extends State<Garden> {
   bool isSettingPressed = false;
+
+  String gardenName = "Garden";
+
+  TextEditingController nameControl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 45,
         backgroundColor: const Color(0xff669D6B),
         elevation: 0,
         // Back button
@@ -72,6 +80,9 @@ class _GardenState extends State<Garden> {
                   // change the icon to check
                   isSettingPressed = true;
                 } else {
+                  setState(() {
+                    if (nameControl.text != "") gardenName = nameControl.text;
+                  });
                   // change the icon the setting
                   isSettingPressed = false;
                 }
@@ -92,11 +103,101 @@ class _GardenState extends State<Garden> {
           child: SizedBox(
             child: Column(
               children: [
-                const SizedBox(height: 10),
+                // Name of the Garden
+
+                SizedBox(
+                  child: Container(
+                      height: 50,
+                      padding: const EdgeInsets.all(8),
+
+                      // if edit buttom is not pressed
+                      child: isSettingPressed == false
+                          ? Text(
+                              gardenName,
+                              style: const TextStyle(
+                                  fontFamily: "Readex Pro",
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )
+                          //if edit buttom ispressed
+                          : SizedBox(
+                              width: 100,
+                              child: TextField(
+                                style: const TextStyle(fontSize: 15),
+                                controller: nameControl,
+                                textAlign: TextAlign.center,
+                                cursorColor: Colors.black,
+                                decoration: InputDecoration(
+                                  hintText: gardenName,
+                                ),
+                              ),
+                            )),
+                ),
 
                 // Body
-                Container(
-                  height: 375,
+                SizedBox(
+                  height: 420,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Plant Image
+                      Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              Text(
+                                "Plant",
+                                style: TextStyle(
+                                    fontFamily: "Readex Pro",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+
+                              // Space
+                              SizedBox(height: 10),
+
+                              // Plant image
+                              SizedBox(
+                                  height: 300,
+                                  child: Image.asset(
+                                    'assets/png/plant.png',
+                                    fit: BoxFit.contain,
+                                  ))
+                            ],
+                          )),
+
+                      // Divider
+
+                      // Detail
+                      Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            child: Column(
+                              children: const [
+                                Text("Detail",
+                                    style: TextStyle(
+                                        fontFamily: "Readex Pro",
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                                // space
+                                SizedBox(
+                                  height: 10,
+                                ),
+
+                                Flexible(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                      "Hidfgsdfsafdasfkasdvhwoefhowfhoiwehwhfwoififhdihbsdihbfsjdfhhsbfiqybjahbsfuajbdjabsdiabsdjddnfaoefnwlejfnkefuhnlfjialsuhbfvlweisufdjwefuwhefiwefiw"),
+                                ))
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
                 ),
 
                 // Bottom

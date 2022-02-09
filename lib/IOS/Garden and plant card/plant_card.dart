@@ -48,7 +48,7 @@ class _PlantCard extends StatefulWidget {
 class __PlantCardState extends State<_PlantCard> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       width: 200,
     );
   }
