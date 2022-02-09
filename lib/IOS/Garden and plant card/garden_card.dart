@@ -6,7 +6,8 @@ import 'package:thesis/IOS/Gardens/new_garden_page.dart';
 
 class GardenCard extends StatefulWidget {
   int? number;
-  GardenCard({Key? key, this.number}) : super(key: key);
+  String status;
+  GardenCard({Key? key, this.number, required this.status}) : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
@@ -32,8 +33,10 @@ class _GardenCardState extends State<GardenCard> {
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
-            closedBuilder: (_, openContainer) =>
-                _GardenCard(number: widget.number),
+            closedBuilder: (_, openContainer) => _GardenCard(
+                  number: widget.number,
+                  status: widget.status,
+                ),
 
             //If open
             openBuilder: (_, closeContainer) => Garden()));
@@ -43,7 +46,8 @@ class _GardenCardState extends State<GardenCard> {
 // The actuall Garden card widget
 class _GardenCard extends StatefulWidget {
   int? number;
-  _GardenCard({Key? key, this.number}) : super(key: key);
+  String? status;
+  _GardenCard({Key? key, this.number, required this.status}) : super(key: key);
 
   @override
   __GardenCardState createState() => __GardenCardState();
@@ -63,19 +67,29 @@ class __GardenCardState extends State<_GardenCard> {
               width: 125,
               child: Text("#${widget.number}",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: "Readex Pro",
                       fontSize: 20,
                       fontWeight: FontWeight.bold))),
+
+          // status of the garden
           Positioned(
-            top: 8,
-            right: 10,
-            child: SvgPicture.asset(
-              'assets/check_status.svg',
-              width: 30,
-              color: const Color(0xfffefefe),
-            ),
-          ),
+              top: 8,
+              right: 10,
+              child: widget.status == "good"
+                  ? SvgPicture.asset(
+                      'assets/check_status.svg',
+                      width: 30,
+                      color: const Color(0xfffefefe),
+                    )
+                  : widget.status == "warning"
+                      ? SvgPicture.asset('assets/warning.svg',
+                          width: 30, color: Colors.yellow)
+                      : SvgPicture.asset(
+                          'assets/warning.svg',
+                          width: 30,
+                          color: Colors.red,
+                        )),
 
           // comment of the garden
           const Positioned(

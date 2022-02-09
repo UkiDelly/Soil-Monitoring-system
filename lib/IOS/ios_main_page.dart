@@ -42,16 +42,12 @@ class _HomeState extends State<Home> {
                         SizedBox(
                           width: 25,
                         ),
-                        Hero(
-                          tag: "My gardens",
-                          transitionOnUserGestures: true,
-                          child: Text(
-                            "My Gardens",
-                            style: (TextStyle(
-                                fontFamily: "Readex Pro",
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold)),
-                          ),
+                        Text(
+                          "My Gardens",
+                          style: (TextStyle(
+                              fontFamily: "Readex Pro",
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -68,9 +64,18 @@ class _HomeState extends State<Home> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       if (index < gardenCount - 1) {
-                        return GardenCard(
-                          number: index + 1,
-                        );
+                        //test status
+                        if (index == 0) {
+                          return GardenCard(
+                            number: index + 1,
+                            status: "good",
+                          );
+                        } else {
+                          return GardenCard(
+                            number: index + 1,
+                            status: "warning",
+                          );
+                        }
                       }
                       // Add new garden card
                       return const AddGarden();
