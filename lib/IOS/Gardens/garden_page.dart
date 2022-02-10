@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:pie_chart/pie_chart.dart';
+import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/garden_page_name.dart';
+import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/moisture.dart';
+import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/phLevel.dart';
 import 'package:thesis/IOS/Gardens/history_page.dart';
 import 'dart:math' as math;
+
+import 'Garden Page widgets/npk_status.dart';
 
 class Garden extends StatefulWidget {
   const Garden({Key? key}) : super(key: key);
@@ -17,6 +21,8 @@ class _GardenState extends State<Garden> {
   bool isSettingPressed = false;
   String gardenName = "Garden";
   Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
+  double ph = 7;
+  double moisture = 46;
 
   TextEditingController nameControl = TextEditingController();
 
@@ -103,49 +109,50 @@ class _GardenState extends State<Garden> {
           bottom: false,
           child: SizedBox(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Name of the Garden
-
-                SizedBox(
-                  child: Container(
-                      height: 50,
-                      padding: const EdgeInsets.all(8),
-
-                      // if edit buttom is not pressed
-                      child: isSettingPressed == false
-                          ? Text(
-                              gardenName,
-                              style: const TextStyle(
-                                  fontFamily: "Readex Pro",
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )
-                          //if edit buttom ispressed
-                          : SizedBox(
-                              width: 100,
-                              child: TextField(
-                                style: const TextStyle(fontSize: 15),
-                                controller: nameControl,
-                                textAlign: TextAlign.center,
-                                cursorColor: Colors.black,
-                                decoration: InputDecoration(
-                                  hintText: gardenName,
-                                ),
-                              ),
-                            )),
-                ),
+                GardenName(
+                    gardenName: gardenName,
+                    isSettingPressed: isSettingPressed,
+                    nameControl: nameControl),
 
                 // Body
                 SizedBox(
                   height: 420,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // NPK status
-                      SizedBox(
-                        child: NPKstatus(dataMap: dataMap),
-                      )
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // NPK status
+                          SizedBox(
+                            child: NPKstatus(dataMap: dataMap),
+                          ),
+
+                          //
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          // Ph Level
+                          PhLevel(
+                            ph: ph,
+                          ),
+
+                          //
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          // Moisture
+                          MoistureLevel(
+                            moisture: moisture,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -172,27 +179,6 @@ class _GardenState extends State<Garden> {
               ],
             ),
           )),
-    );
-  }
-}
-
-class NPKstatus extends StatefulWidget {
-  late Map<String, double> dataMap;
-  NPKstatus({Key? key, required this.dataMap}) : super(key: key);
-
-  @override
-  _NPKstatusState createState() => _NPKstatusState();
-}
-
-class _NPKstatusState extends State<NPKstatus> {
-  @override
-  Widget build(BuildContext context) {
-    return PieChart(
-      dataMap: widget.dataMap,
-      chartLegendSpacing: 10,
-      chartRadius: 100,
-      chartValuesOptions:
-          const ChartValuesOptions(showChartValuesInPercentage: true),
     );
   }
 }
