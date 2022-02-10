@@ -1,3 +1,5 @@
+import 'package:animated_widgets/widgets/opacity_animated.dart';
+import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,7 +39,8 @@ class _GardenState extends State<Garden> {
         toolbarHeight: 40,
         backgroundColor: const Color(0xff669D6B),
         elevation: 0,
-        // Back button
+
+        /// Back button
         leading: IconButton(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -48,7 +51,7 @@ class _GardenState extends State<Garden> {
           onPressed: () => Navigator.pop(context),
         ),
 
-        // My Gardens
+        /// My Gardens
         title: const Text("My Gardens"),
         titleTextStyle: const TextStyle(
             color: Colors.black,
@@ -58,9 +61,9 @@ class _GardenState extends State<Garden> {
         centerTitle: false,
         titleSpacing: -10,
 
-        // History button, setting button
+        /// History button, setting button
         actions: [
-          //History button
+          /// History button
           IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
@@ -80,7 +83,8 @@ class _GardenState extends State<Garden> {
                 color: Colors.white,
                 size: 30,
               )),
-          // Setting button
+
+          /// Setting button
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -116,26 +120,37 @@ class _GardenState extends State<Garden> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Body
+                /// Body
                 Container(
                   padding: const EdgeInsets.only(top: 20),
                   height: 500,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // Left Column
+                      /// Left Column
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          // Name of the Garden
+                          /// Name of the Garden
                           GardenName(
                               gardenName: gardenName,
                               isSettingPressed: isSettingPressed,
                               nameControl: nameControl),
 
-                          // NPK status
-                          SizedBox(
-                            child: NPKstatus(dataMap: dataMap),
+                          /// NPK status
+                          TranslationAnimatedWidget.tween(
+                            duration: const Duration(seconds: 1),
+                            enabled: true,
+                            translationDisabled: const Offset(-500, 0),
+                            translationEnabled: const Offset(0, 0),
+                            curve: Curves.fastOutSlowIn,
+                            child: OpacityAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              opacityDisabled: 0,
+                              opacityEnabled: 1,
+                              child: NPKstatus(dataMap: dataMap),
+                            ),
                           ),
 
                           //
@@ -148,89 +163,149 @@ class _GardenState extends State<Garden> {
                       // Right Column
                       Column(
                         children: [
-// Ph Level
-                          OpenContainer(
-                              transitionDuration:
-                                  const Duration(milliseconds: 300),
-                              closedElevation: 5,
-                              // When the Container is closed
-                              onClosed: (data) {
-                                setState(() {});
-                              },
-                              clipBehavior: Clip.hardEdge,
-                              //Shape of the close Container
-                              closedShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              closedBuilder: (_, closedBuilder) =>
-                                  PhLevel(ph: ph),
-                              openBuilder: (_, openBuilder) => HistoryPage()),
+                          /// Ph Level
+                          TranslationAnimatedWidget.tween(
+                            delay: const Duration(milliseconds: 300),
+                            duration: const Duration(seconds: 1),
+                            enabled: true,
+                            translationDisabled: const Offset(500, 0),
+                            translationEnabled: const Offset(0, 0),
+                            curve: Curves.fastOutSlowIn,
+                            child: OpacityAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              opacityDisabled: 0,
+                              opacityEnabled: 1,
+                              child: OpenContainer(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  closedElevation: 5,
+                                  // When the Container is closed
+                                  onClosed: (data) {
+                                    setState(() {});
+                                  },
+                                  clipBehavior: Clip.hardEdge,
+                                  //Shape of the close Container
+                                  closedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  closedBuilder: (_, closedBuilder) =>
+                                      PhLevel(ph: ph),
+                                  openBuilder: (_, openBuilder) =>
+                                      HistoryPage()),
+                            ),
+                          ),
 
                           //
                           const SizedBox(
                             height: 20,
                           ),
 
-                          // Moisture
-                          OpenContainer(
-                              transitionDuration:
-                                  const Duration(milliseconds: 300),
-                              closedElevation: 5,
-                              // When the Container is closed
-                              onClosed: (data) {
-                                setState(() {});
-                              },
-                              clipBehavior: Clip.hardEdge,
-                              //Shape of the close Container
-                              closedShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              closedBuilder: (_, closedBuilder) =>
-                                  MoistureLevel(moisture: moisture),
-                              openBuilder: (_, openBuilder) => HistoryPage()),
+                          /// Moisture
+                          TranslationAnimatedWidget.tween(
+                            delay: const Duration(milliseconds: 500),
+                            duration: const Duration(seconds: 1),
+                            enabled: true,
+                            translationDisabled: const Offset(500, 0),
+                            translationEnabled: const Offset(0, 0),
+                            curve: Curves.fastOutSlowIn,
+                            child: OpacityAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              opacityDisabled: 0,
+                              opacityEnabled: 1,
+                              child: OpenContainer(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  closedElevation: 5,
+                                  // When the Container is closed
+                                  onClosed: (data) {
+                                    setState(() {});
+                                  },
+                                  clipBehavior: Clip.hardEdge,
+                                  //Shape of the close Container
+                                  closedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  closedBuilder: (_, closedBuilder) =>
+                                      MoistureLevel(moisture: moisture),
+                                  openBuilder: (_, openBuilder) =>
+                                      HistoryPage()),
+                            ),
+                          ),
 
                           //
                           const SizedBox(
                             height: 20,
                           ),
 
-                          //Moisture Level
-                          OpenContainer(
-                              transitionDuration:
-                                  const Duration(milliseconds: 300),
-                              closedElevation: 5,
-                              // When the Container is closed
-                              onClosed: (data) {
-                                setState(() {});
-                              },
-                              clipBehavior: Clip.hardEdge,
-                              //Shape of the close Container
-                              closedShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              closedBuilder: (_, closedBuilder) => Temp(
-                                    temp: temp,
-                                  ),
-                              openBuilder: (_, openBuilder) => HistoryPage()),
+                          /// Temperature
+                          TranslationAnimatedWidget.tween(
+                            delay: const Duration(milliseconds: 700),
+                            duration: const Duration(seconds: 1),
+                            enabled: true,
+                            translationDisabled: const Offset(500, 0),
+                            translationEnabled: const Offset(0, 0),
+                            curve: Curves.fastOutSlowIn,
+                            child: OpacityAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              opacityDisabled: 0,
+                              opacityEnabled: 1,
+                              child: OpenContainer(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  closedElevation: 5,
+                                  // When the Container is closed
+                                  onClosed: (data) {
+                                    setState(() {});
+                                  },
+                                  clipBehavior: Clip.hardEdge,
+                                  //Shape of the close Container
+                                  closedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  closedBuilder: (_, closedBuilder) => Temp(
+                                        temp: temp,
+                                      ),
+                                  openBuilder: (_, openBuilder) =>
+                                      HistoryPage()),
+                            ),
+                          ),
 
                           //
                           const SizedBox(
                             height: 20,
                           ),
 
-                          // Humidity
-                          OpenContainer(
-                              transitionDuration:
-                                  const Duration(milliseconds: 300),
-                              closedElevation: 5,
-                              // When the Container is closed
-                              onClosed: (data) {
-                                setState(() {});
-                              },
-                              clipBehavior: Clip.hardEdge,
-                              //Shape of the close Container
-                              closedShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              closedBuilder: (_, closedBuilder) =>
-                                  Humidity(humidity: humidity),
-                              openBuilder: (_, openBuilder) => HistoryPage()),
+                          /// Humidity
+                          TranslationAnimatedWidget.tween(
+                            delay: const Duration(milliseconds: 900),
+                            duration: const Duration(seconds: 1),
+                            enabled: true,
+                            translationDisabled: const Offset(500, 0),
+                            translationEnabled: const Offset(0, 0),
+                            curve: Curves.fastOutSlowIn,
+                            child: OpacityAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              opacityDisabled: 0,
+                              opacityEnabled: 1,
+                              child: OpenContainer(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  closedElevation: 5,
+                                  // When the Container is closed
+                                  onClosed: (data) {
+                                    setState(() {});
+                                  },
+                                  clipBehavior: Clip.hardEdge,
+                                  //Shape of the close Container
+                                  closedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  closedBuilder: (_, closedBuilder) =>
+                                      Humidity(humidity: humidity),
+                                  openBuilder: (_, openBuilder) =>
+                                      HistoryPage()),
+                            ),
+                          ),
                         ],
                       )
                     ],
