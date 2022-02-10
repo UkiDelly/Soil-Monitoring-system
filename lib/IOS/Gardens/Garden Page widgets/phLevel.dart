@@ -14,13 +14,13 @@ class _PhLevelState extends State<PhLevel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
-      height: 100,
+      width: 120,
+      height: 70,
       child: Card(
-        elevation: 10,
+        elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text("Ph Level",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),

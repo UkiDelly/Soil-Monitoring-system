@@ -12,13 +12,12 @@ class _MoistureLevelState extends State<MoistureLevel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
-      height: 100,
+      width: 120,
+      height: 70,
       child: Card(
-        elevation: 10,
+        elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Text("Moisture",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
           RichText(
