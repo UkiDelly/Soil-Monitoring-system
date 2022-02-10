@@ -1,26 +1,31 @@
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class MoistureLevel extends StatefulWidget {
-  double moisture;
-  MoistureLevel({Key? key, required this.moisture}) : super(key: key);
+class Moisture_Level extends StatefulWidget {
+  var moisture;
+  Moisture_Level({Key? key, required this.moisture}) : super(key: key);
 
   @override
-  _MoistureLevelState createState() => _MoistureLevelState();
+  _Moisture_LevelState createState() => _Moisture_LevelState();
 }
 
-class _MoistureLevelState extends State<MoistureLevel> {
+class _Moisture_LevelState extends State<Moisture_Level> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
-      height: 70,
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text("Moisture",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-          RichText(
+      width: 180,
+      height: 130,
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        const Text("Moisture",
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+        OpacityAnimatedWidget(
+          delay: const Duration(milliseconds: 2000),
+          curve: Curves.ease,
+          duration: const Duration(seconds: 1),
+          enabled: true,
+          child: RichText(
               text: TextSpan(children: [
             TextSpan(
               text: "${widget.moisture}",
@@ -36,9 +41,24 @@ class _MoistureLevelState extends State<MoistureLevel> {
                   fontWeight: FontWeight.bold,
                   color: Colors.blueAccent),
             )
-          ]))
-        ]),
-      ),
+          ])),
+        ),
+        SizedBox(
+          width: 170,
+          child: SfLinearGauge(
+            showTicks: false,
+            animationDuration: 3000,
+            animateRange: true,
+            barPointers: [LinearBarPointer(value: widget.moisture)],
+            markerPointers: [
+              LinearShapePointer(
+                value: widget.moisture,
+                color: Colors.blueAccent,
+              )
+            ],
+          ),
+        )
+      ]),
     );
   }
 }

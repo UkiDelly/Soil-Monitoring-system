@@ -12,8 +12,8 @@ class _HumidityState extends State<Humidity> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 130,
-      height: 70,
+      width: 180,
+      height: 80,
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -22,6 +22,9 @@ class _HumidityState extends State<Humidity> {
           children: [
             const Text("Humidity",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+            const SizedBox(
+              height: 5,
+            ),
             RichText(
                 text: TextSpan(children: [
               TextSpan(

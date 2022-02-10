@@ -13,7 +13,7 @@ class _NPKstatusState extends State<NPKstatus> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
+      width: 180,
       height: 170,
       child: Card(
         clipBehavior: Clip.hardEdge,
@@ -32,8 +32,8 @@ class _NPKstatusState extends State<NPKstatus> {
               dataMap: widget.dataMap,
               emptyColor: Colors.white,
               chartRadius: 150,
-              animationDuration: const Duration(seconds: 1),
-              chartLegendSpacing: 30,
+              animationDuration: const Duration(milliseconds: 1500),
+              chartLegendSpacing: 10,
               chartValuesOptions: const ChartValuesOptions(
                 showChartValuesInPercentage: true,
               ),

@@ -6,12 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/garden_page_name.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/humidity.dart';
-import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/moisture.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/phLevel.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/tempurature.dart';
 import 'package:thesis/IOS/Gardens/history_page.dart';
 import 'dart:math' as math;
 
+import 'Garden Page widgets/moisture.dart';
 import 'Garden Page widgets/npk_status.dart';
 
 class Garden extends StatefulWidget {
@@ -28,7 +28,7 @@ class _GardenState extends State<Garden> {
   Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
   double ph = 7;
   double moisture = 46;
-  int temp = 31, humidity = 30;
+  double temp = 31, humidity = 30;
 
   TextEditingController nameControl = TextEditingController();
 
@@ -155,7 +155,40 @@ class _GardenState extends State<Garden> {
 
                           //
                           const SizedBox(
-                            height: 10,
+                            height: 20,
+                          ),
+
+                          /// Temperature
+                          TranslationAnimatedWidget.tween(
+                            delay: const Duration(milliseconds: 700),
+                            duration: const Duration(seconds: 1),
+                            enabled: true,
+                            translationDisabled: const Offset(-500, 0),
+                            translationEnabled: const Offset(0, 0),
+                            curve: Curves.fastOutSlowIn,
+                            child: OpacityAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              opacityDisabled: 0,
+                              opacityEnabled: 1,
+                              child: OpenContainer(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  closedElevation: 5,
+                                  // When the Container is closed
+                                  onClosed: (data) {
+                                    setState(() {});
+                                  },
+                                  clipBehavior: Clip.hardEdge,
+                                  //Shape of the close Container
+                                  closedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  closedBuilder: (_, closedBuilder) => Temp(
+                                        temp: temp,
+                                      ),
+                                  openBuilder: (_, openBuilder) =>
+                                      HistoryPage()),
+                            ),
                           ),
                         ],
                       ),
@@ -189,7 +222,7 @@ class _GardenState extends State<Garden> {
                                   closedShape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   closedBuilder: (_, closedBuilder) =>
-                                      PhLevel(ph: ph),
+                                      Ph_Level(ph: ph),
                                   openBuilder: (_, openBuilder) =>
                                       HistoryPage()),
                             ),
@@ -226,45 +259,7 @@ class _GardenState extends State<Garden> {
                                   closedShape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   closedBuilder: (_, closedBuilder) =>
-                                      MoistureLevel(moisture: moisture),
-                                  openBuilder: (_, openBuilder) =>
-                                      HistoryPage()),
-                            ),
-                          ),
-
-                          //
-                          const SizedBox(
-                            height: 20,
-                          ),
-
-                          /// Temperature
-                          TranslationAnimatedWidget.tween(
-                            delay: const Duration(milliseconds: 700),
-                            duration: const Duration(seconds: 1),
-                            enabled: true,
-                            translationDisabled: const Offset(500, 0),
-                            translationEnabled: const Offset(0, 0),
-                            curve: Curves.fastOutSlowIn,
-                            child: OpacityAnimatedWidget.tween(
-                              duration: const Duration(seconds: 1),
-                              enabled: true,
-                              opacityDisabled: 0,
-                              opacityEnabled: 1,
-                              child: OpenContainer(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  closedElevation: 5,
-                                  // When the Container is closed
-                                  onClosed: (data) {
-                                    setState(() {});
-                                  },
-                                  clipBehavior: Clip.hardEdge,
-                                  //Shape of the close Container
-                                  closedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  closedBuilder: (_, closedBuilder) => Temp(
-                                        temp: temp,
-                                      ),
+                                      Moisture_Level(moisture: moisture),
                                   openBuilder: (_, openBuilder) =>
                                       HistoryPage()),
                             ),
