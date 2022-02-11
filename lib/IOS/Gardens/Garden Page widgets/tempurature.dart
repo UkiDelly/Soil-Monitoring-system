@@ -16,61 +16,76 @@ class _TempState extends State<Temp> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 180,
-      height: 120,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Tempurature",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-          OpacityAnimatedWidget(
-            delay: const Duration(milliseconds: 2000),
-            curve: Curves.ease,
-            duration: const Duration(seconds: 1),
-            enabled: true,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GradientText(
-                  "${widget.temp}",
-                  colors: getColor(widget.temp),
-                  style: const TextStyle(
-                      fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                const Text("°C",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
-              ],
+      height: 125,
+      child: Card(
+        elevation: 10,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Temperature text
+            const Text("Temperature",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+            // Opacity animation
+            OpacityAnimatedWidget(
+              delay: const Duration(milliseconds: 2000),
+              curve: Curves.ease,
+              duration: const Duration(seconds: 1),
+              enabled: true,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Gradient Text
+                  GradientText(
+                    "${widget.temp}",
+                    colors: getColor(widget.temp),
+                    style: const TextStyle(
+                        fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  const Text("°C",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SizedBox(
-            width: 170,
-            child: SfLinearGauge(
-              showTicks: false,
-              animationDuration: 3000,
-              animateRange: true,
-              animateAxis: true,
-              barPointers: [
-                LinearBarPointer(
-                  value: widget.temp,
-                  color: Colors.red,
-                )
-              ],
-              markerPointers: [
-                LinearShapePointer(
-                  value: widget.temp,
-                  color: Colors.redAccent,
-                )
-              ],
+            const SizedBox(
+              height: 8,
             ),
-          )
-        ],
+
+            /// Linear gauge
+            SizedBox(
+              width: 160,
+              child: SfLinearGauge(
+                showTicks: false,
+                animationDuration: 3000,
+                animateRange: true,
+                animateAxis: true,
+                // Gauge division
+                barPointers: [
+                  LinearBarPointer(
+                    value: widget.temp,
+                    color: Colors.red,
+                  )
+                ],
+
+                /// Mark Pointer
+                markerPointers: [
+                  LinearShapePointer(
+                    value: widget.temp,
+                    color: Colors.redAccent,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
+/// Colors for the gradient text
 getColor(temp) {
   List<Color> color;
   if (temp < 25) {

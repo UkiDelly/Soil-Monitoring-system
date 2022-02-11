@@ -16,49 +16,64 @@ class _Moisture_LevelState extends State<Moisture_Level> {
     return SizedBox(
       width: 180,
       height: 130,
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        const Text("Moisture",
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-        OpacityAnimatedWidget(
-          delay: const Duration(milliseconds: 2000),
-          curve: Curves.ease,
-          duration: const Duration(seconds: 1),
-          enabled: true,
-          child: RichText(
-              text: TextSpan(children: [
-            TextSpan(
-              text: "${widget.moisture}",
-              style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            const TextSpan(
-              text: "%",
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent),
-            )
-          ])),
-        ),
-        SizedBox(
-          width: 170,
-          child: SfLinearGauge(
-            showTicks: false,
-            animationDuration: 3000,
-            animateRange: true,
-            barPointers: [LinearBarPointer(value: widget.moisture)],
-            markerPointers: [
-              LinearShapePointer(
-                value: widget.moisture,
-                color: Colors.blueAccent,
+      child: Card(
+        elevation: 10,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          /// Moisture Text
+          const Text("Moisture",
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+
+          /// Opacity animation
+          OpacityAnimatedWidget(
+            delay: const Duration(milliseconds: 2000),
+            curve: Curves.ease,
+            duration: const Duration(seconds: 1),
+            enabled: true,
+            child: RichText(
+                text: TextSpan(children: [
+              /// value
+              TextSpan(
+                text: "${widget.moisture}",
+                style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              const TextSpan(
+                text: "%",
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent),
               )
-            ],
+            ])),
           ),
-        )
-      ]),
+          SizedBox(
+            width: 160,
+
+            /// Moisture Gauge
+            child: SfLinearGauge(
+              showTicks: false,
+              animationDuration: 3000,
+              animateRange: true,
+
+              /// the value where the pointer pointing
+              barPointers: [LinearBarPointer(value: widget.moisture)],
+
+              /// pointer
+              markerPointers: [
+                LinearShapePointer(
+                  value: widget.moisture,
+                  color: Colors.blueAccent,
+                )
+              ],
+            ),
+          )
+        ]),
+      ),
     );
   }
 }

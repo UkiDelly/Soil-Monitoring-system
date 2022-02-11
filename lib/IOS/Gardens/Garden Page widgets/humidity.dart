@@ -15,11 +15,12 @@ class _HumidityState extends State<Humidity> {
       width: 180,
       height: 80,
       child: Card(
-        elevation: 0,
+        elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            /// Humidity Text
             const Text("Humidity",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
             const SizedBox(

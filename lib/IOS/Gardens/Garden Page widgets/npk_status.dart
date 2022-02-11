@@ -28,12 +28,19 @@ class _NPKstatusState extends State<NPKstatus> {
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
             ),
+
+            /// Chart
             PieChart(
+              // Data Map of the chart
               dataMap: widget.dataMap,
               emptyColor: Colors.white,
               chartRadius: 150,
               animationDuration: const Duration(milliseconds: 1500),
+
+              //space between the pie chart and the value name
               chartLegendSpacing: 10,
+
+              // change the value into percentage in the chart
               chartValuesOptions: const ChartValuesOptions(
                 showChartValuesInPercentage: true,
               ),
@@ -41,6 +48,7 @@ class _NPKstatusState extends State<NPKstatus> {
             )
           ],
         ),
+        // shape of the card
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );

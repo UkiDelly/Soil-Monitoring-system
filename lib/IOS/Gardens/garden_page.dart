@@ -13,6 +13,7 @@ import 'dart:math' as math;
 
 import 'Garden Page widgets/moisture.dart';
 import 'Garden Page widgets/npk_status.dart';
+import 'Garden Page widgets/status_icon.dart';
 
 class Garden extends StatefulWidget {
   const Garden({Key? key}) : super(key: key);
@@ -29,6 +30,7 @@ class _GardenState extends State<Garden> {
   double ph = 7;
   double moisture = 46;
   double temp = 31, humidity = 30;
+  String comment = "Comment for the Garden";
 
   TextEditingController nameControl = TextEditingController();
 
@@ -52,7 +54,7 @@ class _GardenState extends State<Garden> {
         ),
 
         /// My Gardens
-        title: const Text("My Gardens"),
+        title: Text("My Gardens"),
         titleTextStyle: const TextStyle(
             color: Colors.black,
             fontSize: 15,
@@ -128,72 +130,78 @@ class _GardenState extends State<Garden> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       /// Left Column
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          /// Name of the Garden
-                          GardenName(
-                              gardenName: gardenName,
-                              isSettingPressed: isSettingPressed,
-                              nameControl: nameControl),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            /// Name of the Garden
+                            GardenName(
+                                gardenName: gardenName,
+                                isSettingPressed: isSettingPressed,
+                                nameControl: nameControl),
 
-                          /// NPK status
-                          TranslationAnimatedWidget.tween(
-                            duration: const Duration(seconds: 1),
-                            enabled: true,
-                            translationDisabled: const Offset(-500, 0),
-                            translationEnabled: const Offset(0, 0),
-                            curve: Curves.fastOutSlowIn,
-                            child: OpacityAnimatedWidget.tween(
+                            /// NPK status
+                            TranslationAnimatedWidget.tween(
                               duration: const Duration(seconds: 1),
                               enabled: true,
-                              opacityDisabled: 0,
-                              opacityEnabled: 1,
-                              child: NPKstatus(dataMap: dataMap),
+                              translationDisabled: const Offset(-500, 0),
+                              translationEnabled: const Offset(0, 0),
+                              curve: Curves.fastOutSlowIn,
+                              child: OpacityAnimatedWidget.tween(
+                                duration: const Duration(seconds: 1),
+                                enabled: true,
+                                opacityDisabled: 0,
+                                opacityEnabled: 1,
+                                child: NPKstatus(dataMap: dataMap),
+                              ),
                             ),
-                          ),
 
-                          //
-                          const SizedBox(
-                            height: 20,
-                          ),
+                            //
+                            const SizedBox(
+                              height: 10,
+                            ),
 
-                          /// Temperature
-                          TranslationAnimatedWidget.tween(
-                            delay: const Duration(milliseconds: 700),
-                            duration: const Duration(seconds: 1),
-                            enabled: true,
-                            translationDisabled: const Offset(-500, 0),
-                            translationEnabled: const Offset(0, 0),
-                            curve: Curves.fastOutSlowIn,
-                            child: OpacityAnimatedWidget.tween(
+                            /// Temperature
+                            TranslationAnimatedWidget.tween(
+                              delay: const Duration(milliseconds: 700),
                               duration: const Duration(seconds: 1),
                               enabled: true,
-                              opacityDisabled: 0,
-                              opacityEnabled: 1,
-                              child: OpenContainer(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  closedElevation: 5,
-                                  // When the Container is closed
-                                  onClosed: (data) {
-                                    setState(() {});
-                                  },
-                                  clipBehavior: Clip.hardEdge,
-                                  //Shape of the close Container
-                                  closedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  closedBuilder: (_, closedBuilder) => Temp(
-                                        temp: temp,
-                                      ),
-                                  openBuilder: (_, openBuilder) =>
-                                      HistoryPage()),
+                              translationDisabled: const Offset(-500, 0),
+                              translationEnabled: const Offset(0, 0),
+                              curve: Curves.fastOutSlowIn,
+                              child: OpacityAnimatedWidget.tween(
+                                  duration: const Duration(seconds: 1),
+                                  enabled: true,
+                                  opacityDisabled: 0,
+                                  opacityEnabled: 1,
+                                  child: Temp(
+                                    temp: temp,
+                                  )
+                                  //OpenContainer(
+                                  //     transitionDuration:
+                                  //         const Duration(milliseconds: 300),
+                                  //     closedElevation: 5,
+                                  //     // When the Container is closed
+                                  //     onClosed: (data) {
+                                  //       setState(() {});
+                                  //     },
+                                  //     clipBehavior: Clip.hardEdge,
+                                  //     //Shape of the close Container
+                                  //     closedShape: RoundedRectangleBorder(
+                                  //         borderRadius: BorderRadius.circular(20)),
+                                  //     closedBuilder: (_, closedBuilder) => Temp(
+                                  //           temp: temp,
+                                  //         ),
+                                  //     openBuilder: (_, openBuilder) =>
+                                  //         HistoryPage()),
+                                  ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
 
-                      // Right Column
+                      /// Right Column
                       Column(
                         children: [
                           /// Ph Level
@@ -209,28 +217,31 @@ class _GardenState extends State<Garden> {
                               enabled: true,
                               opacityDisabled: 0,
                               opacityEnabled: 1,
-                              child: OpenContainer(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  closedElevation: 5,
-                                  // When the Container is closed
-                                  onClosed: (data) {
-                                    setState(() {});
-                                  },
-                                  clipBehavior: Clip.hardEdge,
-                                  //Shape of the close Container
-                                  closedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  closedBuilder: (_, closedBuilder) =>
-                                      Ph_Level(ph: ph),
-                                  openBuilder: (_, openBuilder) =>
-                                      HistoryPage()),
+                              child: Ph_Level(
+                                ph: ph,
+                              ),
+                              // child: OpenContainer(
+                              //     transitionDuration:
+                              //         const Duration(milliseconds: 300),
+                              //     closedElevation: 5,
+                              //     // When the Container is closed
+                              //     onClosed: (data) {
+                              //       setState(() {});
+                              //     },
+                              //     clipBehavior: Clip.hardEdge,
+                              //     //Shape of the close Container
+                              //     closedShape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(20)),
+                              //     closedBuilder: (_, closedBuilder) =>
+                              //         Ph_Level(ph: ph),
+                              //     openBuilder: (_, openBuilder) =>
+                              //         HistoryPage()),
                             ),
                           ),
 
                           //
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
 
                           /// Moisture
@@ -246,22 +257,25 @@ class _GardenState extends State<Garden> {
                               enabled: true,
                               opacityDisabled: 0,
                               opacityEnabled: 1,
-                              child: OpenContainer(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  closedElevation: 5,
-                                  // When the Container is closed
-                                  onClosed: (data) {
-                                    setState(() {});
-                                  },
-                                  clipBehavior: Clip.hardEdge,
-                                  //Shape of the close Container
-                                  closedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  closedBuilder: (_, closedBuilder) =>
-                                      Moisture_Level(moisture: moisture),
-                                  openBuilder: (_, openBuilder) =>
-                                      HistoryPage()),
+                              child: Moisture_Level(
+                                moisture: moisture,
+                              ),
+                              // child: OpenContainer(
+                              //     transitionDuration:
+                              //         const Duration(milliseconds: 300),
+                              //     closedElevation: 5,
+                              //     // When the Container is closed
+                              //     onClosed: (data) {
+                              //       setState(() {});
+                              //     },
+                              //     clipBehavior: Clip.hardEdge,
+                              //     //Shape of the close Container
+                              //     closedShape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(20)),
+                              //     closedBuilder: (_, closedBuilder) =>
+                              //         Moisture_Level(moisture: moisture),
+                              //     openBuilder: (_, openBuilder) =>
+                              //         HistoryPage()),
                             ),
                           ),
 
@@ -283,22 +297,25 @@ class _GardenState extends State<Garden> {
                               enabled: true,
                               opacityDisabled: 0,
                               opacityEnabled: 1,
-                              child: OpenContainer(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  closedElevation: 5,
-                                  // When the Container is closed
-                                  onClosed: (data) {
-                                    setState(() {});
-                                  },
-                                  clipBehavior: Clip.hardEdge,
-                                  //Shape of the close Container
-                                  closedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  closedBuilder: (_, closedBuilder) =>
-                                      Humidity(humidity: humidity),
-                                  openBuilder: (_, openBuilder) =>
-                                      HistoryPage()),
+                              child: Humidity(
+                                humidity: humidity,
+                              ),
+                              // child: OpenContainer(
+                              //     transitionDuration:
+                              //         const Duration(milliseconds: 300),
+                              //     closedElevation: 5,
+                              //     // When the Container is closed
+                              //     onClosed: (data) {
+                              //       setState(() {});
+                              //     },
+                              //     clipBehavior: Clip.hardEdge,
+                              //     //Shape of the close Container
+                              //     closedShape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(20)),
+                              //     closedBuilder: (_, closedBuilder) =>
+                              //         Humidity(humidity: humidity),
+                              //     openBuilder: (_, openBuilder) =>
+                              //         HistoryPage()),
                             ),
                           ),
                         ],
@@ -307,22 +324,57 @@ class _GardenState extends State<Garden> {
                   ),
                 ),
 
-                // Bottom
+                /// Bottom
                 Flexible(
                   fit: FlexFit.tight,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xfffefefe),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 5,
-                            blurRadius: 30,
-                            offset: const Offset(0, 10))
-                      ],
+                  child: TranslationAnimatedWidget.tween(
+                    duration: const Duration(seconds: 1),
+                    enabled: true,
+                    translationDisabled: const Offset(0, 500),
+                    translationEnabled: const Offset(0, 0),
+                    curve: Curves.fastOutSlowIn,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color(0xfffefefe),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 5,
+                              blurRadius: 30,
+                              offset: const Offset(0, 10))
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Status text
+                            const Text(
+                              "Status",
+                              style: TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.bold),
+                            ),
+
+                            /// Status icon
+                            const Status_Display(),
+
+                            /// Comment
+                            Text(
+                              "$comment",
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -13,9 +13,10 @@ class GardenName extends StatefulWidget {
 class _GardenNameState extends State<GardenName> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Flexible(
+      fit: FlexFit.loose,
       child: Container(
-          height: 50,
+          // height: 50,
           padding: const EdgeInsets.all(8),
 
           // if edit buttom is not pressed
