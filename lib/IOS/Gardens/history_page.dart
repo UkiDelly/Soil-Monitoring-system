@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:thesis/IOS/Gardens/History%20page%20Widgets/moisture_history.dart';
+import 'package:thesis/IOS/Gardens/History%20page%20Widgets/ph_history.dart';
+import 'package:thesis/IOS/Gardens/History%20page%20Widgets/temperature.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -7,28 +10,53 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff669D6B),
-      appBar: AppBar(
         backgroundColor: const Color(0xff669D6B),
-        elevation: 0,
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            'assets/back.svg',
-            width: 15,
-            color: Colors.white,
+        appBar: AppBar(
+          backgroundColor: const Color(0xff669D6B),
+          elevation: 0,
+          leading: IconButton(
+            icon: SvgPicture.asset(
+              'assets/back.svg',
+              width: 15,
+              color: Colors.white,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          "Soil Status History",
-          style: TextStyle(
-              color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: Container(
-          //color: Colors.grey,
+          centerTitle: true,
+          title: const Text(
+            "Soil Status History",
+            style: TextStyle(
+                color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
           ),
-    );
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                /// NPK history
+                const SizedBox(),
+
+                /// Ph history
+                const SizedBox(),
+                PhHistory(),
+
+                /// Moisture history
+                const SizedBox(
+                  height: 10,
+                ),
+                MoistureHistory(),
+
+                /// Temperature history
+                const SizedBox(height: 10),
+                TempHistory(),
+
+                /// Humidity history
+                const SizedBox(),
+              ],
+            ),
+          ),
+        ));
   }
 }
