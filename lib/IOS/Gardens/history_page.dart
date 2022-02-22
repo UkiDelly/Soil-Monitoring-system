@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/moisture_history.dart';
+import 'package:thesis/IOS/Gardens/History%20page%20Widgets/npk_history.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/ph_history.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/temperature.dart';
 
@@ -36,10 +37,15 @@ class HistoryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 /// NPK history
-                const SizedBox(),
+                const SizedBox(
+                  height: 10,
+                ),
+                NPKHistory(),
 
                 /// Ph history
-                const SizedBox(),
+                const SizedBox(
+                  height: 10,
+                ),
                 PhHistory(),
 
                 /// Moisture history

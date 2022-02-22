@@ -10,7 +10,8 @@ class TempHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HistoryChart tempHistory = HistoryChart(
-        title: "Temp History",
+        title: const Text("Temp History",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         minX: 1,
         maxX: 7,
         minY: 0,

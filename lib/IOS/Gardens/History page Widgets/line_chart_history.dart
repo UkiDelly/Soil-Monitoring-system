@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 
 class HistoryChart {
   //* Title of the chart
-  String title = "";
+  Widget title;
 
   //* Min and max value of the chart
-  late double minX, maxX, minY, maxY;
+  double minX = 0, maxX = 0, minY = 0, maxY = 0;
 
   //* Interval of the left side of the chart
   late double? leftSideInterval = 1;
 
   //* Spots of the chart
-  late List<FlSpot> spots;
+  List<FlSpot>? spots = [const FlSpot(1, 1)];
 
   //? Showing the dots?
   bool showDot = true;
@@ -31,22 +31,25 @@ class HistoryChart {
   //* Colors below the bar if belowBarArea is true
   List<Color>? belowBarColors = [];
 
+  //* or whole LineChartBarData
+  List<LineChartBarData>? lineChartBarData = [];
+
   //
-  HistoryChart({
-    required this.title,
-    required this.minX,
-    required this.maxX,
-    required this.minY,
-    this.leftSideInterval,
-    required this.maxY,
-    required this.spots,
-    required this.showDot,
-    this.lineChartBarGradient,
-    this.lineChartBarWidth,
-    this.lineColor,
-    this.belowBarArea,
-    this.belowBarColors,
-  });
+  HistoryChart(
+      {required this.title,
+      required this.minX,
+      required this.maxX,
+      required this.minY,
+      this.leftSideInterval,
+      required this.maxY,
+      this.spots,
+      required this.showDot,
+      this.lineChartBarGradient,
+      this.lineChartBarWidth,
+      this.lineColor,
+      this.belowBarArea,
+      this.belowBarColors,
+      this.lineChartBarData});
   //
   Widget historyChart(_) {
     return SizedBox(
@@ -57,9 +60,7 @@ class HistoryChart {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            title,
             Container(
               padding: const EdgeInsets.all(20),
               width: MediaQuery.of(_).size.width - 30,
@@ -67,18 +68,20 @@ class HistoryChart {
               child: SizedBox(
                 child: Center(
                   child: LineChart(mainData(
-                      minX,
-                      maxX,
-                      minY,
-                      leftSideInterval,
-                      maxY,
-                      spots,
-                      showDot,
-                      lineChartBarGradient,
-                      lineChartBarWidth,
-                      lineColor,
-                      belowBarArea,
-                      belowBarColors)),
+                    lineChartBarData,
+                    minX,
+                    maxX,
+                    minY,
+                    leftSideInterval,
+                    maxY,
+                    spots,
+                    showDot,
+                    lineChartBarGradient,
+                    lineChartBarWidth,
+                    lineColor,
+                    belowBarArea,
+                    belowBarColors,
+                  )),
                 ),
               ),
             )
@@ -90,12 +93,13 @@ class HistoryChart {
 }
 
 LineChartData mainData(
+    List<LineChartBarData>? lineChartBarData,
     double minX,
     double maxX,
     double minY,
     double? leftSideInterval,
     double maxY,
-    List<FlSpot> spots,
+    List<FlSpot>? spots,
     bool showDot,
     bool? lineChartBarGradient,
     bool? barWidth,
@@ -187,41 +191,42 @@ LineChartData mainData(
     maxY: maxY,
 
     //* Data spot
-    lineBarsData: [
-      LineChartBarData(
-          //* Spots
-          spots: spots,
-          isCurved: true,
-          colors: lineColor ?? [const Color(0xfffffff0)],
+    lineBarsData: lineChartBarData ??
+        [
+          LineChartBarData(
+              //* Spots
+              spots: spots,
+              isCurved: true,
+              colors: lineColor ?? [const Color(0xfffffff0)],
 
-          //* Gradient from the bottom
-          gradientFrom: lineChartBarGradient == true
-              ? const Offset(0, 1)
-              : const Offset(0, 0),
-          //* to the top
-          gradientTo: lineChartBarGradient == true
-              ? const Offset(0, 0)
-              : const Offset(1, 1),
-          //* bar width
-          barWidth: barWidth == true ? 3 : 0,
+              //* Gradient from the bottom
+              gradientFrom: lineChartBarGradient == true
+                  ? const Offset(0, 1)
+                  : const Offset(0, 0),
+              //* to the top
+              gradientTo: lineChartBarGradient == true
+                  ? const Offset(0, 0)
+                  : const Offset(1, 1),
+              //* bar width
+              barWidth: barWidth == true ? 3 : 0,
 
-          //* about the dots of the chart
-          dotData: FlDotData(show: showDot),
+              //* about the dots of the chart
+              dotData: FlDotData(show: showDot),
 
-          //* About the below area of the line
-          belowBarData: belowBarArea == true
-              ? BarAreaData(
-                  show: true,
-                  gradientFrom: const Offset(
-                    0,
-                    1,
-                  ),
-                  gradientTo: const Offset(0, 0),
-                  colors: belowBarAreaColor
-                      ?.map((color) => color.withOpacity(0.5))
-                      .toList(),
-                )
-              : null)
-    ],
+              //* About the below area of the line
+              belowBarData: belowBarArea == true
+                  ? BarAreaData(
+                      show: true,
+                      gradientFrom: const Offset(
+                        0,
+                        1,
+                      ),
+                      gradientTo: const Offset(0, 0),
+                      colors: belowBarAreaColor
+                          ?.map((color) => color.withOpacity(0.5))
+                          .toList(),
+                    )
+                  : null)
+        ],
   );
 }

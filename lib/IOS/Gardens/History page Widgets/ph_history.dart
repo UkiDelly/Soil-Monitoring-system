@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/line_chart_history.dart';
@@ -29,7 +31,8 @@ class PhHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     //? create ph history chart
     HistoryChart phHistory = HistoryChart(
-      title: "Ph History",
+      title: const Text("Ph History",style: TextStyle(
+            fontSize: 25, fontWeight: FontWeight.bold),),
       minX: 1,
       maxX: 7,
       minY: 1,

@@ -12,7 +12,8 @@ class MoistureHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HistoryChart moistureHistory = HistoryChart(
-        title: "Moisture History",
+        title: const Text("Moisture History",style: TextStyle(
+            fontSize: 25, fontWeight: FontWeight.bold)),
         minX: 1,
         maxX: 7,
         minY: 0,
