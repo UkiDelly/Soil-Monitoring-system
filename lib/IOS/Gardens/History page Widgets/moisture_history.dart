@@ -5,22 +5,22 @@ import 'package:thesis/IOS/Gardens/History%20page%20Widgets/line_chart_history.d
 class MoistureHistory extends StatelessWidget {
   MoistureHistory({Key? key}) : super(key: key);
 
-  List<FlSpot> spots = [
-    const FlSpot(3, 50),
-  ];
+  List<FlSpot> spots = [const FlSpot(3, 50), const FlSpot(1, 44)];
 
   @override
   Widget build(BuildContext context) {
     HistoryChart moistureHistory = HistoryChart(
-        title: const Text("Moisture History",style: TextStyle(
-            fontSize: 25, fontWeight: FontWeight.bold)),
+        title: const Text("Moisture History",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         minX: 1,
         maxX: 7,
         minY: 0,
         leftSideInterval: 20,
         maxY: 100,
         spots: spots,
-        showDot: true);
+        showDot: true,
+        lineColor: [Colors.lightBlueAccent],
+        lineChartBarWidth: true);
 
     return moistureHistory.historyChart(context);
   }

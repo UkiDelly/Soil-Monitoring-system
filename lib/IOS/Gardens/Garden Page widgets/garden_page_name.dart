@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class GardenName extends StatefulWidget {
-  var isSettingPressed, gardenName, nameControl;
+  TextEditingController controller;
+  String name;
+  bool isSettingPressed;
   GardenName(
-      {Key? key, this.isSettingPressed, this.gardenName, this.nameControl})
+      {Key? key,
+      required this.name,
+      required this.isSettingPressed,
+      required this.controller})
       : super(key: key);
 
   @override
@@ -13,35 +18,45 @@ class GardenName extends StatefulWidget {
 class _GardenNameState extends State<GardenName> {
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      fit: FlexFit.loose,
-      child: Container(
-          // height: 50,
-          padding: const EdgeInsets.all(8),
-
-          // if edit buttom is not pressed
-          child: widget.isSettingPressed == false
-              ? Text(
-                  widget.gardenName,
-                  style: const TextStyle(
-                      fontFamily: "Readex Pro",
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                )
-              //if edit buttom ispressed
-              : SizedBox(
-                  width: 100,
-                  child: TextField(
-                    style: const TextStyle(fontSize: 15),
-                    controller: widget.nameControl,
-                    textAlign: TextAlign.center,
-                    cursorColor: Colors.black,
-                    decoration: InputDecoration(
-                      hintText: widget.gardenName,
-                    ),
+    return Container(
+      width: MediaQuery.of(context).size.width - 20,
+      height: 70,
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          color: const Color(0xfffffff0),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.green.shade400,
+                offset: const Offset(-4, -4),
+                blurRadius: 10),
+            BoxShadow(
+                color: Colors.green.shade900,
+                offset: const Offset(4, 4),
+                blurRadius: 10),
+          ]),
+      child: Center(
+        child: widget.isSettingPressed == false
+            ? Text(
+                widget.name,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(5),
+                    hintText: widget.name,
+                    hintStyle: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
                   ),
-                )),
+                  style: const TextStyle(
+                      fontSize: 35, fontWeight: FontWeight.bold),
+                  controller: widget.controller,
+                ),
+              ),
+      ),
     );
   }
 }

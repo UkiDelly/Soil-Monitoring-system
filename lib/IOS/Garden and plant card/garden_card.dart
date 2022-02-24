@@ -57,7 +57,7 @@ class __GardenCardState extends State<_GardenCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
+      height: 300,
       child: Stack(
         children: [
           // Name of the garden
@@ -69,7 +69,7 @@ class __GardenCardState extends State<_GardenCard> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontFamily: "Readex Pro",
-                      fontSize: 20,
+                      fontSize: 50,
                       fontWeight: FontWeight.bold))),
 
           // status of the garden
@@ -142,7 +142,7 @@ class _AddGardenCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
+      height: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [

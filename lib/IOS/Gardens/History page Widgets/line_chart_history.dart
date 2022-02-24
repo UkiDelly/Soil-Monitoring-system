@@ -152,7 +152,7 @@ LineChartData mainData(
         //* Left Side
         leftTitles: SideTitles(
           showTitles: true,
-          reservedSize: 30,
+          reservedSize: 35,
           interval: leftSideInterval ?? 1,
           getTextStyles: (context, value) => const TextStyle(
             color: Color(0xff67727d),
