@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:thesis/Web/Garden/web_garden_card.dart';
 
 class WebMain extends StatefulWidget {
   const WebMain({Key? key}) : super(key: key);
@@ -8,8 +10,104 @@ class WebMain extends StatefulWidget {
 }
 
 class _WebMainState extends State<WebMain> {
+  int gardenCount = 2;
+  bool isPressed = false;
+  var indexTaped = 0;
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      backgroundColor: const Color(0xfffffff0),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SizedBox(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              //? Logo and Name
+              SizedBox(
+                child: Row(
+                  children: [
+                    //* Logo
+                    SvgPicture.asset("assets/Logo.svg"),
+
+                    //
+                    const SizedBox(
+                      width: 20,
+                    ),
+
+                    //* My Gardens
+                    const Text(
+                      "My Gardens",
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Readex Pro"),
+                    )
+                  ],
+                ),
+              ),
+
+              //
+              const SizedBox(
+                height: 20,
+              ),
+
+              //* Garden Card
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                height: isPressed == false ? 300 : 200,
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10))),
+                child: ListView.builder(
+                    itemCount: gardenCount < 3 ? gardenCount + 1 : 3,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      //* AddGarden card at the end of the list if gardenCount is less than 3
+                      if (index == gardenCount && gardenCount < 3) {
+                        return WebAddGarden(
+                          isPressed: isPressed,
+                        );
+                      }
+                      //* if the list is 3, fill all with the garden cards
+                      return InkWell(
+                        onTap: () => setState(() {
+                          isPressed = !isPressed;
+                        }),
+                        child: WebGardenCard(
+                          isPressed: isPressed,
+                          status: "good",
+                          number: index + 1,
+                        ),
+                      );
+                    }),
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
+
+              //* Container when pressed
+              AnimatedContainer(
+                curve: Curves.easeInToLinear,
+                duration: const Duration(milliseconds: 500),
+                width: isPressed != false
+                    ? MediaQuery.of(context).size.width - 20
+                    : 0,
+                height: isPressed != false ? 400 : 0,
+                decoration: const BoxDecoration(
+                    color: Color(0xff669D6B),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                // child:
+              ),
+            ],
+          ),
+        )),
+      ),
+    );
   }
 }
