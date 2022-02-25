@@ -34,6 +34,8 @@ class HistoryChart {
   //* or whole LineChartBarData
   List<LineChartBarData>? lineChartBarData = [];
 
+  //* width of the Container
+  late double? width;
   //
   HistoryChart(
       {required this.title,
@@ -49,10 +51,12 @@ class HistoryChart {
       this.lineColor,
       this.belowBarArea,
       this.belowBarColors,
-      this.lineChartBarData});
+      this.lineChartBarData,
+      this.width});
   //
   Widget historyChart(_) {
     return SizedBox(
+      width: width ?? width,
       height: 350,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),

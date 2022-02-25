@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class Temp extends StatefulWidget {
   var temp;
-  Temp({Key? key, this.temp}) : super(key: key);
+  Temp({Key? key, required this.temp}) : super(key: key);
 
   @override
   _TempState createState() => _TempState();

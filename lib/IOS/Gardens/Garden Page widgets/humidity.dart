@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Humidity extends StatefulWidget {
   var humidity;
-  Humidity({Key? key, this.humidity}) : super(key: key);
+  Humidity({Key? key, required this.humidity}) : super(key: key);
 
   @override
   _HumidityState createState() => _HumidityState();

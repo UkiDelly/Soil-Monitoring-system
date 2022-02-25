@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/line_chart_history.dart';
 
 class NPKHistory extends StatelessWidget {
-  NPKHistory({Key? key}) : super(key: key);
+  double? width;
+  NPKHistory({Key? key, this.width}) : super(key: key);
 
   List<FlSpot> nSpot = [
     const FlSpot(1, 100),
@@ -115,7 +116,8 @@ class NPKHistory extends StatelessWidget {
         minY: 0,
         maxY: 100,
         showDot: true,
-        lineChartBarData: npk_status);
+        lineChartBarData: npk_status,
+        width: width);
 
     return npkHistory.historyChart(context);
   }

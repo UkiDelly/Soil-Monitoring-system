@@ -5,12 +5,17 @@ import 'package:animations/animations.dart';
 import 'package:thesis/IOS/Gardens/new_garden_page.dart';
 
 class WebGardenCard extends StatefulWidget {
+  int indexTapped;
   bool isPressed;
   int? number;
   String status;
 
   WebGardenCard(
-      {Key? key, this.number, required this.status, required this.isPressed})
+      {Key? key,
+      this.number,
+      required this.status,
+      required this.isPressed,
+      required this.indexTapped})
       : super(key: key);
 
   @override
@@ -24,14 +29,13 @@ class _WebGardenCardState extends State<WebGardenCard> {
         padding: const EdgeInsets.all(8.0),
         // Open Container
         child: AnimatedContainer(
-            decoration: const BoxDecoration(
-                color:
-                    //widget.isPressed == false
-                    //?
-                    Color(0xff669D6B),
-                //: const Color.fromARGB(255, 47, 73, 50),
+            decoration: BoxDecoration(
+                color: widget.isPressed == true &&
+                        widget.indexTapped == widget.number
+                    ? const Color.fromARGB(255, 47, 73, 50)
+                    : const Color(0xff669D6B),
                 borderRadius: const BorderRadius.all(Radius.circular(20))),
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 300),
             child: _WebGardenCard(
               isPressed: widget.isPressed,
               number: widget.number,
@@ -58,7 +62,7 @@ class __WebGardenCardState extends State<_WebGardenCard> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       width: widget.isPressed == false ? 300 : 200,
       child: Stack(
         children: [
@@ -153,7 +157,7 @@ class _AddWebGardenCardState extends State<_AddWebGardenCard> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       width: widget.isPressed == false ? 300 : 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

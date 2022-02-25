@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/line_chart_history.dart';
 
 class PhHistory extends StatelessWidget {
-  PhHistory({Key? key}) : super(key: key);
+  double? width;
+  PhHistory({Key? key, this.width}) : super(key: key);
 
   final List<FlSpot> pHspots = const [
     FlSpot(1, 7),
@@ -31,8 +32,10 @@ class PhHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     //? create ph history chart
     HistoryChart phHistory = HistoryChart(
-      title: const Text("Ph History",style: TextStyle(
-            fontSize: 25, fontWeight: FontWeight.bold),),
+      title: const Text(
+        "Ph History",
+        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+      ),
       minX: 1,
       maxX: 7,
       minY: 1,
@@ -43,6 +46,7 @@ class PhHistory extends StatelessWidget {
       lineChartBarWidth: false,
       belowBarColors: gradientColors,
       lineChartBarGradient: true,
+      width: width,
     );
 
     return phHistory.historyChart(context);

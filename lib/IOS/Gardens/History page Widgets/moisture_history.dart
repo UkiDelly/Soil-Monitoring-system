@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/line_chart_history.dart';
 
 class MoistureHistory extends StatelessWidget {
-  MoistureHistory({Key? key}) : super(key: key);
+  double? width;
+  MoistureHistory({Key? key, this.width}) : super(key: key);
 
   List<FlSpot> spots = [const FlSpot(3, 50), const FlSpot(1, 44)];
 
@@ -20,7 +21,8 @@ class MoistureHistory extends StatelessWidget {
         spots: spots,
         showDot: true,
         lineColor: [Colors.lightBlueAccent],
-        lineChartBarWidth: true);
+        lineChartBarWidth: true,
+        width: width);
 
     return moistureHistory.historyChart(context);
   }
