@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens/History%20page%20Widgets/line_chart_history.dart';
@@ -63,7 +65,7 @@ class NPKHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //* Line chart bar data of NPK
-    List<LineChartBarData> npk_status = [
+    List<LineChartBarData> npkStatus = [
       //? N
       LineChartBarData(
         //* Spots
@@ -116,7 +118,7 @@ class NPKHistory extends StatelessWidget {
         minY: 0,
         maxY: 100,
         showDot: true,
-        lineChartBarData: npk_status,
+        lineChartBarData: npkStatus,
         width: width);
 
     return npkHistory.historyChart(context);

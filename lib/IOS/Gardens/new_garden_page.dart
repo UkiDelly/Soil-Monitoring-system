@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AddNewGarden extends StatefulWidget {
-  AddNewGarden({Key? key}) : super(key: key);
+  const AddNewGarden({Key? key}) : super(key: key);
 
   @override
   State<AddNewGarden> createState() => _AddNewGardenState();
 }
 
 class _AddNewGardenState extends State<AddNewGarden> {
+  @override
   void initState() {
     super.initState();
   }
@@ -15,10 +16,8 @@ class _AddNewGardenState extends State<AddNewGarden> {
   //text controller
   var nameControl = TextEditingController();
 
+  @override
   Widget build(BuildContext context) {
-    @override
-    var name;
-
     return GestureDetector(
       //unfocuse eveything if tap the background
       onTap: () {

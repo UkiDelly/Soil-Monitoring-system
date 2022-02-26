@@ -30,10 +30,10 @@ class _PlantCardState extends State<PlantCard> {
           closedShape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           // If close,
-          closedBuilder: (_, openContainer) => _PlantCard(),
+          closedBuilder: (_, openContainer) => const _PlantCard(),
 
           //If open
-          openBuilder: (_, closeContainer) => PlantPage()),
+          openBuilder: (_, closeContainer) => const PlantPage()),
     );
   }
 }
@@ -49,7 +49,7 @@ class __PlantCardState extends State<_PlantCard> {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-      width: 200,
+      width: 300,
     );
   }
 }

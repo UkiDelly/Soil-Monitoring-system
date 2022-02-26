@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -141,7 +143,7 @@ class _WebAddGardenState extends State<WebAddGarden> {
             closedBuilder: (_, openBuilder) => _AddWebGardenCard(
                   isPressed: widget.isPressed,
                 ),
-            openBuilder: (_, closeBuilder) => AddNewGarden()));
+            openBuilder: (_, closeBuilder) => const AddNewGarden()));
   }
 }
 

@@ -1,16 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class Ph_Level extends StatefulWidget {
+class PhLevel extends StatefulWidget {
   double ph;
-  Ph_Level({Key? key, required this.ph}) : super(key: key);
+  PhLevel({Key? key, required this.ph}) : super(key: key);
 
   @override
-  _Ph_LevelState createState() => _Ph_LevelState();
+  _PhLevelState createState() => _PhLevelState();
 }
 
-class _Ph_LevelState extends State<Ph_Level> {
+class _PhLevelState extends State<PhLevel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

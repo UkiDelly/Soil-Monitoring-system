@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:thesis/IOS/ios_main_page.dart';
 import 'package:flutter/services.dart';
-import 'package:thesis/Web/web_main.dart';
+import 'package:thesis/login.dart';
 
 void main() {
   //? disable rotate
@@ -21,6 +19,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Soil Monitoring System",
-        home: kIsWeb == false ? MobileHome() : WebMain());
+        home: LoginPage());
   }
 }

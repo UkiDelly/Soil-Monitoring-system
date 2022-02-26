@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/garden_page_name.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/humidity.dart';
-import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/phLevel.dart';
+import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/ph_level.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/tempurature.dart';
 import 'package:thesis/IOS/Gardens/history_page.dart';
 import '../Garden and plant card/plant_card.dart';
@@ -52,14 +52,14 @@ class _GardenState extends State<Garden> {
         ),
 
         //* My Gardens
-        title: Text("My Gardens"),
-        titleTextStyle: const TextStyle(
-            color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            fontFamily: "Readex Pro"),
-        centerTitle: false,
-        titleSpacing: -10,
+        // title: Text("My Gardens"),
+        // titleTextStyle: const TextStyle(
+        //     color: Colors.black,
+        //     fontSize: 15,
+        //     fontWeight: FontWeight.bold,
+        //     fontFamily: "Readex Pro"),
+        // centerTitle: false,
+        // titleSpacing: -10,
 
         //* History button, setting button
         actions: [
@@ -72,7 +72,7 @@ class _GardenState extends State<Garden> {
                         context,
                         PageTransition(
                             duration: const Duration(milliseconds: 595),
-                            child: HistoryPage(),
+                            child: const HistoryPage(),
                             type: PageTransitionType.rightToLeft))
                     .then((value) {
                   setState(() {});
@@ -118,7 +118,7 @@ class _GardenState extends State<Garden> {
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
             child: SafeArea(
               bottom: true,
-              child: SizedBox(
+              child: Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,10 +136,11 @@ class _GardenState extends State<Garden> {
 
                     //* Body
                     Container(
-                      padding: const EdgeInsets.only(top: 20),
-                      height: 500,
+                      padding: const EdgeInsets.only(top: 10),
+                      //height: 500,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           //? Left Column
                           SizedBox(
@@ -197,6 +198,9 @@ class _GardenState extends State<Garden> {
                           //? Right Column
                           Column(
                             children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
                               //* Ph Level
                               TranslationAnimatedWidget.tween(
                                 delay: const Duration(milliseconds: 300),
@@ -210,7 +214,7 @@ class _GardenState extends State<Garden> {
                                   enabled: true,
                                   opacityDisabled: 0,
                                   opacityEnabled: 1,
-                                  child: Ph_Level(
+                                  child: PhLevel(
                                     ph: ph,
                                   ),
                                 ),
@@ -234,7 +238,7 @@ class _GardenState extends State<Garden> {
                                   enabled: true,
                                   opacityDisabled: 0,
                                   opacityEnabled: 1,
-                                  child: Moisture_Level(
+                                  child: MoistureLevel(
                                     moisture: moisture,
                                   ),
                                 ),
@@ -268,6 +272,12 @@ class _GardenState extends State<Garden> {
                         ],
                       ),
                     ),
+
+                    //? Divider
+                    const SizedBox(
+                      height: 10,
+                    ),
+
                     const Divider(
                       color: Color(0xfffffff0),
                       indent: 20,
@@ -308,61 +318,6 @@ class _GardenState extends State<Garden> {
                             return const PlantCard();
                           }),
                     ),
-
-                    /// Bottom
-                    // Flexible(
-                    //   fit: FlexFit.tight,
-                    //   child: TranslationAnimatedWidget.tween(
-                    //     duration: const Duration(seconds: 1),
-                    //     enabled: true,
-                    //     translationDisabled: const Offset(0, 500),
-                    //     translationEnabled: const Offset(0, 0),
-                    //     curve: Curves.fastOutSlowIn,
-                    //     child: Container(
-                    //       width: MediaQuery.of(context).size.width,
-                    //       decoration: BoxDecoration(
-                    //         color: const Color(0xfffefefe),
-                    //         borderRadius: const BorderRadius.only(
-                    //             topLeft: Radius.circular(25),
-                    //             topRight: Radius.circular(25)),
-                    //         boxShadow: [
-                    //           BoxShadow(
-                    //               color: Colors.black.withOpacity(0.25),
-                    //               spreadRadius: 5,
-                    //               blurRadius: 30,
-                    //               offset: const Offset(0, 10))
-                    //         ],
-                    //       ),
-                    //       child: Padding(
-                    //         padding: const EdgeInsets.symmetric(horizontal: 10),
-                    //         child: Column(
-                    //           mainAxisAlignment: MainAxisAlignment.center,
-                    //           children: [
-                    //             // Status text
-                    //             const Text(
-                    //               "Status",
-                    //               style: TextStyle(
-                    //                   fontSize: 30, fontWeight: FontWeight.bold),
-                    //             ),
-
-                    //             /// Status icon
-                    //             const Status_Display(),
-
-                    //             /// Comment
-                    //             Text(
-                    //               comment,
-                    //               style: const TextStyle(
-                    //                 fontSize: 30,
-                    //                 fontWeight: FontWeight.bold,
-                    //               ),
-                    //               textAlign: TextAlign.center,
-                    //             )
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

@@ -1,10 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class Temp extends StatefulWidget {
-  var temp;
+  double temp;
   Temp({Key? key, required this.temp}) : super(key: key);
 
   @override
@@ -86,15 +88,14 @@ class _TempState extends State<Temp> {
 }
 
 /// Colors for the gradient text
-getColor(temp) {
-  List<Color> color;
+List<Color> getColor(temp) {
   if (temp < 25) {
-    return color = const [Color(0xff2196EB), Color(0xff5482C0)];
+    return const [Color(0xff2196EB), Color(0xff5482C0)];
   } else if (temp < 50) {
-    return color = const [Color(0xff5482C0), Color(0xff8F6B8D)];
+    return const [Color(0xff5482C0), Color(0xff8F6B8D)];
   } else if (temp < 75) {
-    return color = const [Color(0xff8F6B8D), Color(0xffCC5359)];
+    return const [Color(0xff8F6B8D), Color(0xffCC5359)];
   } else {
-    return color = const [Color(0xffCC5359), Color(0xffF44336)];
+    return const [Color(0xffCC5359), Color(0xffF44336)];
   }
 }

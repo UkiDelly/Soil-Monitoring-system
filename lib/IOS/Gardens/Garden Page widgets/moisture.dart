@@ -1,16 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class Moisture_Level extends StatefulWidget {
-  var moisture;
-  Moisture_Level({Key? key, required this.moisture}) : super(key: key);
+class MoistureLevel extends StatefulWidget {
+  double moisture;
+  MoistureLevel({Key? key, required this.moisture}) : super(key: key);
 
   @override
-  _Moisture_LevelState createState() => _Moisture_LevelState();
+  _MoistureLevelState createState() => _MoistureLevelState();
 }
 
-class _Moisture_LevelState extends State<Moisture_Level> {
+class _MoistureLevelState extends State<MoistureLevel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

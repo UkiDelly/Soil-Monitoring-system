@@ -1,10 +1,14 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/humidity.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/moisture.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/npk_status.dart';
-import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/phLevel.dart';
+import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/ph_level.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/tempurature.dart';
+import 'package:thesis/IOS/Gardens/History%20page%20Widgets/humidity_history.dart';
+import 'package:thesis/Web/Garden/web_plant_card.dart';
 
 import '../../IOS/Gardens/History page Widgets/moisture_history.dart';
 import '../../IOS/Gardens/History page Widgets/npk_history.dart';
@@ -39,83 +43,115 @@ class _WebGardenPageState extends State<WebGardenPage> {
           duration: const Duration(milliseconds: 1500),
           opacityDisabled: 0,
           opacityEnabled: 1,
-          child: Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //* Left Side
               SizedBox(
-                  width: widget.isPressed == true ? 400 : 0,
-                  child: widget.isPressed == true
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Wrap(
-                            direction: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    //* Left Side, Status
+                    SizedBox(
+                        width: widget.isPressed == true ? 400 : 0,
+                        child: widget.isPressed == true
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    NPKstatus(dataMap: dataMap),
+                                    const SizedBox(width: 10),
+                                    PhLevel(ph: ph),
+                                    const SizedBox(width: 10),
+                                    MoistureLevel(moisture: moisture),
+                                    const SizedBox(width: 10),
+                                    Temp(temp: temp),
+                                    const SizedBox(width: 10),
+                                    Humidity(
+                                      humidity: humidity,
+                                    ),
+                                  ],
+                                ))
+                            : null),
+
+                    //* Right Side, History
+                    Expanded(
+                        child: Container(
+                      height: 400,
+                      padding: const EdgeInsets.all(8),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Center(
+                          child: Row(
                             children: [
-                              NPKstatus(dataMap: dataMap),
-                              const SizedBox(width: 10),
-                              Ph_Level(ph: ph),
-                              const SizedBox(width: 10),
-                              Moisture_Level(moisture: moisture),
-                              const SizedBox(width: 10),
-                              Temp(temp: temp),
-                              const SizedBox(width: 10),
-                              Humidity(
-                                humidity: humidity,
+                              //? NPK history
+                              const SizedBox(
+                                width: 10,
                               ),
+                              NPKHistory(
+                                width: 400,
+                              ),
+
+                              //? Ph history
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              PhHistory(
+                                width: 400,
+                              ),
+
+                              //? Moisture history
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              MoistureHistory(
+                                width: 400,
+                              ),
+
+                              //? Temperature history
+                              const SizedBox(width: 10),
+                              TempHistory(width: 400),
+
+                              //? Humidity history
+                              const SizedBox(),
+                              HumidityHistory(
+                                width: 400,
+                              )
                             ],
-                          ))
-                      : null),
+                          ),
+                        ),
+                      ),
+                    ))
+                  ],
+                ),
+              ),
 
               //* Divider
-              const VerticalDivider(
-                indent: 20,
-                endIndent: 20,
-                color: Color(0xfffffff0),
-              ),
-              //* Right Side
-              Expanded(
-                  child: Container(
-                padding: const EdgeInsets.all(8),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        /// NPK history
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        NPKHistory(
-                          width: 400,
-                        ),
+              const Divider(
+                  indent: 10, endIndent: 10, color: Color(0xfffffff0)),
 
-                        /// Ph history
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        PhHistory(
-                          width: 400,
-                        ),
-
-                        /// Moisture history
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        MoistureHistory(
-                          width: 400,
-                        ),
-
-                        /// Temperature history
-                        const SizedBox(width: 10),
-                        TempHistory(),
-
-                        /// Humidity history
-                        const SizedBox(),
-                      ],
-                    ),
-                  ),
+              //* Plant Text
+              const Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Plants that can be plant",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-              ))
+              ),
+              //
+              const SizedBox(
+                height: 10,
+              ),
+              //* Plant Card
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                height: 330,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  itemBuilder: (context, index) => const WebPlantCard(),
+                ),
+              )
             ],
           ),
         ));

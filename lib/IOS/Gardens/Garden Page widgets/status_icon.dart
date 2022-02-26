@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Status_Display extends StatelessWidget {
-  const Status_Display({Key? key}) : super(key: key);
+class StatusDisplay extends StatelessWidget {
+  const StatusDisplay({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

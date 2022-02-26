@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:thesis/IOS/Gardens/garden_page.dart';
@@ -39,7 +41,7 @@ class _GardenCardState extends State<GardenCard> {
                 ),
 
             //If open
-            openBuilder: (_, closeContainer) => Garden()));
+            openBuilder: (_, closeContainer) => const Garden()));
   }
 }
 
@@ -131,8 +133,8 @@ class _AddGardenState extends State<AddGarden> {
             //Shape of the close Container
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-            closedBuilder: (_, openBuilder) => _AddGardenCard(),
-            openBuilder: (_, closeBuilder) => AddNewGarden()));
+            closedBuilder: (_, openBuilder) => const _AddGardenCard(),
+            openBuilder: (_, closeBuilder) => const AddNewGarden()));
   }
 }
 

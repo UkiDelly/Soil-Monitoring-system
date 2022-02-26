@@ -50,7 +50,17 @@ class _WebMainState extends State<WebMain> {
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Readex Pro"),
-                      )
+                      ),
+
+                      const Expanded(child: SizedBox()),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Logout",
+                            style: TextStyle(color: Colors.black, fontSize: 30),
+                          ))
                     ],
                   ),
                 ),
@@ -80,6 +90,7 @@ class _WebMainState extends State<WebMain> {
                         }
                         //* if the list is 3, fill all with the garden cards
                         return InkWell(
+                          //* Detect if it card is pressed
                           onTap: () => setState(() {
                             isPressed = true;
                             indexTapped = index + 1;
@@ -102,13 +113,14 @@ class _WebMainState extends State<WebMain> {
                 //* Container when pressed
                 AnimatedContainer(
                   curve: Curves.easeInToLinear,
-                  duration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 200),
                   width: MediaQuery.of(context).size.width - 20,
-                  height: isPressed != false ? 400 : 0,
+                  height: isPressed != false ? 800 : 0,
                   decoration: const BoxDecoration(
                       color: Color(0xff669D6B),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: isPressed == true
+                      //* Garden Page
                       ? WebGardenPage(
                           isPressed: isPressed, indexTapped: indexTapped)
                       : null,
