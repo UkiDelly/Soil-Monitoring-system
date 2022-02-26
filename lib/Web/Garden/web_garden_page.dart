@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:convert';
-
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
