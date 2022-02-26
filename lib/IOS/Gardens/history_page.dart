@@ -19,7 +19,7 @@ class HistoryPage extends StatelessWidget {
           elevation: 0,
           leading: IconButton(
             icon: SvgPicture.asset(
-              'assets/back.svg',
+              'assetsicon/back.svg',
               width: 15,
               color: Colors.white,
             ),

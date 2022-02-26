@@ -1,7 +1,10 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
+
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/humidity.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/moisture.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/npk_status.dart';
@@ -26,12 +29,39 @@ class WebGardenPage extends StatefulWidget {
 }
 
 class _WebGardenPageState extends State<WebGardenPage> {
-  //? dump data
-  Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
-  double ph = 8;
-  double moisture = 50;
-  double temp = 60;
-  double humidity = 30;
+  //?dump data
+  bool isSettingPressed = false;
+  String gardenName = "Garden";
+  late Map<String, double> dataMap = {"": 0};
+  double ph = 0, moisture = 0, temp = 0, humidity = 0;
+  // Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
+  // double ph = 7;
+  // double moisture = 46;
+  // double temp = 31, humidity = 30;
+  String comment = "Comment for the Garden";
+
+  TextEditingController nameControl = TextEditingController();
+
+  //* Load date from the json file
+  readJson() async {
+    final String response = await rootBundle.loadString('assets/dump.json');
+    final data = await json.decode(response);
+
+    setState(() {
+      ph = data["ph"];
+      moisture = data["moisture"];
+      temp = data["temp"];
+      humidity = data["humidity"];
+      dataMap = {"N": data["N"], "P": data["P"], "K": data["K"]};
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readJson();
+  }
 
   @override
   Widget build(BuildContext context) {

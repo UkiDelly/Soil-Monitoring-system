@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/material.dart';
@@ -23,21 +22,21 @@ class Garden extends StatefulWidget {
 }
 
 class _GardenState extends State<Garden> {
-  late Map<String, dynamic> _data = {};
-
-  //dump data
+  //?dump data
   bool isSettingPressed = false;
   String gardenName = "Garden";
-  late Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
-  double ph = 7;
-  double moisture = 46;
-  double temp = 31, humidity = 30;
+  late Map<String, double> dataMap = {"": 0};
+  double ph = 0, moisture = 0, temp = 0, humidity = 0;
+  // Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
+  // double ph = 7;
+  // double moisture = 46;
+  // double temp = 31, humidity = 30;
   String comment = "Comment for the Garden";
 
   TextEditingController nameControl = TextEditingController();
 
   //* Load date from the json file
-  Future<void> readJson() async {
+  readJson() async {
     final String response = await rootBundle.loadString('assets/dump.json');
     final data = await json.decode(response);
 
