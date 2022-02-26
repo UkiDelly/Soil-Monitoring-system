@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens/Garden%20Page%20widgets/garden_page_name.dart';
@@ -20,16 +23,39 @@ class Garden extends StatefulWidget {
 }
 
 class _GardenState extends State<Garden> {
+  late Map<String, dynamic> _data = {};
+
   //dump data
   bool isSettingPressed = false;
   String gardenName = "Garden";
-  Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
+  late Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
   double ph = 7;
   double moisture = 46;
   double temp = 31, humidity = 30;
   String comment = "Comment for the Garden";
 
   TextEditingController nameControl = TextEditingController();
+
+  //* Load date from the json file
+  Future<void> readJson() async {
+    final String response = await rootBundle.loadString('assets/dump.json');
+    final data = await json.decode(response);
+
+    setState(() {
+      ph = data["ph"];
+      moisture = data["moisture"];
+      temp = data["temp"];
+      humidity = data["humidity"];
+      dataMap = {"N": data["N"], "P": data["P"], "K": data["K"]};
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readJson();
+  }
 
   @override
   Widget build(BuildContext context) {

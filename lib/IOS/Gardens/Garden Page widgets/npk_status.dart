@@ -44,8 +44,7 @@ class _NPKstatusState extends State<NPKstatus> {
 
               // change the value into percentage in the chart
               chartValuesOptions: const ChartValuesOptions(
-                showChartValuesInPercentage: true,
-              ),
+                  showChartValuesInPercentage: false, showChartValues: true),
               ringStrokeWidth: 40,
             )
           ],

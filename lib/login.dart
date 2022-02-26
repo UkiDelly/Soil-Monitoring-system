@@ -102,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                         backgroundColor:
                             MaterialStateProperty.all(const Color(0xff669D6B))),
                     onPressed: () {
+                      //* If the platform is mobile
                       if (!kIsWeb) {
                         Navigator.push(
                                 context,
@@ -111,7 +112,9 @@ class _LoginPageState extends State<LoginPage> {
                             .then((value) {
                           setState(() {});
                         });
-                      } else {
+                      }
+                      //* if the platform is web
+                      else {
                         Navigator.push(
                                 context,
                                 PageTransition(
