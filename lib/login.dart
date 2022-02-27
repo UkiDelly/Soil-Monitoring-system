@@ -10,8 +10,7 @@ import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
 import 'riverpod.dart';
 
-final tokenProvider =
-    StateNotifierProvider<TokenNotifier, String>((ref) => TokenNotifier("0"));
+
 
 //! Error message if the token is invalid
 String? _errorText(String token) {
