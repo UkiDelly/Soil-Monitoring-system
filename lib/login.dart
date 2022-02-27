@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis/IOS/ios_main_page.dart';
+import 'package:thesis/IOS/new_user.dart';
 import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
 import 'provider.dart';
@@ -76,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: usernameController,
                       decoration: InputDecoration(
+                        focusColor: const Color(0xfffffff0),
                         hintText: "username",
                         prefixIcon: const Icon(Icons.account_circle_outlined),
                         filled: true,
@@ -116,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                 //? Login Button
                 SizedBox(
                   height: 55,
+                  width: 250,
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor:
@@ -163,6 +166,27 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+
+                //
+                const SizedBox(height: 100),
+                const Text("Don't have an account?",
+                    style: TextStyle(fontSize: 20, color: Colors.black)),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: const SignInPage(),
+                            type: PageTransitionType.rightToLeft));
+                  },
+                  child: const Text(
+                    "Sign In!",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline, fontSize: 30),
+                  ),
+                  style:
+                      const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                )
               ],
             ),
           ),
