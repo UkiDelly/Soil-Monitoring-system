@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:thesis/login.dart';
+import 'provider.dart';
 
 void main() {
   //? disable rotate
@@ -16,9 +18,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Soil Monitoring System",
-        home: LoginPage());
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Token>(create: (context) => Token()),
+      ],
+      child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Soil Monitoring System",
+          home: LoginPage()),
+    );
   }
 }
