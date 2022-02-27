@@ -33,10 +33,12 @@ class _LoginPageState extends State<LoginPage> {
     var item = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
+        //* Save the token
         token = item["data"]["authToken"];
       });
     } else {
       setState(() {
+        //*  When authorization is fail
         token = item["status"].toString();
       });
     }
@@ -104,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide.none,
                             ),
+                            //! if token is not valid, show error
                             errorText: _errorText(token)))),
 
                 const SizedBox(
@@ -118,8 +121,10 @@ class _LoginPageState extends State<LoginPage> {
                         backgroundColor:
                             MaterialStateProperty.all(const Color(0xff669D6B))),
                     onPressed: () async {
+                      //? Do the login process and wait until done
                       await login();
 
+                      //! Check it the token is given
                       if (token.isNotEmpty && token != "400") {
                         //* If the platform is mobile
                         if (!kIsWeb) {
@@ -145,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       }
 
+                      //? Store the token for further use
                       Provider.of<Token>(context, listen: false)
                           .setToken(token);
                     },
@@ -166,6 +172,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+//! Error message if the token is invalid
 String? _errorText(String token) {
   if (token == "400") {
     return "Incorrect Username or Password";
