@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:thesis/IOS/IOS%20main%20page.dart';
-import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:thesis/login.dart';
+import 'provider.dart';
 
 void main() {
+  //? disable rotate
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -12,36 +18,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
-      color: Color(0xffFEFEFE),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Token>(create: (context) => Token()),
+      ],
+      child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Soil Monitoring System",
+          home: LoginPage()),
     );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-// Main Home Page
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    if (Platform.isIOS || Platform.isAndroid) {
-      return const Material(
-        type: MaterialType.transparency,
-        child: Scaffold(
-          body: SafeArea(bottom: false, child: Home()),
-        ),
-      );
-    }
-    // Safe Area
-    return Scaffold(
-        body: Container(
-      color: Colors.grey,
-    ));
   }
 }
