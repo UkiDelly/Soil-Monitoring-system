@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:thesis/IOS/Gardens/garden_page.dart';
+
 import 'package:animations/animations.dart';
-import 'package:thesis/IOS/Gardens/new_garden_page.dart';
+import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
+
+import '../New Garden Page/new_garden_page.dart';
 
 class GardenCard extends StatefulWidget {
   int? number;
