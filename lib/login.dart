@@ -10,8 +10,6 @@ import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
 import 'riverpod.dart';
 
-
-
 //! Error message if the token is invalid
 String? _errorText(String token) {
   if (token == "400") {
@@ -198,7 +196,7 @@ class __LoginWidgetState extends ConsumerState<_LoginWidget> {
 //Login
 login(TextEditingController usernameController,
     TextEditingController passwordController, var tokenProvider) async {
-  const url = "http://localhost:3000/v1/user/login";
+  const url = "http://soilanalysis.loca.lt/v1/user/login";
   final response = await http.post(Uri.parse(url), body: {
     'username': usernameController.text,
     'password': passwordController.text
