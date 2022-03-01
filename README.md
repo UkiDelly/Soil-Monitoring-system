@@ -1,16 +1,11 @@
-# thesis
+# Soil Monitoring System
 
-flutter app and web for the thesis
+This is the project of my University thesis. It created by Flutter framework.
 
-## Getting Started
+## Mobile App
 
-This project is a starting point for a Flutter application.
+This project's major platform is mobile. So I focus making the mobile app but also there is a web version.
 
-A few resources to get you started if this is your first Flutter project:
+## Web application
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project also include web application as a minor platform.
