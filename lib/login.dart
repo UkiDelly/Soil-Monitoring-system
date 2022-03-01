@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/mobile_main.dart';
 
 import 'package:thesis/IOS/new_user.dart';
 import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
+import 'IOS/Main Page/mobile_main.dart';
 import 'riverpod.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 

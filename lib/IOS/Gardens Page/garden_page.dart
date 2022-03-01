@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import '../Garden and plant card/plant_card.dart';
+import 'plant_card.dart';
 import '../History Page/history_page.dart';
 import 'Garden Page widgets/garden_page_name.dart';
 import 'Garden Page widgets/humidity.dart';

@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/Web/Garden/web_garden_card.dart';
-import 'package:thesis/Web/Garden/web_garden_page.dart';
 import 'package:thesis/login.dart';
+
+import 'Web Garden Page/web_garden_card.dart';
+import 'Web Garden Page/web_garden_page.dart';
 
 class WebMain extends StatefulWidget {
   const WebMain({Key? key}) : super(key: key);
