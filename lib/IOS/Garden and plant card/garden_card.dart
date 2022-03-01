@@ -1,17 +1,15 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'package:animations/animations.dart';
 import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
 
-import '../New Garden Page/new_garden_page.dart';
-
 class GardenCard extends StatefulWidget {
-  int? number;
+  String name;
   String status;
-  GardenCard({Key? key, this.number, required this.status}) : super(key: key);
+  GardenCard({Key? key, required this.name, required this.status})
+      : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
@@ -37,8 +35,8 @@ class _GardenCardState extends State<GardenCard> {
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
-            closedBuilder: (_, openContainer) => _GardenCard(
-                  number: widget.number,
+            closedBuilder: (_, openContainer) => _Context(
+                  name: widget.name,
                   status: widget.status,
                 ),
 
@@ -47,17 +45,15 @@ class _GardenCardState extends State<GardenCard> {
   }
 }
 
-// The actuall Garden card widget
-class _GardenCard extends StatefulWidget {
-  int? number;
+class _Context extends StatelessWidget {
+  String name;
   String? status;
-  _GardenCard({Key? key, this.number, required this.status}) : super(key: key);
+  _Context({
+    Key? key,
+    required this.name,
+    this.status,
+  }) : super(key: key);
 
-  @override
-  __GardenCardState createState() => __GardenCardState();
-}
-
-class __GardenCardState extends State<_GardenCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -69,7 +65,7 @@ class __GardenCardState extends State<_GardenCard> {
               top: 15,
               left: 17,
               width: 125,
-              child: Text("#${widget.number}",
+              child: Text("#$name",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontFamily: "Readex Pro",
@@ -80,13 +76,13 @@ class __GardenCardState extends State<_GardenCard> {
           Positioned(
               top: 8,
               right: 10,
-              child: widget.status == "good"
+              child: status == "good"
                   ? SvgPicture.asset(
                       'assets/check_status.svg',
                       width: 30,
                       color: const Color(0xfffefefe),
                     )
-                  : widget.status == "warning"
+                  : status == "warning"
                       ? SvgPicture.asset('assets/warning.svg',
                           width: 30, color: Colors.yellow)
                       : SvgPicture.asset(
@@ -108,40 +104,8 @@ class __GardenCardState extends State<_GardenCard> {
   }
 }
 
-class AddGarden extends StatefulWidget {
-  const AddGarden({Key? key}) : super(key: key);
-
-  @override
-  State<AddGarden> createState() => _AddGardenState();
-}
-
-class _AddGardenState extends State<AddGarden> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-
-        // Card
-        child: OpenContainer(
-            transitionDuration: const Duration(milliseconds: 300),
-            closedElevation: 5,
-            // When the Container is closed
-            onClosed: (data) {
-              setState(() {});
-            },
-            openColor: const Color(0xfffefefe),
-            //Color when the Container is closed
-            closedColor: const Color(0xfffefefe),
-            //Shape of the close Container
-            closedShape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-            closedBuilder: (_, openBuilder) => const _AddGardenCard(),
-            openBuilder: (_, closeBuilder) => const AddNewGarden()));
-  }
-}
-
-class _AddGardenCard extends StatelessWidget {
-  const _AddGardenCard({Key? key}) : super(key: key);
+class AddGardenCard extends StatelessWidget {
+  const AddGardenCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

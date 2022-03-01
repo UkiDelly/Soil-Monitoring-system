@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/ios_main_page.dart';
+import 'package:thesis/IOS/mobile_main.dart';
+
 import 'package:thesis/IOS/new_user.dart';
 import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
@@ -80,6 +81,8 @@ class __LoginState extends ConsumerState<_Login> {
       //? Done loading data
       setState(() {
         isLoading = false;
+        usernameController.text = "";
+        passwordController.text = "";
       });
     } else {
       showAlertDialog(context);
@@ -157,6 +160,7 @@ class __LoginState extends ConsumerState<_Login> {
         SizedBox(
             width: 300,
             child: TextField(
+              textInputAction: TextInputAction.next,
               controller: usernameController,
               decoration: InputDecoration(
                 focusColor: const Color(0xfffffff0),
@@ -178,6 +182,7 @@ class __LoginState extends ConsumerState<_Login> {
         SizedBox(
             width: 300,
             child: TextField(
+                textInputAction: TextInputAction.done,
                 //* Hide the password
                 obscureText: true,
                 controller: passwordController,
@@ -210,7 +215,6 @@ class __LoginState extends ConsumerState<_Login> {
                 onPressed: () async {
 //? Do the login process and wait until done
                   await login();
-                  setState(() {});
 
 //! Check it the token is given
                   if (successLogin) {

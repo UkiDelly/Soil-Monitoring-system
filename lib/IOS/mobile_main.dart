@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'Garden and plant card/garden_card.dart';
+import 'Main Page/garden_card.dart';
 
 class MobileHome extends StatelessWidget {
   const MobileHome({Key? key}) : super(key: key);
@@ -93,7 +93,7 @@ class _GardenListState extends State<GardenList> {
 //* if the list is 3, fill all with the garden cards
             return GardenCard(
               status: "good",
-              number: index + 1,
+              name: "${index + 1}",
             );
           }),
     ));
