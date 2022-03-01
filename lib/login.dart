@@ -58,19 +58,21 @@ class __LoginState extends ConsumerState<_Login> {
       isLoading = true;
     });
 
-    const url = "http://soilanalysis.loca.lt/v1/user/login";
+    const url = "http://localhost:3000/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
     });
+
     var item = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
       setState(() {
         successLogin = true;
       });
 //* Save the token for further use
       ref.watch(tokenProvider.notifier).setToken(item["data"]["authToken"]);
-    } else {
+    } else if (response.statusCode == 401) {
 //!  When authorization is fail
       ref.watch(tokenProvider.notifier).setToken(item["status"].toString());
 
@@ -78,6 +80,8 @@ class __LoginState extends ConsumerState<_Login> {
       setState(() {
         isLoading = false;
       });
+    } else {
+      showAlertDialog(context);
     }
   }
 
@@ -205,26 +209,19 @@ class __LoginState extends ConsumerState<_Login> {
                 onPressed: () async {
 //? Do the login process and wait until done
                   await login();
+                  setState(() {});
 
 //! Check it the token is given
                   if (successLogin) {
 //* If the platform is mobile
-                    if (!kIsWeb) {
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                              child: const MobileHome(),
-                              type: PageTransitionType.fade));
-                    }
-//* if the platform is web
-                    else {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const WebMain(),
-                              type: PageTransitionType.fade));
-                    }
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child:
+                                kIsWeb ? const WebMain() : const MobileHome(),
+                            type: PageTransitionType.fade));
                   }
+//* if the platform is web
                 },
                 child: const Text(
                   "Login",
@@ -238,6 +235,43 @@ class __LoginState extends ConsumerState<_Login> {
           },
         )
       ]),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: const Text(
+        "OK",
+        style: TextStyle(color: Color(0xff669D6B)),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Row(
+        children: const [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.yellowAccent,
+          )
+        ],
+      ),
+      content: const Text("The Server is offline~"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
