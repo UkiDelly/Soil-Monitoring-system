@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
@@ -26,6 +27,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //? Set the system status color to black since the background is light
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return const Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xfffffff0),

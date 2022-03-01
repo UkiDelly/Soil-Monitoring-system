@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'garden_card.dart';
 
@@ -7,7 +9,15 @@ class MobileHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //? Set the system status color to black since the background is light
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: const Color(0xfffffff0),
+          toolbarOpacity: 0,
+          elevation: 0,
+          toolbarHeight: 0),
+      extendBodyBehindAppBar: true,
       backgroundColor: const Color(0xfffffff0),
       body: SafeArea(
         bottom: false,

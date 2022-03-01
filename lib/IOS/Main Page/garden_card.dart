@@ -39,7 +39,9 @@ class _GardenCardState extends State<GardenCard> {
             closedBuilder: (_, openContainer) => _Contents(name: widget.name),
 
             //If open
-            openBuilder: (_, closeContainer) => const Garden()));
+            openBuilder: (_, closeContainer) {
+              return const Garden();
+            }));
   }
 }
 
