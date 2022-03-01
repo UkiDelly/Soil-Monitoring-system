@@ -26,6 +26,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xfffffff0),
       body: SafeArea(
         child: SizedBox(
