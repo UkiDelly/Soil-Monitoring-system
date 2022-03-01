@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/ios_main_page.dart';
+
 import 'package:thesis/IOS/new_user.dart';
 import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
+import 'IOS/Main Page/mobile_main.dart';
 import 'riverpod.dart';
-
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 //! Error message if the token is invalid
 String? _errorText(String token) {
@@ -26,12 +26,92 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfffffff0),
+    return const Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Color(0xfffffff0),
       body: SafeArea(
         child: SizedBox(
-          child: Center(
-            child: Column(
+          child: _Login(),
+        ),
+      ),
+    );
+  }
+}
+
+class _Login extends ConsumerStatefulWidget {
+  const _Login({Key? key}) : super(key: key);
+
+  @override
+  __LoginState createState() => __LoginState();
+}
+
+class __LoginState extends ConsumerState<_Login> {
+  //
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+  bool successLogin = false;
+  //
+
+//*Login
+  login() async {
+    //? Loading data
+    setState(() {
+      isLoading = true;
+    });
+
+    const url = "http://localhost:3000/v1/user/login";
+    final response = await http.post(Uri.parse(url), body: {
+      'username': usernameController.text,
+      'password': passwordController.text
+    });
+
+    var item = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        successLogin = true;
+      });
+//* Save the token for further use
+      ref.watch(tokenProvider.notifier).setToken(item["data"]["authToken"]);
+    } else if (response.statusCode == 401) {
+//!  When authorization is fail
+      ref.watch(tokenProvider.notifier).setToken(item["status"].toString());
+
+      //? Done loading data
+      setState(() {
+        isLoading = false;
+        usernameController.text = "";
+        passwordController.text = "";
+      });
+    } else {
+      showAlertDialog(context);
+    }
+  }
+
+  //
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: isLoading
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(
+                  color: Color(0xff669D6B),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AnimatedTextKit(animatedTexts: [
+                  TyperAnimatedText("Loading...",
+                      curve: Curves.linear,
+                      textStyle: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold))
+                ]),
+              ],
+            )
+          : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 //* Logo
@@ -44,7 +124,7 @@ class LoginPage extends StatelessWidget {
                   height: 15,
                 ),
 //? Login
-                const _LoginWidget(),
+                __login(),
 
                 //
                 const SizedBox(height: 100),
@@ -69,34 +149,18 @@ class LoginPage extends StatelessWidget {
                 )
               ],
             ),
-          ),
-        ),
-      ),
     );
   }
-}
 
-class _LoginWidget extends ConsumerStatefulWidget {
-  const _LoginWidget({Key? key}) : super(key: key);
-
-  @override
-  __LoginWidgetState createState() => __LoginWidgetState();
-}
-
-class __LoginWidgetState extends ConsumerState<_LoginWidget> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool nameError = false;
-  bool passwordError = false;
-
-  @override
-  Widget build(BuildContext context) {
+  //
+  Widget __login() {
     return SizedBox(
       child: Column(children: [
 //? User name
         SizedBox(
             width: 300,
             child: TextField(
+              textInputAction: TextInputAction.next,
               controller: usernameController,
               decoration: InputDecoration(
                 focusColor: const Color(0xfffffff0),
@@ -118,6 +182,7 @@ class __LoginWidgetState extends ConsumerState<_LoginWidget> {
         SizedBox(
             width: 300,
             child: TextField(
+                textInputAction: TextInputAction.done,
                 //* Hide the password
                 obscureText: true,
                 controller: passwordController,
@@ -140,7 +205,6 @@ class __LoginWidgetState extends ConsumerState<_LoginWidget> {
 //? Login Button
         Consumer(
           builder: (_, ref, __) {
-            final token = ref.watch(tokenProvider.notifier);
             return SizedBox(
               height: 55,
               width: 250,
@@ -150,34 +214,19 @@ class __LoginWidgetState extends ConsumerState<_LoginWidget> {
                         MaterialStateProperty.all(const Color(0xff669D6B))),
                 onPressed: () async {
 //? Do the login process and wait until done
-                  await login(usernameController, passwordController, token);
+                  await login();
 
 //! Check it the token is given
-                  if (ref.watch(tokenProvider) != "0" &&
-                      ref.watch(tokenProvider) != "400") {
+                  if (successLogin) {
 //* If the platform is mobile
-                    if (!kIsWeb) {
-                      Navigator.pushReplacement(
-                              context,
-                              PageTransition(
-                                  child: const MobileHome(),
-                                  type: PageTransitionType.fade))
-                          .then((value) {
-                        setState(() {});
-                      });
-                    }
-//* if the platform is web
-                    else {
-                      Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: const WebMain(),
-                                  type: PageTransitionType.fade))
-                          .then((value) {
-                        setState(() {});
-                      });
-                    }
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child:
+                                kIsWeb ? const WebMain() : const MobileHome(),
+                            type: PageTransitionType.fade));
                   }
+//* if the platform is web
                 },
                 child: const Text(
                   "Login",
@@ -193,22 +242,41 @@ class __LoginWidgetState extends ConsumerState<_LoginWidget> {
       ]),
     );
   }
-}
 
-//Login
-login(TextEditingController usernameController,
-    TextEditingController passwordController, var tokenProvider) async {
-  const url = "http://localhost:3000/v1/user/login";
-  final response = await http.post(Uri.parse(url), body: {
-    'username': usernameController.text,
-    'password': passwordController.text
-  });
-  var item = jsonDecode(response.body);
-  if (response.statusCode == 200) {
-//* Save the token for further use
-    tokenProvider.setToken(item["data"]["authToken"]);
-  } else {
-//!  When authorization is fail
-    tokenProvider.setToken(item["status"].toString());
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: const Text(
+        "OK",
+        style: TextStyle(color: Color(0xff669D6B)),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Row(
+        children: const [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.yellowAccent,
+          )
+        ],
+      ),
+      content: const Text("The Server is offline~"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
