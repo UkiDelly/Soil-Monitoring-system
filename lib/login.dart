@@ -80,6 +80,8 @@ class __LoginState extends ConsumerState<_Login> {
       //? Done loading data
       setState(() {
         isLoading = false;
+        usernameController.text = "";
+        passwordController.text = "";
       });
     } else {
       showAlertDialog(context);
@@ -157,6 +159,7 @@ class __LoginState extends ConsumerState<_Login> {
         SizedBox(
             width: 300,
             child: TextField(
+              textInputAction: TextInputAction.next,
               controller: usernameController,
               decoration: InputDecoration(
                 focusColor: const Color(0xfffffff0),
@@ -178,6 +181,7 @@ class __LoginState extends ConsumerState<_Login> {
         SizedBox(
             width: 300,
             child: TextField(
+                textInputAction: TextInputAction.done,
                 //* Hide the password
                 obscureText: true,
                 controller: passwordController,
@@ -210,7 +214,6 @@ class __LoginState extends ConsumerState<_Login> {
                 onPressed: () async {
 //? Do the login process and wait until done
                   await login();
-                  setState(() {});
 
 //! Check it the token is given
                   if (successLogin) {
