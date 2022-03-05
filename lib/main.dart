@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
+import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 
 import 'package:thesis/login.dart';
 
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Soil Monitoring System",
-        home: LoginPage());
+        home: Garden() //LoginPage()
+        );
   }
 }
