@@ -2,14 +2,13 @@
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-
-import '../Gardens Page/garden_page.dart';
+import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
 import '../New Garden Page/new_garden_page.dart';
 
 class GardenCard extends StatefulWidget {
-  String name;
-  String status;
-  GardenCard({Key? key, required this.name, required this.status})
+  String gardenName;
+  String gardenID;
+  GardenCard({Key? key, required this.gardenName, required this.gardenID})
       : super(key: key);
 
   @override
@@ -36,11 +35,15 @@ class _GardenCardState extends State<GardenCard> {
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
-            closedBuilder: (_, openContainer) => _Contents(name: widget.name),
+            closedBuilder: (_, openContainer) =>
+                _Contents(name: widget.gardenName),
 
             //If open
             openBuilder: (_, closeContainer) {
-              return const Garden();
+              return NewGardenPage(
+                gardenName: widget.gardenName,
+                gardenID: widget.gardenID,
+              ); //Garden();
             }));
   }
 }
@@ -64,13 +67,18 @@ class _Contents extends StatelessWidget {
             height: 10,
           ),
           Card(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))),
             elevation: 5,
-            child: Text(name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontFamily: "Readex Pro",
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontFamily: "Readex Pro",
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold)),
+            ),
           ),
         ],
       ),
