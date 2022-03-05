@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
-import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-
-import 'package:thesis/login.dart';
+import 'login.dart';
 
 void main() {
   //? disable rotate
@@ -21,9 +18,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Soil Monitoring System",
-        home: Garden() //LoginPage()
-        );
+      debugShowCheckedModeBanner: false,
+      title: "Soil Monitoring System",
+      home: LoginPage(),
+    );
   }
 }

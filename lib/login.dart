@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/IOS/Main%20Page/test.dart';
 
 import 'package:thesis/IOS/new_user.dart';
 import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/loading.dart';
 import 'IOS/Main Page/mobile_main.dart';
-import 'riverpod.dart';
+import 'provider.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 //! Error message if the token is invalid
@@ -63,7 +65,7 @@ class __LoginState extends ConsumerState<_Login> {
       isLoading = true;
     });
 
-    const url = "http://localhost:3000/v1/user/login";
+    const url = "https://soilanalysis.loca.lt/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
@@ -97,23 +99,7 @@ class __LoginState extends ConsumerState<_Login> {
   Widget build(BuildContext context) {
     return Center(
       child: isLoading
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(
-                  color: Color(0xff669D6B),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                AnimatedTextKit(animatedTexts: [
-                  TyperAnimatedText("Loading...",
-                      curve: Curves.linear,
-                      textStyle: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold))
-                ]),
-              ],
-            )
+          ? const LoadingPage()
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -229,7 +215,6 @@ class __LoginState extends ConsumerState<_Login> {
                                 kIsWeb ? const WebMain() : const MobileHome(),
                             type: PageTransitionType.fade));
                   }
-//* if the platform is web
                 },
                 child: const Text(
                   "Login",
