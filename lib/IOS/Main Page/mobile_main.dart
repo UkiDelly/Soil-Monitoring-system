@@ -36,6 +36,7 @@ class MobileHome extends StatelessWidget {
 //* Garden List
               Consumer(
                 builder: (ctx, ref, child) {
+                  //* get the token from the provider
                   final token = ref.watch(tokenProvider);
                   return GardenList(token: token);
                 },
@@ -97,6 +98,7 @@ class AboveGardenList extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class GardenList extends StatefulWidget {
   String token = "";
   GardenList({
@@ -115,10 +117,11 @@ class _GardenListState extends State<GardenList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchData();
+    getGardenList();
   }
 
-  fetchData() async {
+  //? get the garden list
+  getGardenList() async {
     const url = "http://soilanalysis.loca.lt/v1/garden/list";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
@@ -133,9 +136,10 @@ class _GardenListState extends State<GardenList> {
 
   List data = [];
   bool isLoading = true;
-  int gardenCount = 2;
+  int gardenCount = 0;
   @override
   Widget build(BuildContext context) {
+    //! if the app is getting the data from the api show loading widget
     return isLoading
         ? Flexible(
             child: Column(
@@ -156,6 +160,8 @@ class _GardenListState extends State<GardenList> {
               ],
             ),
           )
+
+        //? Show the garden List
         : Flexible(
             child: ListView.builder(
                 itemCount: gardenCount < 3 ? gardenCount + 1 : 3,

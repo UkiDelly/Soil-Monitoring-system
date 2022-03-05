@@ -5,15 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Main%20Page/test.dart';
-
 import 'package:thesis/IOS/new_user.dart';
 import 'package:thesis/Web/web_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/loading.dart';
 import 'IOS/Main Page/mobile_main.dart';
 import 'provider.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 
 //! Error message if the token is invalid
 String? _errorText(String token) {
@@ -65,6 +62,7 @@ class __LoginState extends ConsumerState<_Login> {
       isLoading = true;
     });
 
+    //* Login api
     const url = "https://soilanalysis.loca.lt/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
@@ -73,6 +71,7 @@ class __LoginState extends ConsumerState<_Login> {
 
     var item = jsonDecode(response.body);
 
+    //* Login is success
     if (response.statusCode == 200) {
       setState(() {
         successLogin = true;
@@ -141,7 +140,7 @@ class __LoginState extends ConsumerState<_Login> {
     );
   }
 
-  //
+//? Login Widget
   Widget __login() {
     return SizedBox(
       child: Column(children: [
@@ -207,7 +206,7 @@ class __LoginState extends ConsumerState<_Login> {
 
 //! Check it the token is given
                   if (successLogin) {
-//* If the platform is mobile
+//* check the platfrom
                     Navigator.pushReplacement(
                         context,
                         PageTransition(
@@ -231,6 +230,7 @@ class __LoginState extends ConsumerState<_Login> {
     );
   }
 
+//! Show the alert if the server is offline
   showAlertDialog(BuildContext context) {
     // set up the button
     Widget okButton = TextButton(
