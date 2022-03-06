@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'Web/web_main.dart';
 import 'login.dart';
 
 void main() {
@@ -18,10 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "Readex Pro"),
-      debugShowCheckedModeBanner: false,
-      title: "Soil Monitoring System",
-      home: const LoginPage(),
-    );
+        theme: ThemeData(fontFamily: "Readex Pro"),
+        debugShowCheckedModeBanner: false,
+        title: "Soil Monitoring System",
+        home: WebMain(
+          username: "test user",
+        ) //LoginPage(),
+        );
   }
 }

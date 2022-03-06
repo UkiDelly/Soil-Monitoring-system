@@ -33,7 +33,7 @@ class __WebPlantCardState extends State<_WebPlantCard> {
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       child: Container(
         width: 200,
-        color: const Color(0xfffffff0),
+        color: const Color.fromARGB(255, 246, 245, 245),
       ),
     );
   }

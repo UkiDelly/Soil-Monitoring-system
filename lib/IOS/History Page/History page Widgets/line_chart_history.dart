@@ -201,7 +201,7 @@ LineChartData mainData(
               //* Spots
               spots: spots,
               isCurved: true,
-              colors: lineColor ?? [const Color(0xfffffff0)],
+              colors: lineColor ?? [const Color.fromARGB(255, 246, 245, 245)],
 
               //* Gradient from the bottom
               gradientFrom: lineChartBarGradient == true

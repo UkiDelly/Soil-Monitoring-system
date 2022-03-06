@@ -156,7 +156,9 @@ class _WebGardenPageState extends State<WebGardenPage> {
 
               //* Divider
               const Divider(
-                  indent: 10, endIndent: 10, color: Color(0xfffffff0)),
+                  indent: 10,
+                  endIndent: 10,
+                  color: Color.fromARGB(255, 246, 245, 245)),
 
               //* Plant Text
               const Padding(

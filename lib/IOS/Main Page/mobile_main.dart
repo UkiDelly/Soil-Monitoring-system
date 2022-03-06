@@ -17,12 +17,12 @@ class MobileHome extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: const Color(0xfffffff0),
+          backgroundColor: const Color.fromARGB(255, 246, 245, 245),
           toolbarOpacity: 0,
           elevation: 0,
           toolbarHeight: 0),
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xfffffff0),
+      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
       body: SafeArea(
         bottom: false,
         child: SizedBox(

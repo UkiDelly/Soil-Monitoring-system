@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 
 import 'IOS/new_user.dart';
+import 'Web/web_main.dart';
 import 'loading.dart';
 import 'provider.dart';
 
@@ -26,7 +29,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xfffffff0),
+      backgroundColor: Color.fromARGB(255, 246, 245, 245),
       body: _Login(),
     );
   }
@@ -43,6 +46,7 @@ class __LoginState extends ConsumerState<_Login> {
   bool isLoading = false, succesLogin = false;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  String username = "";
 
   //*Login func
   login() async {
@@ -65,6 +69,7 @@ class __LoginState extends ConsumerState<_Login> {
       ref.watch(tokenProvider.notifier).setToken(item['data']['authToken']);
       setState(() {
         succesLogin = true;
+        username = item['data']['username'];
       });
     } else if (response.statusCode == 401) {
       item = jsonDecode(response.body);
@@ -135,7 +140,7 @@ class __LoginState extends ConsumerState<_Login> {
                 textInputAction: TextInputAction.next,
                 controller: usernameController,
                 decoration: InputDecoration(
-                  focusColor: const Color(0xfffffff0),
+                  focusColor: const Color.fromARGB(255, 246, 245, 245),
                   hintText: "username",
                   prefixIcon: const Icon(Icons.account_circle_outlined),
                   filled: true,
@@ -185,6 +190,20 @@ class __LoginState extends ConsumerState<_Login> {
                 child: ElevatedButton(
                   onPressed: () {
                     login();
+                    //* Check if its success to login
+                    if (succesLogin) {
+                      Navigator.push(
+                          (context),
+                          PageTransition(
+                              child: kIsWeb
+                              //* if the platform is web, open the web page
+                                  ? WebMain(
+                                      username: username,
+                                    )
+                              //* else open the mobile page
+                                  : const MobileHome(),
+                              type: PageTransitionType.fade));
+                    }
                   },
                   child: const Text(
                     "Login",

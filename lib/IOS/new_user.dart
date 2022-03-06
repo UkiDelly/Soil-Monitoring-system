@@ -27,7 +27,7 @@ class _SignInPageState extends State<SignInPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: const Color(0xfffffff0),
+      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
       body: SafeArea(
           child: Center(
         child: Column(

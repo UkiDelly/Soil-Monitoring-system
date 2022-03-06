@@ -279,7 +279,7 @@ class __GardenState extends State<_Garden> {
               ),
 
               const Divider(
-                color: Color(0xfffffff0),
+                color: Color.fromARGB(255, 246, 245, 245),
                 indent: 20,
                 endIndent: 20,
                 thickness: 1,

@@ -25,7 +25,7 @@ class GardenName extends StatelessWidget {
             height: 70,
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
-                color: const Color(0xfffffff0),
+                color: const Color.fromARGB(255, 246, 245, 245),
                 boxShadow: [
                   BoxShadow(
                       color: Colors.green.shade200,
