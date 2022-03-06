@@ -64,7 +64,7 @@ class AboveGardenList extends StatelessWidget {
           SizedBox(
             width: 40,
             height: 40,
-            child: SvgPicture.asset("assets/Logo.svg"),
+            child: SvgPicture.asset("Logo/Logo.svg"),
           ),
           const SizedBox(
             height: 10,

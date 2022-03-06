@@ -23,7 +23,7 @@ class _SignInPageState extends State<SignInPage> {
           style: TextStyle(fontSize: 30),
         ),
         leading: IconButton(
-          icon: SvgPicture.asset("assets/back.svg", height: 30),
+          icon: SvgPicture.asset("icons/back.svg", height: 30),
           onPressed: () => Navigator.pop(context),
         ),
       ),

@@ -85,15 +85,15 @@ class __WebGardenCardState extends State<_WebGardenCard> {
               right: 10,
               child: widget.status == "good"
                   ? SvgPicture.asset(
-                      'assets/check_status.svg',
+                      'icons/check_status.svg',
                       width: 30,
                       color: const Color(0xfffefefe),
                     )
                   : widget.status == "warning"
-                      ? SvgPicture.asset('assets/warning.svg',
+                      ? SvgPicture.asset('icons/warning.svg',
                           width: 30, color: Colors.yellow)
                       : SvgPicture.asset(
-                          'assets/warning.svg',
+                          'icons/warning.svg',
                           width: 30,
                           color: Colors.red,
                         )),

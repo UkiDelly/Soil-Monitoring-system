@@ -39,7 +39,7 @@ class _WebMainState extends State<WebMain> {
                   child: Row(
                     children: [
                       //* Logo
-                      SvgPicture.asset("assets/Logo.svg"),
+                      SvgPicture.asset("Logo/Logo.svg"),
 
                       //
                       const SizedBox(
