@@ -14,6 +14,12 @@ class WebMain extends StatefulWidget {
 }
 
 class _WebMainState extends State<WebMain> {
+  getGardenList() async {}
+
+  // vardiable
+  int gardenListLength = 10;
+  bool isTapped = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,12 +51,6 @@ class _WebMainState extends State<WebMain> {
           //
           const SizedBox(height: 10),
 
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   height: MediaQuery.of(context).size.height - 70,
-          //   color: Colors.red,
-          // )
-
           //* Garden List
           SizedBox(
             height: MediaQuery.of(context).size.height - 70,
@@ -62,6 +62,8 @@ class _WebMainState extends State<WebMain> {
                       : MediaQuery.of(context).size.width,
                   child: gardenListPart(),
                 ),
+
+                //* Garden Page
                 SizedBox(
                   child: MediaQuery.of(context).size.width > 550
                       ? const VerticalDivider(
@@ -72,9 +74,11 @@ class _WebMainState extends State<WebMain> {
 
                 //* Detail Page
                 SizedBox(
-                    width: MediaQuery.of(context).size.width > 550
-                        ? MediaQuery.of(context).size.width * 0.49
-                        : 0)
+                  width: MediaQuery.of(context).size.width > 550
+                      ? MediaQuery.of(context).size.width * 0.49
+                      : 0,
+                  child: WebGarden(isTapped: isTapped),
+                )
               ],
             ),
           )
@@ -100,6 +104,8 @@ class _WebMainState extends State<WebMain> {
             IconButton(
                 hoverColor: Colors.white.withOpacity(0),
                 splashColor: Colors.white.withOpacity(0),
+                focusColor: Colors.white.withOpacity(0),
+                highlightColor: Colors.white.withOpacity(0),
                 onPressed: () {},
                 icon: const Icon(
                   Icons.add,
@@ -114,12 +120,26 @@ class _WebMainState extends State<WebMain> {
             child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 padding: const EdgeInsets.all(10),
-                itemCount: 10,
+                itemCount: gardenListLength,
                 itemBuilder: (_, index) => GestureDetector(
                     onTap: () {
                       print(index);
+                      setState(() {
+                        isTapped = !isTapped;
+                      });
+
+                      // If the with is not enough
+                      if (MediaQuery.of(context).size.width < 550) {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: WebGardenMini(isTapped: isTapped),
+                                type: PageTransitionType.rightToLeft));
+                      }
                     },
-                    child: const WebGardenCard())),
+                    child: WebGardenCard(
+                      index: index + 1,
+                    ))),
           ),
         )
       ],
