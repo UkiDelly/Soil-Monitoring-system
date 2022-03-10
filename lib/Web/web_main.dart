@@ -24,6 +24,8 @@ class _WebMainState extends ConsumerState<WebMain> {
   bool isLoading = false;
   var gardenList;
   int selectedGarden = 0;
+  String selectedGardenID = "";
+  var selectedGardenData;
 
   @override
   void initState() {
@@ -161,9 +163,8 @@ class _WebMainState extends ConsumerState<WebMain> {
                       setState(() {
                         isTapped = !isTapped;
                         selectedGarden = index;
+                        selectedGardenID = gardenList[index]['_id'];
                       });
-
-                      print(gardenList);
 
                       // If the with is not enough
                       if (MediaQuery.of(context).size.width < 550) {
