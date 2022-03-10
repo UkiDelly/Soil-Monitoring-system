@@ -1,24 +1,36 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Web/Web%20Garden%20Page/web_garden_card.dart';
 import 'package:thesis/Web/Web%20Garden%20Page/web_garden_page.dart';
-import 'package:thesis/login.dart';
+import 'package:thesis/loading.dart';
+import 'package:thesis/provider.dart';
+import 'package:http/http.dart' as http;
 
-class WebMain extends StatefulWidget {
-  String username = "";
-  WebMain({Key? key, required this.username}) : super(key: key);
+class WebMain extends ConsumerStatefulWidget {
+  String username, token;
+  WebMain({Key? key, required this.username, required this.token})
+      : super(key: key);
 
   @override
-  State<WebMain> createState() => _WebMainState();
+  ConsumerState<WebMain> createState() => _WebMainState();
 }
 
-class _WebMainState extends State<WebMain> {
-  getGardenList() async {}
-
-  // vardiable
-  int gardenListLength = 10;
+class _WebMainState extends ConsumerState<WebMain> {
+  // variable
+  int gardenListLength = 0;
   bool isTapped = false;
+  bool isLoading = false;
+  var gardenList;
+  int selectedGarden = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getGardenList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,46 +57,69 @@ class _WebMainState extends State<WebMain> {
         ],
       ),
       backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          //
-          const SizedBox(height: 10),
-
-          //* Garden List
-          SizedBox(
-            height: MediaQuery.of(context).size.height - 70,
-            child: Row(
+      body: isLoading
+          ? const Center(child: LoadingPage())
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width > 550
-                      ? MediaQuery.of(context).size.width * 0.49
-                      : MediaQuery.of(context).size.width,
-                  child: gardenListPart(),
-                ),
+                //
+                const SizedBox(height: 10),
 
-                //* Garden Page
+                //* Garden List
                 SizedBox(
-                  child: MediaQuery.of(context).size.width > 550
-                      ? const VerticalDivider(
-                          width: 10,
-                        )
-                      : null,
-                ),
+                  height: MediaQuery.of(context).size.height - 70,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width > 550
+                            ? MediaQuery.of(context).size.width * 0.49
+                            : MediaQuery.of(context).size.width,
+                        child: gardenListPart(),
+                      ),
 
-                //* Detail Page
-                SizedBox(
-                  width: MediaQuery.of(context).size.width > 550
-                      ? MediaQuery.of(context).size.width * 0.49
-                      : 0,
-                  child: WebGarden(isTapped: isTapped),
+                      //* Garden Page
+                      SizedBox(
+                        child: MediaQuery.of(context).size.width > 550
+                            ? const VerticalDivider(
+                                width: 10,
+                              )
+                            : null,
+                      ),
+
+                      //* Detail Page
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width > 550
+                            ? MediaQuery.of(context).size.width * 0.49
+                            : 0,
+                        child: WebGarden(
+                          isTapped: isTapped,
+                          gardenID: gardenList[selectedGarden]["_id"],
+                        ),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
-          )
-        ],
-      ),
     );
+  }
+
+  getGardenList() async {
+    setState(() {
+      isLoading = true;
+    });
+    const url = "https://soilanalysis.loca.lt/v1/garden/list";
+    var response = await http.get(Uri.parse(url),
+        headers: {'Authorization': 'Bearer ${widget.token}'});
+    if (response.statusCode == 200) {
+      var item = jsonDecode(response.body);
+
+      setState(() {
+        gardenListLength = item['data'].length;
+        gardenList = item['data'];
+        isLoading = false;
+      });
+    }
   }
 
   Widget gardenListPart() {
@@ -123,22 +158,28 @@ class _WebMainState extends State<WebMain> {
                 itemCount: gardenListLength,
                 itemBuilder: (_, index) => GestureDetector(
                     onTap: () {
-                      print(index);
                       setState(() {
                         isTapped = !isTapped;
+                        selectedGarden = index;
                       });
+
+                      print(gardenList);
 
                       // If the with is not enough
                       if (MediaQuery.of(context).size.width < 550) {
                         Navigator.push(
                             context,
                             PageTransition(
-                                child: WebGardenMini(isTapped: isTapped),
+                                child: WebGardenMini(
+                                  isTapped: isTapped,
+                                  gardenID: gardenList[index]['_id'],
+                                ),
                                 type: PageTransitionType.rightToLeft));
                       }
                     },
                     child: WebGardenCard(
                       index: index + 1,
+                      name: gardenList[index]["name"],
                     ))),
           ),
         )

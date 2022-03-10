@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class WebGardenCard extends StatelessWidget {
-  WebGardenCard({Key? key, required this.index}) : super(key: key);
+  WebGardenCard({Key? key, required this.index, required this.name})
+      : super(key: key);
 
   int index;
+  String name;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,15 @@ class WebGardenCard extends StatelessWidget {
               ),
 
               //* Garden Name
+              Center(
+                child: Text(
+                  name,
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 246, 245, 245),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                ),
+              )
             ],
           ))),
     );

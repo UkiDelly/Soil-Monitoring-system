@@ -1,5 +1,4 @@
 import 'package:animated_widgets/widgets/opacity_animated.dart';
-import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/humidity.dart';
 import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/moisture.dart';
@@ -9,7 +8,9 @@ import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/tempurature.da
 
 class WebGarden extends StatefulWidget {
   bool isTapped;
-  WebGarden({Key? key, required this.isTapped}) : super(key: key);
+  String gardenID;
+  WebGarden({Key? key, required this.isTapped, required this.gardenID})
+      : super(key: key);
 
   @override
   State<WebGarden> createState() => _WebGardenState();
@@ -24,6 +25,11 @@ class _WebGardenState extends State<WebGarden> {
   double moisture = 0.1;
   double humidity = 30;
   //
+
+  getSingleGarden() async {
+    final url = "http://soilanalysis.loca.lt/v1/garden/:${widget.gardenID}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -103,30 +109,36 @@ class _WebGardenState extends State<WebGarden> {
   }
 
   Widget gardenName() {
-    return Flexible(
-      child: Container(
+    return Wrap(children: [
+      Container(
           margin: const EdgeInsets.all(8),
           padding: const EdgeInsets.all(8),
           decoration: const BoxDecoration(
               color: Color.fromARGB(255, 246, 245, 245),
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Text(
-            sampledata["name"],
+            "",
             style: const TextStyle(fontSize: 35),
           )),
-    );
+    ]);
   }
 }
 
 // If the width is less tha 550
 class WebGardenMini extends StatelessWidget {
   bool isTapped;
-  WebGardenMini({Key? key, required this.isTapped}) : super(key: key);
+  String gardenID;
+  WebGardenMini({Key? key, required this.isTapped, required this.gardenID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebGarden(isTapped: isTapped),
+      body: WebGarden(
+        isTapped: isTapped,
+        gardenID: gardenID,
+        //gardenID: gardenID,
+      ),
     );
   }
 }
