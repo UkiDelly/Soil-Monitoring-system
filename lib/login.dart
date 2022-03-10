@@ -126,10 +126,7 @@ class __LoginState extends ConsumerState<_Login> {
 
   Widget _logo() {
     return SizedBox(
-      width: 40,
-      height: 40,
-      child: SvgPicture.asset("Logo/Logo.svg"),
-    );
+        width: 40, height: 40, child: SvgPicture.asset("assets/Logo/Logo.svg"));
   }
 
   //? Login

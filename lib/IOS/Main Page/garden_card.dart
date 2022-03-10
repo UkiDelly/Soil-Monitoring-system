@@ -8,7 +8,12 @@ import '../New Garden Page/new_garden_page.dart';
 class GardenCard extends StatefulWidget {
   String gardenName;
   String gardenID;
-  GardenCard({Key? key, required this.gardenName, required this.gardenID})
+  int index;
+  GardenCard(
+      {Key? key,
+      required this.gardenName,
+      required this.gardenID,
+      required this.index})
       : super(key: key);
 
   @override
@@ -18,7 +23,8 @@ class GardenCard extends StatefulWidget {
 class _GardenCardState extends State<GardenCard> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+        height: 130,
         padding: const EdgeInsets.all(8.0),
         // Open Container
         child: OpenContainer(
@@ -36,7 +42,7 @@ class _GardenCardState extends State<GardenCard> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
             closedBuilder: (_, openContainer) =>
-                _Contents(name: widget.gardenName),
+                _Contents(name: widget.gardenName, index: widget.index),
 
             //If open
             openBuilder: (_, closeContainer) {
@@ -51,34 +57,34 @@ class _GardenCardState extends State<GardenCard> {
 //* Content of the garden card
 class _Contents extends StatelessWidget {
   String name;
+  int index;
 
   _Contents({
     Key? key,
     required this.name,
+    required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Card(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15))),
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontFamily: "Readex Pro",
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold)),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+            child: Text(
+              "#$index",
+              style: const TextStyle(fontSize: 30),
             ),
+          ),
+          Center(
+            child: Text(name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontFamily: "Readex Pro",
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold)),
           ),
         ],
       ),
