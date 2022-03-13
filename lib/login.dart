@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 
 import 'IOS/new_user.dart';
+import 'Web/web_main.dart';
 import 'loading.dart';
 import 'provider.dart';
 
@@ -26,7 +29,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xfffffff0),
+      backgroundColor: Color.fromARGB(255, 246, 245, 245),
       body: _Login(),
     );
   }
@@ -43,7 +46,7 @@ class __LoginState extends ConsumerState<_Login> {
   bool isLoading = false, succesLogin = false;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  String username = "";
   //*Login func
   login() async {
     //? Loading data
@@ -53,7 +56,7 @@ class __LoginState extends ConsumerState<_Login> {
 
     const url = "https://soilanalysis.loca.lt/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
-      'username': usernameController.text,
+      'username': usernameController.text.toString(),
       'password': passwordController.text
     });
 
@@ -62,14 +65,20 @@ class __LoginState extends ConsumerState<_Login> {
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
       //* Save the token
-      ref.watch(tokenProvider.notifier).setToken(item['data']['authToken']);
+      await ref
+          .watch(tokenProvider.notifier)
+          .setToken(item['data']['authToken']);
       setState(() {
+        username = usernameController.text;
         succesLogin = true;
+        isLoading = false;
       });
     } else if (response.statusCode == 401) {
       item = jsonDecode(response.body);
 //!  When authorization is fail
-      ref.watch(tokenProvider.notifier).setToken(item["status"].toString());
+      await ref
+          .watch(tokenProvider.notifier)
+          .setToken(item["status"].toString());
       //? Done loading data
       setState(() {
         isLoading = false;
@@ -117,10 +126,7 @@ class __LoginState extends ConsumerState<_Login> {
 
   Widget _logo() {
     return SizedBox(
-      width: 40,
-      height: 40,
-      child: SvgPicture.asset("Logo/Logo.svg"),
-    );
+        width: 40, height: 40, child: SvgPicture.asset("assets/Logo/Logo.svg"));
   }
 
   //? Login
@@ -135,7 +141,7 @@ class __LoginState extends ConsumerState<_Login> {
                 textInputAction: TextInputAction.next,
                 controller: usernameController,
                 decoration: InputDecoration(
-                  focusColor: const Color(0xfffffff0),
+                  focusColor: const Color.fromARGB(255, 246, 245, 245),
                   hintText: "username",
                   prefixIcon: const Icon(Icons.account_circle_outlined),
                   filled: true,
@@ -177,25 +183,36 @@ class __LoginState extends ConsumerState<_Login> {
           ),
 
           //? Login Button
-          Consumer(
-            builder: (ctx, ref, child) {
-              return SizedBox(
-                height: 55,
-                width: 150,
-                child: ElevatedButton(
-                  onPressed: () {
-                    login();
-                  },
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(const Color(0xff669d6b))),
-                ),
-              );
-            },
+          SizedBox(
+            height: 55,
+            width: 150,
+            child: ElevatedButton(
+              onPressed: () async {
+                await login();
+                //* Check if its success to login
+                if (succesLogin) {
+                  await Navigator.pushReplacement(
+                      (context),
+                      PageTransition(
+                          child: kIsWeb
+                              //* if the platform is web, open the web page
+                              ? WebMain(
+                                  username: username,
+                                  token: ref.watch(tokenProvider).toString(),
+                                )
+                              //* else open the mobile page
+                              : const MobileHome(),
+                          type: PageTransitionType.fade));
+                }
+              },
+              child: const Text(
+                "Login",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(const Color(0xff669d6b))),
+            ),
           )
         ],
       ),

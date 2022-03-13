@@ -1,143 +1,190 @@
-import "package:flutter/material.dart";
-import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/login.dart';
+import 'package:thesis/Web/Web%20Garden%20Page/web_garden_card.dart';
+import 'package:thesis/Web/Web%20Garden%20Page/web_garden_page.dart';
+import 'package:thesis/loading.dart';
+import 'package:thesis/provider.dart';
+import 'package:http/http.dart' as http;
 
-import 'Web Garden Page/web_garden_card.dart';
-import 'Web Garden Page/web_garden_page.dart';
-
-class WebMain extends StatefulWidget {
-  const WebMain({Key? key}) : super(key: key);
+class WebMain extends ConsumerStatefulWidget {
+  String username, token;
+  WebMain({Key? key, required this.username, required this.token})
+      : super(key: key);
 
   @override
-  _WebMainState createState() => _WebMainState();
+  ConsumerState<WebMain> createState() => _WebMainState();
 }
 
-class _WebMainState extends State<WebMain> {
-  int gardenCount = 2;
-  bool isPressed = false;
-  var indexTapped = 0;
+class _WebMainState extends ConsumerState<WebMain> {
+  // variable
+  int gardenListLength = 0;
+  bool isTapped = false;
+  bool isLoading = false;
+  var gardenList;
+  int selectedGarden = 0;
+  String selectedGardenID = "";
+  var selectedGardenData;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getGardenList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfffffff0),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SizedBox(
-            child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () => setState(() {
-              isPressed = false;
-            }),
-            child: Column(
+      appBar: AppBar(
+        centerTitle: true,
+        //* User's Garden
+        title: Text("${widget.username}'s Garden"),
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 40),
+        backgroundColor: Colors.white.withOpacity(0),
+        elevation: 0,
+        actions: [
+          //* Logout button
+          TextButton(
+              style: ButtonStyle(
+                  // remove hovor color
+                  overlayColor:
+                      MaterialStateProperty.all(Colors.white.withOpacity(0))),
+              onPressed: () {},
+              child: const Text("Logout",
+                  style: TextStyle(
+                      color: Colors.black,
+                      decoration: TextDecoration.underline)))
+        ],
+      ),
+      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
+      body: isLoading
+          ? const Center(child: LoadingPage())
+          : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                //? Logo and Name
+                //
+                const SizedBox(height: 10),
+
+                //* Garden List
                 SizedBox(
+                  height: MediaQuery.of(context).size.height - 70,
                   child: Row(
                     children: [
-                      //* Logo
-                      SvgPicture.asset("Logo/Logo.svg"),
-
-                      //
-                      const SizedBox(
-                        width: 20,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width > 550
+                            ? MediaQuery.of(context).size.width * 0.49
+                            : MediaQuery.of(context).size.width,
+                        child: gardenListPart(),
                       ),
 
-                      //* My Gardens
-                      const Text(
-                        "My Gardens",
-                        style: TextStyle(
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Readex Pro"),
+                      //* Garden Page
+                      SizedBox(
+                        child: MediaQuery.of(context).size.width > 550
+                            ? const VerticalDivider(
+                                width: 10,
+                              )
+                            : null,
                       ),
 
-                      //* Logout
-                      const Expanded(child: SizedBox()),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                PageTransition(
-                                    child: const LoginPage(),
-                                    type: PageTransitionType.fade));
-                          },
-                          child: const Text(
-                            "Logout",
-                            style: TextStyle(color: Colors.black, fontSize: 30),
-                          ))
+                      //* Detail Page
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width > 550
+                            ? MediaQuery.of(context).size.width * 0.49
+                            : 0,
+                        child: WebGarden(
+                          isTapped: isTapped,
+                          gardenID: gardenList[selectedGarden]["_id"],
+                        ),
+                      )
                     ],
                   ),
-                ),
-
-                //
-                const SizedBox(
-                  height: 20,
-                ),
-
-                //* Garden Card
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: isPressed == false ? 300 : 200,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10))),
-                  child: ListView.builder(
-                      itemCount: gardenCount < 3 ? gardenCount + 1 : 3,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        //* AddGarden card at the end of the list if gardenCount is less than 3
-                        if (index == gardenCount && gardenCount < 3) {
-                          return WebAddGarden(
-                            isPressed: isPressed,
-                          );
-                        }
-                        //* if the list is 3, fill all with the garden cards
-                        return InkWell(
-                          //* Detect if it card is pressed
-                          onTap: () => setState(() {
-                            isPressed = true;
-                            indexTapped = index + 1;
-                          }),
-                          //* Garden cards
-                          child: WebGardenCard(
-                            isPressed: isPressed,
-                            status: "good",
-                            number: index + 1,
-                            indexTapped: indexTapped,
-                          ),
-                        );
-                      }),
-                ),
-
-                const SizedBox(
-                  height: 20,
-                ),
-
-                //* Container when pressed
-                AnimatedContainer(
-                  curve: Curves.easeInToLinear,
-                  duration: const Duration(milliseconds: 200),
-                  width: MediaQuery.of(context).size.width - 20,
-                  height: isPressed != false ? 800 : 0,
-                  decoration: const BoxDecoration(
-                      color: Color(0xff669D6B),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: isPressed == true
-                      //* Garden Page
-                      ? WebGardenPage(
-                          isPressed: isPressed, indexTapped: indexTapped)
-                      : null,
-                ),
+                )
               ],
             ),
+    );
+  }
+
+  getGardenList() async {
+    setState(() {
+      isLoading = true;
+    });
+    const url = "https://soilanalysis.loca.lt/v1/garden/list";
+    var response = await http.get(Uri.parse(url),
+        headers: {'Authorization': 'Bearer ${widget.token}'});
+    if (response.statusCode == 200) {
+      var item = jsonDecode(response.body);
+
+      setState(() {
+        gardenListLength = item['data'].length;
+        gardenList = item['data'];
+        isLoading = false;
+      });
+    }
+  }
+
+  Widget gardenListPart() {
+    return Column(
+      children: [
+        //* Garden List Text and add button
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(
+              width: 10,
+            ),
+            const Text(
+              "Garden List",
+              style: TextStyle(fontSize: 25),
+            ),
+            IconButton(
+                hoverColor: Colors.white.withOpacity(0),
+                splashColor: Colors.white.withOpacity(0),
+                focusColor: Colors.white.withOpacity(0),
+                highlightColor: Colors.white.withOpacity(0),
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.add,
+                  size: 30,
+                ))
+          ],
+        ),
+
+        //* List
+        Flexible(
+          child: SizedBox(
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.all(10),
+                itemCount: gardenListLength,
+                itemBuilder: (_, index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isTapped = !isTapped;
+                        selectedGarden = index;
+                        selectedGardenID = gardenList[index]['_id'];
+                      });
+
+                      // If the with is not enough
+                      if (MediaQuery.of(context).size.width < 550) {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: WebGardenMini(
+                                  isTapped: isTapped,
+                                  gardenID: gardenList[index]['_id'],
+                                ),
+                                type: PageTransitionType.rightToLeft));
+                      }
+                    },
+                    child: WebGardenCard(
+                      index: index + 1,
+                      name: gardenList[index]["name"],
+                    ))),
           ),
-        )),
-      ),
+        )
+      ],
     );
   }
 }

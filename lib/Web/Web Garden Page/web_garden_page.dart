@@ -1,187 +1,186 @@
-// ignore_for_file: must_be_immutable
 import 'dart:convert';
-import 'package:animated_widgets/animated_widgets.dart';
+
+import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/humidity.dart';
+import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/moisture.dart';
+import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/npk_status.dart';
+import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/ph_level.dart';
+import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/tempurature.dart';
+import 'package:thesis/loading.dart';
+import 'package:thesis/provider.dart';
+import 'package:http/http.dart' as http;
 
-import '../../IOS/Gardens Page/Garden Page widgets/humidity.dart';
-import '../../IOS/Gardens Page/Garden Page widgets/moisture.dart';
-import '../../IOS/Gardens Page/Garden Page widgets/npk_status.dart';
-import '../../IOS/Gardens Page/Garden Page widgets/ph_level.dart';
-import '../../IOS/Gardens Page/Garden Page widgets/tempurature.dart';
-import '../../IOS/History Page/History page Widgets/humidity_history.dart';
-import '../../IOS/History Page/History page Widgets/moisture_history.dart';
-import '../../IOS/History Page/History page Widgets/npk_history.dart';
-import '../../IOS/History Page/History page Widgets/ph_history.dart';
-import '../../IOS/History Page/History page Widgets/temperature.dart';
-import 'web_plant_card.dart';
-
-class WebGardenPage extends StatefulWidget {
-  bool isPressed;
-  int indexTapped;
-  WebGardenPage({Key? key, required this.indexTapped, required this.isPressed})
+class WebGarden extends ConsumerWidget {
+  bool isTapped;
+  String gardenID;
+  WebGarden({Key? key, required this.isTapped, required this.gardenID})
       : super(key: key);
 
   @override
-  _WebGardenPageState createState() => _WebGardenPageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final token = ref.watch(tokenProvider);
+    return SizedBox(
+      child: isTapped
+          ? SingleChildScrollView(
+              child: _Status(gardenID: gardenID, token: token))
+          : Opacity(opacity: 0.25, child: Image.asset('Logo/Logo.png')),
+    );
+  }
 }
 
-class _WebGardenPageState extends State<WebGardenPage> {
-  //?dump data
-  bool isSettingPressed = false;
-  String gardenName = "Garden";
-  late Map<String, double> dataMap = {"": 0};
-  double ph = 0, moisture = 0, temp = 0, humidity = 0;
-  // Map<String, double> dataMap = {"N": 30, "P": 30, "K": 30};
-  // double ph = 7;
-  // double moisture = 46;
-  // double temp = 31, humidity = 30;
-  String comment = "Comment for the Garden";
+class _Status extends ConsumerStatefulWidget {
+  String gardenID;
+  String token;
+  _Status({Key? key, required this.gardenID, required this.token})
+      : super(key: key);
 
-  TextEditingController nameControl = TextEditingController();
+  @override
+  ConsumerState<_Status> createState() => __StatusState();
+}
 
-  //* Load date from the json file
-  readJson() async {
-    final String response = await rootBundle.loadString('assets/dump.json');
-    final data = await json.decode(response);
+class __StatusState extends ConsumerState<_Status> {
+  // var
 
-    setState(() {
-      ph = data["ph"];
-      moisture = data["moisture"];
-      temp = data["temp"];
-      humidity = data["humidity"];
-      dataMap = {"N": data["N"], "P": data["P"], "K": data["K"]};
+  Map<String, double> sampleNPK = {"n": 20, "p": 25, "k": 40};
+  double ph = 7.5;
+  double temp = 99.9;
+  double moisture = 0.1;
+  double humidity = 30;
+  bool isLoading = false;
+  late Future<dynamic> _garden;
+  //
+  getSingleGarden() async {
+    final url = "https://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    var response = await http.get(Uri.parse(url), headers: {
+      'Authorization': 'Bearer ${widget.token}',
+      'Content-Type': 'application/json'
     });
+    var item = jsonDecode(response.body);
+    return item;
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    readJson();
+    _garden = getSingleGarden();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: OpacityAnimatedWidget.tween(
-          enabled: true,
-          curve: Curves.ease,
-          duration: const Duration(milliseconds: 1500),
-          opacityDisabled: 0,
-          opacityEnabled: 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //* Left Side, Status
-                    SizedBox(
-                        width: widget.isPressed == true ? 400 : 0,
-                        child: widget.isPressed == true
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  children: [
-                                    NPKstatus(dataMap: dataMap),
-                                    const SizedBox(width: 10),
-                                    PhLevel(ph: ph),
-                                    const SizedBox(width: 10),
-                                    MoistureLevel(moisture: moisture),
-                                    const SizedBox(width: 10),
-                                    Temp(temp: temp),
-                                    const SizedBox(width: 10),
-                                    Humidity(
-                                      humidity: humidity,
-                                    ),
-                                  ],
-                                ))
-                            : null),
+    return FutureBuilder<dynamic>(
+        future: _garden,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> garden) {
+          if (garden.hasData) {
+            return Card(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              color: const Color(0xff669D6B),
+              child: Column(
+                children: [
+                  //* Garden Name
+                  OpacityAnimatedWidget.tween(
+                      duration: const Duration(seconds: 1),
+                      enabled: true,
+                      opacityDisabled: 0,
+                      opacityEnabled: 1,
+                      child: Wrap(children: [
+                        Container(
+                            margin: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 246, 245, 245),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Text(
+                              garden.data['data']['name'],
+                              style: const TextStyle(fontSize: 35),
+                            )),
+                      ])),
+                  // Status
+                  Wrap(
+                    children: [
+                      OpacityAnimatedWidget(
+                          delay: const Duration(milliseconds: 300),
+                          duration: const Duration(seconds: 1),
+                          enabled: true,
+                          child: NPKstatus(dataMap: sampleNPK)),
 
-                    //* Right Side, History
-                    Expanded(
-                        child: Container(
-                      height: 400,
-                      padding: const EdgeInsets.all(8),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Center(
-                          child: Row(
-                            children: [
-                              //? NPK history
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              NPKHistory(
-                                width: 400,
-                              ),
+                      //
+                      OpacityAnimatedWidget(
+                          delay: const Duration(milliseconds: 600),
+                          duration: const Duration(seconds: 1),
+                          enabled: true,
+                          child: PhLevel(ph: ph)),
 
-                              //? Ph history
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              PhHistory(
-                                width: 400,
-                              ),
-
-                              //? Moisture history
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              MoistureHistory(
-                                width: 400,
-                              ),
-
-                              //? Temperature history
-                              const SizedBox(width: 10),
-                              TempHistory(width: 400),
-
-                              //? Humidity history
-                              const SizedBox(),
-                              HumidityHistory(
-                                width: 400,
-                              )
-                            ],
-                          ),
-                        ),
+                      //
+                      OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 900),
+                        duration: const Duration(seconds: 1),
+                        enabled: true,
+                        child: Temp(temp: temp),
                       ),
-                    ))
-                  ],
-                ),
-              ),
 
-              //* Divider
-              const Divider(
-                  indent: 10, endIndent: 10, color: Color(0xfffffff0)),
+                      //
+                      OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 1200),
+                        duration: const Duration(seconds: 1),
+                        enabled: true,
+                        child: MoistureLevel(moisture: moisture),
+                      ),
 
-              //* Plant Text
-              const Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  "Plants that can be plant",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
+                      //
+                      OpacityAnimatedWidget(
+                          delay: const Duration(milliseconds: 1600),
+                          duration: const Duration(seconds: 1),
+                          enabled: true,
+                          child: Humidity(humidity: humidity)),
+                    ],
+                  ),
+
+                  //
+                  const Divider(
+                    indent: 10,
+                    endIndent: 10,
+                    thickness: 3,
+                  ),
+
+                  //
+                  const SizedBox(
+                    height: 500,
+                  )
+
+                  //
+                ],
               ),
-              //
-              const SizedBox(
-                height: 10,
-              ),
-              //* Plant Card
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: 330,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) => const WebPlantCard(),
-                ),
-              )
-            ],
-          ),
-        ));
+            );
+          } else {
+            return const LoadingPage();
+          }
+        }
+        //
+
+        );
+  }
+}
+
+// If the width is less tha 550
+class WebGardenMini extends StatelessWidget {
+  bool isTapped;
+  String gardenID;
+  WebGardenMini({Key? key, required this.isTapped, required this.gardenID})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: WebGarden(
+        isTapped: isTapped,
+        gardenID: gardenID,
+        //gardenID: gardenID,
+      ),
+    );
   }
 }

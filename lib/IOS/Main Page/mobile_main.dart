@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
 import 'garden_card.dart';
 import 'package:http/http.dart' as http;
@@ -17,12 +19,12 @@ class MobileHome extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: const Color(0xfffffff0),
+          backgroundColor: const Color.fromARGB(255, 246, 245, 245),
           toolbarOpacity: 0,
           elevation: 0,
           toolbarHeight: 0),
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xfffffff0),
+      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
       body: SafeArea(
         bottom: false,
         child: SizedBox(
@@ -78,17 +80,32 @@ class AboveGardenList extends StatelessWidget {
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10))),
             child: Row(
-              children: const [
-                SizedBox(
-                  width: 25,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    "My Gardens",
+                    style: (TextStyle(
+                        fontFamily: "Readex Pro",
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold)),
+                  ),
                 ),
-                Text(
-                  "My Gardens",
-                  style: (TextStyle(
-                      fontFamily: "Readex Pro",
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold)),
-                ),
+                IconButton(
+                    splashColor: Colors.white.withOpacity(0),
+                    highlightColor: Colors.white.withOpacity(0),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: const AddGarden(),
+                              type: PageTransitionType.rightToLeft));
+                    },
+                    icon: const Icon(
+                      Icons.add,
+                      size: 40,
+                    ))
               ],
             ),
           ),
@@ -141,39 +158,18 @@ class _GardenListState extends State<GardenList> {
   Widget build(BuildContext context) {
     //! if the app is getting the data from the api show loading widget
     return isLoading
-        ? Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(
-                  color: Color(0xff669D6B),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                AnimatedTextKit(animatedTexts: [
-                  TyperAnimatedText("Loading...",
-                      curve: Curves.linear,
-                      textStyle: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold))
-                ]),
-              ],
-            ),
-          )
+        ? const Center(child: LoadingPage())
 
         //? Show the garden List
-        : Flexible(
+        : SizedBox(
+            width: MediaQuery.of(context).size.width * 0.95,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
-                itemCount: gardenCount < 3 ? gardenCount + 1 : 3,
+                itemCount: gardenCount,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
-                  //* AddGarden card at the end of the list if gardenCount is less than 3
-                  if (index == gardenCount && gardenCount < 3) {
-                    return const AddGarden();
-                  }
-                  //* if the list is 3, fill all with the garden cards
-
                   return GardenCard(
+                    index: index + 1,
                     gardenID: "${data[index]["_id"]}",
                     gardenName: "${data[index]["name"]}",
                   );
