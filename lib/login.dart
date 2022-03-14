@@ -8,7 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 
-import 'IOS/new_user.dart';
+import 'new_user.dart';
 import 'Web/web_main.dart';
 import 'loading.dart';
 import 'provider.dart';

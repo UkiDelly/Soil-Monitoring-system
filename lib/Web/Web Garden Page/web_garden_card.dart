@@ -1,11 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class WebGardenCard extends StatelessWidget {
-  WebGardenCard({Key? key, required this.index, required this.name})
-      : super(key: key);
-
   int index;
   String name;
+  WebGardenCard({Key? key, required this.index, required this.name})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

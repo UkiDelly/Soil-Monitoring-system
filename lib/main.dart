@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-import 'Web/web_main.dart';
 import 'login.dart';
 
 void main() {
@@ -23,9 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "Readex Pro"),
       debugShowCheckedModeBanner: false,
       title: "Soil Monitoring System",
-      home: // WebMain()
-          const LoginPage(),
-      //const MobileHome()
+      home: const LoginPage(),
     );
   }
 }
