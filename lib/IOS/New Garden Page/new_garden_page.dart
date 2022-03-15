@@ -70,36 +70,26 @@ class _AddNewGardenState extends State<AddNewGarden> {
           padding: const EdgeInsets.only(top: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Name
-              const Padding(
-                padding: EdgeInsets.only(left: 45, bottom: 5),
-                child: Text(
-                  "Name",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+              const Text(
+                "Name",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
 
               // Name text field
-              Container(
-                height: 30,
-                padding: const EdgeInsets.only(left: 30, right: 30),
+              SizedBox(
+                width: 300,
                 child: TextField(
-                  style: const TextStyle(fontSize: 20),
                   controller: nameControl,
                   decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 10),
-                      filled: true,
-                      fillColor: Color(0xfffefefe),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      )),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(),
+                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                  ),
                 ),
               ),
 

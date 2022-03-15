@@ -23,10 +23,10 @@ class _WebMainState extends ConsumerState<WebMain> {
   int gardenListLength = 0;
   bool isTapped = false;
   bool isLoading = false;
-  var gardenList;
+  var gardenList = {};
   int selectedGarden = 0;
   String selectedGardenID = "";
-  var selectedGardenData;
+  var selectedGardenData = {};
 
   @override
   void initState() {
