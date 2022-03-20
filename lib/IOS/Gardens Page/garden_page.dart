@@ -19,10 +19,10 @@ import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class NewGardenPage extends StatelessWidget {
-  String gardenID;
-  String gardenName;
   NewGardenPage({Key? key, required this.gardenID, required this.gardenName})
       : super(key: key);
+  String gardenID = "";
+  String gardenName = "";
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,14 @@ class NewGardenPage extends StatelessWidget {
             highlightColor: Colors.transparent,
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () => Navigator.pop(context),
+          ),
+
+//* Garden Name
+
+          title: Text(
+            gardenName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
 
 //* History button, setting button
@@ -98,7 +106,8 @@ class __GardenState extends State<_Garden> {
     setState(() {
       isLoading = true;
     });
-    final url = "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
+    // final url = "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);
@@ -138,22 +147,22 @@ class __GardenState extends State<_Garden> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
 
-//* Name of the Garden
-                    GardenName(
-                      name: gardenName,
-                    ),
+                    // //* Name of the Garden
+                    // GardenName(
+                    //   name: gardenName,
+                    // ),
 
-//* Body
+                    //* Body
                     Container(
                       padding: const EdgeInsets.only(top: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-//? Left Column
+                          //? Left Column
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Column(
@@ -164,7 +173,7 @@ class __GardenState extends State<_Garden> {
                                   height: 10,
                                 ),
 
-//* NPK status
+                                //* NPK status
                                 TranslationAnimatedWidget.tween(
                                   duration: const Duration(seconds: 1),
                                   enabled: true,
@@ -185,7 +194,7 @@ class __GardenState extends State<_Garden> {
                                   height: 10,
                                 ),
 
-//* Temperature
+                                //* Temperature
                                 TranslationAnimatedWidget.tween(
                                   delay: const Duration(milliseconds: 700),
                                   duration: const Duration(seconds: 1),
@@ -206,13 +215,13 @@ class __GardenState extends State<_Garden> {
                             ),
                           ),
 
-//? Right Column
+                          //? Right Column
                           Column(
                             children: [
                               const SizedBox(
                                 height: 10,
                               ),
-//* Ph Level
+                              //* Ph Level
                               TranslationAnimatedWidget.tween(
                                 delay: const Duration(milliseconds: 300),
                                 duration: const Duration(seconds: 1),
@@ -236,7 +245,7 @@ class __GardenState extends State<_Garden> {
                                 height: 10,
                               ),
 
-//* Moisture
+                              //* Moisture
                               TranslationAnimatedWidget.tween(
                                 delay: const Duration(milliseconds: 500),
                                 duration: const Duration(seconds: 1),
@@ -260,7 +269,7 @@ class __GardenState extends State<_Garden> {
                                 height: 20,
                               ),
 
-//* Humidity
+                              //* Humidity
                               TranslationAnimatedWidget.tween(
                                 delay: const Duration(milliseconds: 900),
                                 duration: const Duration(seconds: 1),
@@ -284,7 +293,7 @@ class __GardenState extends State<_Garden> {
                       ),
                     ),
 
-//? Divider
+                    //? Divider
                     const SizedBox(
                       height: 10,
                     ),
@@ -300,7 +309,7 @@ class __GardenState extends State<_Garden> {
                     const SizedBox(
                       height: 10,
                     ),
-//* Plants
+                    //* Plants
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -319,7 +328,7 @@ class __GardenState extends State<_Garden> {
                       ),
                     ),
 
-//*Plants card
+                    //*Plants card
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 2.8,
                       child: ListView.builder(

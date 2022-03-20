@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
+import '../New Garden Page/new_garden_page.dart';
 import 'garden_card.dart';
 import 'package:http/http.dart' as http;
 
@@ -65,7 +66,7 @@ class AboveGardenList extends StatelessWidget {
           SizedBox(
             width: 40,
             height: 40,
-            child: SvgPicture.asset("Logo/Logo.svg"),
+            child: SvgPicture.asset("assets/Logo/Logo.svg"),
           ),
           const SizedBox(
             height: 10,
@@ -98,7 +99,7 @@ class AboveGardenList extends StatelessWidget {
                       Navigator.push(
                           context,
                           PageTransition(
-                              child: const AddGarden(),
+                              child: const AddNewGarden(),
                               type: PageTransitionType.rightToLeft));
                     },
                     icon: const Icon(
@@ -116,7 +117,7 @@ class AboveGardenList extends StatelessWidget {
 
 // ignore: must_be_immutable
 class GardenList extends StatefulWidget {
-  String token = "";
+  var token = "";
   GardenList({
     Key? key,
     required this.token,
@@ -138,7 +139,11 @@ class _GardenListState extends State<GardenList> {
 
   //? get the garden list
   getGardenList() async {
-    const url = "http://soilanalysis.loca.lt/v1/garden/list";
+    setState(() {
+      isLoading = true;
+    });
+    //const url = "http://soilanalysis.loca.lt/v1/garden/list";
+    const url = "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);
@@ -151,7 +156,7 @@ class _GardenListState extends State<GardenList> {
   }
 
   List data = [];
-  bool isLoading = true;
+  bool isLoading = false;
   int gardenCount = 0;
   @override
   Widget build(BuildContext context) {

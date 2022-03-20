@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -47,6 +48,7 @@ class __LoginState extends ConsumerState<_Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String username = "";
+
   //*Login func
   login() async {
     //? Loading data
@@ -54,9 +56,10 @@ class __LoginState extends ConsumerState<_Login> {
       isLoading = true;
     });
 
-    const url = "https://soilanalysis.loca.lt/v1/user/login";
+    //const url = "https://soilanalysis.loca.lt/v1/user/login";
+    const url = "http://localhost:3000/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
-      'username': usernameController.text.toString(),
+      'username': usernameController.text,
       'password': passwordController.text
     });
 

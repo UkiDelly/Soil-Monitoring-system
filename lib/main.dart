@@ -19,10 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(fontFamily: "Readex Pro"),
-        debugShowCheckedModeBanner: false,
-        title: "Soil Monitoring System",
-        home: const AddNewGarden() //const LoginPage(),
-        );
+      theme: ThemeData(fontFamily: "Readex Pro"),
+      debugShowCheckedModeBanner: false,
+      title: "Soil Monitoring System",
+      home:
+          //const AddNewGarden()
+          const LoginPage(),
+    );
   }
 }
