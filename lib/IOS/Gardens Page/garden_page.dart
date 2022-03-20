@@ -29,7 +29,7 @@ class NewGardenPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          toolbarHeight: 40,
+          toolbarHeight: 50,
           backgroundColor: const Color(0xff669D6B),
           elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -47,8 +47,9 @@ class NewGardenPage extends StatelessWidget {
           title: Text(
             gardenName,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
           ),
+          centerTitle: true,
 
 //* History button, setting button
           actions: [
@@ -106,8 +107,8 @@ class __GardenState extends State<_Garden> {
     setState(() {
       isLoading = true;
     });
-    final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
-    // final url = "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    // final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
+    final url = "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);

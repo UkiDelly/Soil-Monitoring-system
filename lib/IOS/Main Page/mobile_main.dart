@@ -17,33 +17,36 @@ class MobileHome extends StatelessWidget {
   Widget build(BuildContext context) {
     //? Set the system status color to black since the background is light
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-          toolbarOpacity: 0,
-          elevation: 0,
-          toolbarHeight: 0),
-      extendBodyBehindAppBar: true,
-      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-      body: SafeArea(
-        bottom: false,
-        child: SizedBox(
-          child: Column(
-            children: [
-              const AboveGardenList(),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 246, 245, 245),
+            toolbarOpacity: 0,
+            elevation: 0,
+            toolbarHeight: 0),
+        extendBodyBehindAppBar: true,
+        backgroundColor: const Color.fromARGB(255, 246, 245, 245),
+        body: SafeArea(
+          bottom: false,
+          child: SizedBox(
+            child: Column(
+              children: [
+                const AboveGardenList(),
 
-              const SizedBox(
-                height: 10,
-              ),
-//* Garden List
-              Consumer(
-                builder: (ctx, ref, child) {
-                  //* get the token from the provider
-                  final token = ref.watch(tokenProvider);
-                  return GardenList(token: token);
-                },
-              ),
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+                //* Garden List
+                Consumer(
+                  builder: (ctx, ref, child) {
+                    //* get the token from the provider
+                    final token = ref.watch(tokenProvider);
+                    return GardenList(token: token);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -142,8 +145,8 @@ class _GardenListState extends State<GardenList> {
     setState(() {
       isLoading = true;
     });
-    //const url = "http://soilanalysis.loca.lt/v1/garden/list";
-    const url = "http://localhost:3000/v1/garden/list";
+    const url = "http://soilanalysis.loca.lt/v1/garden/list";
+    // const url = "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);
@@ -167,7 +170,7 @@ class _GardenListState extends State<GardenList> {
         //? Show the garden List
         : SizedBox(
             width: MediaQuery.of(context).size.width * 0.95,
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.of(context).size.height * 0.75,
             child: ListView.builder(
                 itemCount: gardenCount,
                 scrollDirection: Axis.vertical,
