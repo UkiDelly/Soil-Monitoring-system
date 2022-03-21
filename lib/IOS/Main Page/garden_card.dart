@@ -3,17 +3,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
-import '../New Garden Page/new_garden_page.dart';
 
 class GardenCard extends StatefulWidget {
   String gardenName;
-  String gardenID;
   int index;
-  GardenCard(
-      {Key? key,
-      required this.gardenName,
-      required this.gardenID,
-      required this.index})
+  GardenCard({Key? key, required this.gardenName, required this.index})
       : super(key: key);
 
   @override
@@ -45,9 +39,8 @@ class _GardenCardState extends State<GardenCard> {
 
             //If open
             openBuilder: (_, closeContainer) {
-              return NewGardenPage(
+              return GardenPage(
                 gardenName: widget.gardenName,
-                gardenID: widget.gardenID,
               ); //Garden();
             }));
   }

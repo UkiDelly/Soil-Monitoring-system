@@ -9,7 +9,6 @@ import 'package:thesis/IOS/Gardens%20Page/plant_card.dart';
 import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
 import '../History Page/history_page.dart';
-import 'Garden Page widgets/garden_page_name.dart';
 import 'Garden Page widgets/humidity.dart';
 import 'Garden Page widgets/moisture.dart';
 import 'Garden Page widgets/npk_status.dart';
@@ -18,10 +17,9 @@ import 'Garden Page widgets/tempurature.dart';
 import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
-class NewGardenPage extends StatelessWidget {
-  NewGardenPage({Key? key, required this.gardenID, required this.gardenName})
-      : super(key: key);
-  String gardenID = "";
+class GardenPage extends StatelessWidget {
+  GardenPage({Key? key, required this.gardenName}) : super(key: key);
+
   String gardenName = "";
 
   @override
@@ -80,7 +78,6 @@ class NewGardenPage extends StatelessWidget {
             final token = ref.watch(tokenProvider);
             return _Garden(
               token: token,
-              gardenID: gardenID,
             );
           },
         ));
@@ -88,17 +85,16 @@ class NewGardenPage extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class _Garden extends StatefulWidget {
+class _Garden extends ConsumerStatefulWidget {
   String token;
-  String gardenID;
-  _Garden({Key? key, required this.gardenID, required this.token})
-      : super(key: key);
+
+  _Garden({Key? key, required this.token}) : super(key: key);
 
   @override
-  State<_Garden> createState() => __GardenState();
+  ConsumerState<_Garden> createState() => __GardenState();
 }
 
-class __GardenState extends State<_Garden> {
+class __GardenState extends ConsumerState<_Garden> {
   //
   bool isLoading = false;
   //
@@ -107,8 +103,9 @@ class __GardenState extends State<_Garden> {
     setState(() {
       isLoading = true;
     });
+    final gardenID = ref.watch(gardenIdProvider);
     // final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
-    final url = "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    final url = "http://soilanalysis.loca.lt/v1/garden/get/$gardenID";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);

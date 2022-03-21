@@ -175,10 +175,15 @@ class _GardenListState extends State<GardenList> {
                 itemCount: gardenCount,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
-                  return GardenCard(
-                    index: index + 1,
-                    gardenID: "${data[index]["_id"]}",
-                    gardenName: "${data[index]["name"]}",
+                  return Consumer(
+                    builder: (ctx, ref, child) {
+                      ref.watch(gardenIdProvider.notifier).state =
+                          data[index]["_id"];
+                      return GardenCard(
+                        index: index + 1,
+                        gardenName: "${data[index]["name"]}",
+                      );
+                    },
                   );
                 }),
           );
