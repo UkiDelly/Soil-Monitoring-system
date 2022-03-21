@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Gardens%20Page/plant_card.dart';
+import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
 import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
 import '../History Page/history_page.dart';
@@ -45,7 +45,7 @@ class GardenPage extends StatelessWidget {
           title: Text(
             gardenName,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
 
@@ -76,8 +76,10 @@ class GardenPage extends StatelessWidget {
         body: Consumer(
           builder: (ctx, ref, child) {
             final token = ref.watch(tokenProvider);
+            final gardenID = ref.watch(gardenIdProvider);
             return _Garden(
               token: token,
+              gardenID: gardenID,
             );
           },
         ));
@@ -87,8 +89,10 @@ class GardenPage extends StatelessWidget {
 // ignore: must_be_immutable
 class _Garden extends ConsumerStatefulWidget {
   String token;
+  String gardenID;
 
-  _Garden({Key? key, required this.token}) : super(key: key);
+  _Garden({Key? key, required this.token, required this.gardenID})
+      : super(key: key);
 
   @override
   ConsumerState<_Garden> createState() => __GardenState();
@@ -99,18 +103,25 @@ class __GardenState extends ConsumerState<_Garden> {
   bool isLoading = false;
   //
   //? Get the garden data
-  getGarden() async {
+  getGardenData() async {
     setState(() {
       isLoading = true;
     });
-    final gardenID = ref.watch(gardenIdProvider);
     // final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
-    final url = "http://soilanalysis.loca.lt/v1/garden/get/$gardenID";
-    var response = await http.get(Uri.parse(url),
+    final gardenUrl =
+        "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    var gardenResponse = await http.get(Uri.parse(gardenUrl),
         headers: {'Authorization': 'Bearer ${widget.token}'});
-    var item = jsonDecode(response.body);
+    var gardenItem = jsonDecode(gardenResponse.body);
+
+    final sensorUrl =
+        "http://soilanalysis.loca.lt/v1/sensor/get/${widget.gardenID}";
+    var sensorResponse = await http.get(Uri.parse(sensorUrl),
+        headers: {'Authorization': 'Bearer ${widget.token}'});
+    var sensorItem = jsonDecode(sensorResponse.body);
+    print(sensorItem);
     setState(() {
-      data = item["data"];
+      data = gardenItem["data"];
       gardenName = data["name"];
       isLoading = false;
     });
@@ -127,7 +138,7 @@ class __GardenState extends ConsumerState<_Garden> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getGarden();
+    getGardenData();
   }
 
   @override

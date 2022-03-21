@@ -145,6 +145,7 @@ class _GardenListState extends State<GardenList> {
     setState(() {
       isLoading = true;
     });
+    
     const url = "http://soilanalysis.loca.lt/v1/garden/list";
     // const url = "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url),

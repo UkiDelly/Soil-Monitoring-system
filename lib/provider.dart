@@ -15,3 +15,8 @@ final tokenProvider = StateNotifierProvider<Token, String>((ref) => Token());
 final gardenIdProvider = StateProvider<String>(
   (ref) => "",
 );
+
+//user ID
+final userIdProvider = StateProvider<String>(
+  (ref) => "",
+);
