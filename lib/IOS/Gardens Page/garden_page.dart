@@ -328,7 +328,7 @@ class __GardenState extends ConsumerState<_Garden> {
                           Text(
                             "Plants",
                             style: (TextStyle(
-                                fontFamily: "Readex Pro",
+                                
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold)),
                           ),

@@ -63,12 +63,12 @@ class AboveGardenList extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(
-            height: 8,
+            height: 25,
           ),
           //* Logo
           SizedBox(
-            width: 40,
-            height: 40,
+            width: 60,
+            height: 60,
             child: SvgPicture.asset("assets/Logo/Logo.svg"),
           ),
           const SizedBox(
@@ -89,10 +89,8 @@ class AboveGardenList extends StatelessWidget {
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
                     "My Gardens",
-                    style: (TextStyle(
-                        fontFamily: "Readex Pro",
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold)),
+                    style:
+                        (TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
                   ),
                 ),
                 IconButton(
@@ -168,9 +166,9 @@ class _GardenListState extends State<GardenList> {
         ? const Center(child: LoadingPage())
 
         //? Show the garden List
-        : SizedBox(
-            width: MediaQuery.of(context).size.width * 0.95,
-            height: MediaQuery.of(context).size.height * 0.75,
+        : Expanded(
+            // width: MediaQuery.of(context).size.width * 0.95,
+            // height: MediaQuery.of(context).size.height * 0.75,
             child: ListView.builder(
                 itemCount: gardenCount,
                 scrollDirection: Axis.vertical,

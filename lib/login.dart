@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
@@ -28,9 +29,15 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 246, 245, 245),
+      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+        backgroundColor: const Color.fromARGB(255, 246, 245, 245),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      ),
       body: _Login(),
     );
   }
@@ -106,24 +113,24 @@ class __LoginState extends ConsumerState<_Login> {
         child: isLoading
             ? const LoadingPage()
             : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  //
+                  const Spacer(),
                   //* Logo
                   _logo(),
 
                   //
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const Spacer(),
 
                   //* Input
                   _loginInput(),
 
-                  const SizedBox(
-                    height: 100,
-                  ),
+                  const Spacer(),
 
-                  _register()
+                  _register(),
+
+                  const Spacer()
                 ],
               ));
   }

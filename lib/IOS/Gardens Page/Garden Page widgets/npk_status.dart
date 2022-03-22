@@ -20,10 +20,7 @@ class NPKstatus extends StatelessWidget {
           children: [
             const Text(
               "Nutrient",
-              style: TextStyle(
-                  fontFamily: "Readex Pro",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
 
             /// Chart

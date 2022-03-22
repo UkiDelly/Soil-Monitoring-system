@@ -73,10 +73,8 @@ class _Contents extends StatelessWidget {
           Center(
             child: Text(name,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontFamily: "Readex Pro",
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
           ),
           const SizedBox(
             height: 10,

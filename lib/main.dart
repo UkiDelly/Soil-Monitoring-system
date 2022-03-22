@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "Readex Pro"),
+      theme: ThemeData(fontFamily: "ReadexPro"),
       debugShowCheckedModeBanner: false,
       title: "Soil Monitoring System",
       home:
