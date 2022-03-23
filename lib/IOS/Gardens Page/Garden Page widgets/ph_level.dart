@@ -139,7 +139,7 @@ class PhLevel extends StatelessWidget {
                           angle: 90,
                           widget: SizedBox(
                               child: GradientText(
-                            "${ph}",
+                            "$ph",
                             colors: getColor(ph),
                             style: const TextStyle(
                                 fontSize: 45, fontWeight: FontWeight.bold),

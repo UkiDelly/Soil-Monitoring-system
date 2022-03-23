@@ -10,7 +10,7 @@ import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 import 'package:thesis/Web/Web%20Garden%20Page/renewal_web_main.dart';
 
 import 'new_user.dart';
-import 'Web/web_main.dart';
+
 import 'loading.dart';
 import 'provider.dart';
 

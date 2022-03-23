@@ -48,7 +48,7 @@ class Temp extends StatelessWidget {
                 children: [
                   // Gradient Text
                   GradientText(
-                    "${temp}",
+                    "$temp",
                     colors: getColor(temp),
                     style: const TextStyle(
                         fontSize: 25, fontWeight: FontWeight.bold),

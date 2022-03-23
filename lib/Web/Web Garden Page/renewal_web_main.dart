@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +53,7 @@ class WebMain extends StatelessWidget {
 
       //
       backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-      body: _WebMain(),
+      body: const _WebMain(),
     );
   }
 }
@@ -80,6 +82,7 @@ class __WebMainState extends State<_WebMain> {
     if (response.statusCode == 200) {
       setState(() {
         gardenList = item['data'];
+        isLoading = false;
       });
     }
   }
@@ -93,55 +96,54 @@ class __WebMainState extends State<_WebMain> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: //isLoading
-          //? const Center(child:  LoadingPage())
-          //:
-          Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          //
-          const SizedBox(
-            height: 10,
-          ),
-
-          //* Garden list
-          SizedBox(
-            height: MediaQuery.of(context).size.height - 70,
-            child: Row(
+      child: isLoading
+          ? const Center(child: LoadingPage())
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width >
-                          550 // If the web with is greater than 550 px,
-                      ? MediaQuery.of(context).size.width *
-                          0.49 // width is hald of the page
-                      : MediaQuery.of(context)
-                          .size
-                          .width, // else, width is full
-                  child: _list(),
-                ),
-                //? Divider
-                SizedBox(
-                  child: MediaQuery.of(context).size.width > 550
-                      ? const VerticalDivider(
-                          width: 10,
-                        )
-                      : null,
+                //
+                const SizedBox(
+                  height: 10,
                 ),
 
-                //* Garden Page
+                //* Garden list
                 SizedBox(
-                  width: MediaQuery.of(context).size.width > 550
-                      ? MediaQuery.of(context).size.width * 0.49
-                      : 0,
-                  child: WebGarden(
-                    isTapped: isTapped,
+                  height: MediaQuery.of(context).size.height - 70,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width >
+                                550 // If the web with is greater than 550 px,
+                            ? MediaQuery.of(context).size.width *
+                                0.49 // width is hald of the page
+                            : MediaQuery.of(context)
+                                .size
+                                .width, // else, width is full
+                        child: _list(),
+                      ),
+                      //? Divider
+                      SizedBox(
+                        child: MediaQuery.of(context).size.width > 550
+                            ? const VerticalDivider(
+                                width: 10,
+                              )
+                            : null,
+                      ),
+
+                      //* Garden Page
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width > 550
+                            ? MediaQuery.of(context).size.width * 0.49
+                            : 0,
+                        child: WebGarden(
+                          isTapped: isTapped,
+                        ),
+                      )
+                    ],
                   ),
                 )
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 

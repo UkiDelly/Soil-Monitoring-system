@@ -136,7 +136,6 @@ class __GardenState extends ConsumerState<_Garden> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getGardenData();
   }
