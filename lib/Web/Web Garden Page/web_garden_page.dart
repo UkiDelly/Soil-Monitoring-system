@@ -14,29 +14,23 @@ import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
 
-class WebGarden extends ConsumerWidget {
+class WebGarden extends StatelessWidget {
   bool isTapped;
-  String gardenID;
-  WebGarden({Key? key, required this.isTapped, required this.gardenID})
-      : super(key: key);
+
+  WebGarden({Key? key, required this.isTapped}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final token = ref.watch(tokenProvider);
+  Widget build(BuildContext context) {
     return SizedBox(
       child: isTapped
-          ? SingleChildScrollView(
-              child: _Status(gardenID: gardenID, token: token))
+          ? const SingleChildScrollView(child: _Status())
           : Opacity(opacity: 0.25, child: Image.asset('Logo/Logo.png')),
     );
   }
 }
 
 class _Status extends ConsumerStatefulWidget {
-  String gardenID;
-  String token;
-  _Status({Key? key, required this.gardenID, required this.token})
-      : super(key: key);
+  const _Status({Key? key}) : super(key: key);
 
   @override
   ConsumerState<_Status> createState() => __StatusState();
@@ -54,9 +48,12 @@ class __StatusState extends ConsumerState<_Status> {
   late Future<dynamic> _garden;
   //
   getSingleGarden() async {
-    final url = "https://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    final token = ref.watch(tokenProvider);
+    final gardenID = ref.watch(gardenIDProvider);
+    // final url = "https://soilanalysis.loca.lt/v1/garden/get/$gardenID";
+    final url = "http://localhost:3000/v1/garden/get/$gardenID";
     var response = await http.get(Uri.parse(url), headers: {
-      'Authorization': 'Bearer ${widget.token}',
+      'Authorization': 'Bearer $token',
       'Content-Type': 'application/json'
     });
     var item = jsonDecode(response.body);
@@ -171,16 +168,14 @@ class __StatusState extends ConsumerState<_Status> {
 // If the width is less tha 550
 class WebGardenMini extends StatelessWidget {
   bool isTapped;
-  String gardenID;
-  WebGardenMini({Key? key, required this.isTapped, required this.gardenID})
-      : super(key: key);
+  WebGardenMini({Key? key, required this.isTapped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: WebGarden(
         isTapped: isTapped,
-        gardenID: gardenID,
+
         //gardenID: gardenID,
       ),
     );

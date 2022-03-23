@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-//Token
-class Token extends StateNotifier<String> {
-  Token() : super("0");
+final tokenProvider = StateProvider<String>((ref) => "");
+final gardenIDProvider = StateProvider<String>((ref) => "");
 
   setToken(String token) {
     state = token;

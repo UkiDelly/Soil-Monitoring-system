@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/Web/Web%20Garden%20Page/renewal_web_main.dart';
 
 import 'new_user.dart';
 import 'Web/web_main.dart';
@@ -56,8 +56,8 @@ class __LoginState extends ConsumerState<_Login> {
       isLoading = true;
     });
 
-    const url = "https://soilanalysis.loca.lt/v1/user/login";
-    // const url = "http://localhost:3000/v1/user/login";
+    // const url = "https://soilanalysis.loca.lt/v1/user/login";
+    const url = "http://localhost:3000/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
@@ -81,9 +81,8 @@ class __LoginState extends ConsumerState<_Login> {
     } else if (response.statusCode == 401) {
       item = jsonDecode(response.body);
 //!  When authorization is fail
-      await ref
-          .watch(tokenProvider.notifier)
-          .setToken(item["status"].toString());
+
+      ref.watch(tokenProvider.notifier).state = item['data']['authToken'];
       //? Done loading data
       setState(() {
         isLoading = false;
@@ -199,15 +198,12 @@ class __LoginState extends ConsumerState<_Login> {
                 await login();
                 //* Check if its success to login
                 if (succesLogin) {
-                  await Navigator.pushReplacement(
+                  Navigator.pushReplacement(
                       (context),
                       PageTransition(
                           child: kIsWeb
                               //* if the platform is web, open the web page
-                              ? WebMain(
-                                  username: username,
-                                  token: ref.watch(tokenProvider).toString(),
-                                )
+                              ? WebMain(username: username)
                               //* else open the mobile page
                               : const MobileHome(),
                           type: PageTransitionType.fade));
