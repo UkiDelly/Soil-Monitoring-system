@@ -5,15 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class Temp extends StatefulWidget {
+/// Colors for the gradient text
+List<Color> getColor(temp) {
+  if (temp < 25) {
+    return const [Color(0xff2196EB), Color(0xff5482C0)];
+  } else if (temp < 50) {
+    return const [Color(0xff5482C0), Color(0xff8F6B8D)];
+  } else if (temp < 75) {
+    return const [Color(0xff8F6B8D), Color(0xffCC5359)];
+  } else {
+    return const [Color(0xffCC5359), Color(0xffF44336)];
+  }
+}
+
+class Temp extends StatelessWidget {
   double temp;
   Temp({Key? key, required this.temp}) : super(key: key);
 
-  @override
-  _TempState createState() => _TempState();
-}
-
-class _TempState extends State<Temp> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -40,8 +48,8 @@ class _TempState extends State<Temp> {
                 children: [
                   // Gradient Text
                   GradientText(
-                    "${widget.temp}",
-                    colors: getColor(widget.temp),
+                    "${temp}",
+                    colors: getColor(temp),
                     style: const TextStyle(
                         fontSize: 25, fontWeight: FontWeight.bold),
                   ),
@@ -66,7 +74,7 @@ class _TempState extends State<Temp> {
                 // Gauge division
                 barPointers: [
                   LinearBarPointer(
-                    value: widget.temp,
+                    value: temp,
                     color: Colors.red,
                   )
                 ],
@@ -74,7 +82,7 @@ class _TempState extends State<Temp> {
                 /// Mark Pointer
                 markerPointers: [
                   LinearShapePointer(
-                    value: widget.temp,
+                    value: temp,
                     color: Colors.redAccent,
                   )
                 ],
@@ -84,18 +92,5 @@ class _TempState extends State<Temp> {
         ),
       ),
     );
-  }
-}
-
-/// Colors for the gradient text
-List<Color> getColor(temp) {
-  if (temp < 25) {
-    return const [Color(0xff2196EB), Color(0xff5482C0)];
-  } else if (temp < 50) {
-    return const [Color(0xff5482C0), Color(0xff8F6B8D)];
-  } else if (temp < 75) {
-    return const [Color(0xff8F6B8D), Color(0xffCC5359)];
-  } else {
-    return const [Color(0xffCC5359), Color(0xffF44336)];
   }
 }
