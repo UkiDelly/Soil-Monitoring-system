@@ -145,6 +145,7 @@ class _GardenListState extends State<GardenList> {
     setState(() {
       isLoading = true;
     });
+    
     const url = "http://soilanalysis.loca.lt/v1/garden/list";
     // const url = "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url),
@@ -175,10 +176,15 @@ class _GardenListState extends State<GardenList> {
                 itemCount: gardenCount,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
-                  return GardenCard(
-                    index: index + 1,
-                    gardenID: "${data[index]["_id"]}",
-                    gardenName: "${data[index]["name"]}",
+                  return Consumer(
+                    builder: (ctx, ref, child) {
+                      ref.watch(gardenIdProvider.notifier).state =
+                          data[index]["_id"];
+                      return GardenCard(
+                        index: index + 1,
+                        gardenName: "${data[index]["name"]}",
+                      );
+                    },
                   );
                 }),
           );

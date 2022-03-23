@@ -71,6 +71,8 @@ class __LoginState extends ConsumerState<_Login> {
       await ref
           .watch(tokenProvider.notifier)
           .setToken(item['data']['authToken']);
+      //* Save the userID
+      ref.watch(userIdProvider.notifier).state = "";
       setState(() {
         username = usernameController.text;
         succesLogin = true;
@@ -129,7 +131,10 @@ class __LoginState extends ConsumerState<_Login> {
 
   Widget _logo() {
     return SizedBox(
-        width: 40, height: 40, child: SvgPicture.asset("assets/Logo/Logo.svg"));
+        child: SvgPicture.asset(
+      "assets/Logo/Logo.svg",
+      height: 120,
+    ));
   }
 
   //? Login

@@ -10,3 +10,13 @@ class Token extends StateNotifier<String> {
 }
 
 final tokenProvider = StateNotifierProvider<Token, String>((ref) => Token());
+
+// grdenID
+final gardenIdProvider = StateProvider<String>(
+  (ref) => "",
+);
+
+//user ID
+final userIdProvider = StateProvider<String>(
+  (ref) => "",
+);

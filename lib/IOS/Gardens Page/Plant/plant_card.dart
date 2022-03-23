@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:thesis/IOS/Plant/plant_detail_page.dart';
+import 'package:thesis/IOS/Gardens%20Page/Plant/plant_detail_page.dart';
 
 class PlantCard extends StatefulWidget {
   const PlantCard({Key? key}) : super(key: key);

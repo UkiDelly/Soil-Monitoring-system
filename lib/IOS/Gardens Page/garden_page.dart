@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Gardens%20Page/plant_card.dart';
+import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
 import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
 import '../History Page/history_page.dart';
-import 'Garden Page widgets/garden_page_name.dart';
 import 'Garden Page widgets/humidity.dart';
 import 'Garden Page widgets/moisture.dart';
 import 'Garden Page widgets/npk_status.dart';
@@ -18,10 +17,9 @@ import 'Garden Page widgets/tempurature.dart';
 import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
-class NewGardenPage extends StatelessWidget {
-  NewGardenPage({Key? key, required this.gardenID, required this.gardenName})
-      : super(key: key);
-  String gardenID = "";
+class GardenPage extends StatelessWidget {
+  GardenPage({Key? key, required this.gardenName}) : super(key: key);
+
   String gardenName = "";
 
   @override
@@ -47,7 +45,7 @@ class NewGardenPage extends StatelessWidget {
           title: Text(
             gardenName,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
 
@@ -78,6 +76,7 @@ class NewGardenPage extends StatelessWidget {
         body: Consumer(
           builder: (ctx, ref, child) {
             final token = ref.watch(tokenProvider);
+            final gardenID = ref.watch(gardenIdProvider);
             return _Garden(
               token: token,
               gardenID: gardenID,
@@ -88,32 +87,41 @@ class NewGardenPage extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class _Garden extends StatefulWidget {
+class _Garden extends ConsumerStatefulWidget {
   String token;
   String gardenID;
-  _Garden({Key? key, required this.gardenID, required this.token})
+
+  _Garden({Key? key, required this.token, required this.gardenID})
       : super(key: key);
 
   @override
-  State<_Garden> createState() => __GardenState();
+  ConsumerState<_Garden> createState() => __GardenState();
 }
 
-class __GardenState extends State<_Garden> {
+class __GardenState extends ConsumerState<_Garden> {
   //
   bool isLoading = false;
   //
   //? Get the garden data
-  getGarden() async {
+  getGardenData() async {
     setState(() {
       isLoading = true;
     });
     // final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
-    final url = "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
-    var response = await http.get(Uri.parse(url),
+    final gardenUrl =
+        "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    var gardenResponse = await http.get(Uri.parse(gardenUrl),
         headers: {'Authorization': 'Bearer ${widget.token}'});
-    var item = jsonDecode(response.body);
+    var gardenItem = jsonDecode(gardenResponse.body);
+
+    final sensorUrl =
+        "http://soilanalysis.loca.lt/v1/sensor/get/${widget.gardenID}";
+    var sensorResponse = await http.get(Uri.parse(sensorUrl),
+        headers: {'Authorization': 'Bearer ${widget.token}'});
+    var sensorItem = jsonDecode(sensorResponse.body);
+    print(sensorItem);
     setState(() {
-      data = item["data"];
+      data = gardenItem["data"];
       gardenName = data["name"];
       isLoading = false;
     });
@@ -130,7 +138,7 @@ class __GardenState extends State<_Garden> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getGarden();
+    getGardenData();
   }
 
   @override
