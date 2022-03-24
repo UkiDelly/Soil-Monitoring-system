@@ -85,7 +85,6 @@ class __LoginState extends ConsumerState<_Login> {
       //* Save the userID
       ref.watch(userIDProvider.notifier).state = tokenDecode['_id'];
 
-      print(tokenDecode['_id']);
       setState(() {
         username = usernameController.text;
         succesLogin = true;

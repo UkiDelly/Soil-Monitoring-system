@@ -44,10 +44,12 @@ class _GardenCardState extends State<GardenCard> {
 
             //If open
             openBuilder: (_, closeContainer) {
-              return GardenPage(
+              return
+                  // Center(child: Text(widget.gardenID));
+                  GardenPage(
                 gardenID: widget.gardenID,
                 gardenName: widget.gardenName,
-              ); //Garden();
+              );
             }));
   }
 }

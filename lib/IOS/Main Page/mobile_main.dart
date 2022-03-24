@@ -152,16 +152,17 @@ class _GardenListState extends ConsumerState<GardenList> {
     var item = jsonDecode(response.body);
 
     List temp = item['data'];
+    List _gardenList = [];
     final userID = ref.watch(userIDProvider);
 
     for (int i = 0; i < temp.length; i++) {
-      if (temp[i]['createdBy'] != userID) {
-        temp.removeAt(i);
+      if (temp[i]['createdBy'] == userID) {
+        _gardenList = [..._gardenList, temp[i]];
       }
     }
 
     setState(() {
-      gardenList = temp;
+      gardenList = _gardenList;
       isLoading = false;
     });
   }
