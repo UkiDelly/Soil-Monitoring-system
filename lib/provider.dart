@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//user ID
+final userIdProvider = StateProvider<String>(
+  (ref) => "",
+);
 final userIDProvider = StateProvider<String>((ref) => "");
 final tokenProvider = StateProvider<String>((ref) => "");
 final gardenIDProvider = StateProvider<String>((ref) => "");
@@ -12,7 +16,3 @@ class SelectGarden {
 
   SelectGarden(this.isSelected, this.index);
 }
-//user ID
-final userIdProvider = StateProvider<String>(
-  (ref) => "",
-);

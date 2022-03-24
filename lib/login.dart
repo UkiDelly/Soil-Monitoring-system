@@ -70,9 +70,7 @@ class __LoginState extends ConsumerState<_Login> {
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
       //* Save the token
-      await ref
-          .watch(tokenProvider.notifier)
-          .setToken(item['data']['authToken']);
+      ref.watch(tokenProvider.notifier).state = item['data']['authToken'];
       //* Save the userID
       ref.watch(userIdProvider.notifier).state = "";
       setState(() {
