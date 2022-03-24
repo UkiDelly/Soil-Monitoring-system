@@ -159,7 +159,6 @@ class _GardenListState extends ConsumerState<GardenList> {
         temp.removeAt(i);
       }
     }
-    print(item);
 
     setState(() {
       gardenList = temp;
@@ -181,15 +180,10 @@ class _GardenListState extends ConsumerState<GardenList> {
                 itemCount: gardenList.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
-                  return Consumer(
-                    builder: (ctx, ref, child) {
-                      ref.watch(gardenIDProvider.notifier).state =
-                          gardenList[index]["_id"];
-                      return GardenCard(
-                        index: index + 1,
-                        gardenName: gardenList[index]["name"],
-                      );
-                    },
+                  return GardenCard(
+                    index: index + 1,
+                    gardenID: gardenList[index]['_id'],
+                    gardenName: gardenList[index]['name'],
                   );
                 }),
           );

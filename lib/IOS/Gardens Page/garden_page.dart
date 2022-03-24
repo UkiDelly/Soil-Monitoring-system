@@ -18,9 +18,11 @@ import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class GardenPage extends StatelessWidget {
-  GardenPage({Key? key, required this.gardenName}) : super(key: key);
+  GardenPage({Key? key, required this.gardenID, required this.gardenName})
+      : super(key: key);
 
-  String gardenName = "";
+  String gardenID;
+  String gardenName;
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +75,16 @@ class GardenPage extends StatelessWidget {
 
         //* Content
         backgroundColor: const Color(0xff669D6B),
-        body: const _Garden());
+        body: _Garden(
+          gardenID: gardenID,
+        ));
   }
 }
 
 // ignore: must_be_immutable
 class _Garden extends ConsumerStatefulWidget {
-  const _Garden({Key? key}) : super(key: key);
+  String gardenID;
+  _Garden({Key? key, required this.gardenID}) : super(key: key);
 
   @override
   ConsumerState<_Garden> createState() => __GardenState();
@@ -96,19 +101,19 @@ class __GardenState extends ConsumerState<_Garden> {
     });
 
     final token = ref.watch(tokenProvider);
-    final gardenID = ref.watch(gardenIDProvider);
-    final url = "http://localhost:3000/v1/garden/get/$gardenID";
+    final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
     // final url =
     //     "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
     var gardenResponse = await http
         .get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
     var gardenItem = jsonDecode(gardenResponse.body);
 
-    final sensorUrl = "http://soilanalysis.loca.lt/v1/sensor/get/$gardenID";
-    var sensorResponse = await http
-        .get(Uri.parse(sensorUrl), headers: {'Authorization': 'Bearer $token'});
-    var sensorItem = jsonDecode(sensorResponse.body);
-    print(sensorItem);
+    // final sensorUrl =
+    //     "http://soilanalysis.loca.lt/v1/sensor/get/${widget.gardenID}";
+    // var sensorResponse = await http
+    //     .get(Uri.parse(sensorUrl), headers: {'Authorization': 'Bearer $token'});
+    // var sensorItem = jsonDecode(sensorResponse.body);
+    // print(sensorItem);
     setState(() {
       data = gardenItem["data"];
       gardenName = data["name"];
@@ -150,11 +155,6 @@ class __GardenState extends ConsumerState<_Garden> {
                     const SizedBox(
                       height: 10,
                     ),
-
-                    // //* Name of the Garden
-                    // GardenName(
-                    //   name: gardenName,
-                    // ),
 
                     //* Body
                     SizedBox(
