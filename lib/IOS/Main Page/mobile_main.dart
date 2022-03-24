@@ -135,7 +135,6 @@ class _GardenListState extends State<GardenList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getGardenList();
   }
@@ -145,7 +144,7 @@ class _GardenListState extends State<GardenList> {
     setState(() {
       isLoading = true;
     });
-    
+
     const url = "http://soilanalysis.loca.lt/v1/garden/list";
     // const url = "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url),
@@ -178,7 +177,7 @@ class _GardenListState extends State<GardenList> {
                 itemBuilder: (BuildContext context, int index) {
                   return Consumer(
                     builder: (ctx, ref, child) {
-                      ref.watch(gardenIdProvider.notifier).state =
+                      ref.watch(gardenIDProvider.notifier).state =
                           data[index]["_id"];
                       return GardenCard(
                         index: index + 1,

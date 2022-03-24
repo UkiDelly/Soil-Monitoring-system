@@ -76,7 +76,7 @@ class GardenPage extends StatelessWidget {
         body: Consumer(
           builder: (ctx, ref, child) {
             final token = ref.watch(tokenProvider);
-            final gardenID = ref.watch(gardenIdProvider);
+            final gardenID = ref.watch(gardenIDProvider);
             return _Garden(
               token: token,
               gardenID: gardenID,
@@ -136,7 +136,6 @@ class __GardenState extends ConsumerState<_Garden> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getGardenData();
   }

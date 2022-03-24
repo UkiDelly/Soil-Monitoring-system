@@ -4,15 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class PhLevel extends StatefulWidget {
+getColor(double ph) {
+  late List<Color> color;
+
+  if (ph < 3) {
+    color = [Colors.red, Colors.red];
+    return color;
+  } else if (ph < 6) {
+    color = [Colors.orange, Colors.yellow];
+    return color;
+  } else if (ph == 7) {
+    color = [Colors.green, Colors.lightGreen];
+    return color;
+  } else if (ph > 7 && ph < 11) {
+    color = [Colors.blue, Colors.purple];
+    return color;
+  } else {
+    color = [Colors.purple, Colors.indigo];
+    return color;
+  }
+}
+
+class PhLevel extends StatelessWidget {
   double ph;
   PhLevel({Key? key, required this.ph}) : super(key: key);
 
-  @override
-  _PhLevelState createState() => _PhLevelState();
-}
-
-class _PhLevelState extends State<PhLevel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -108,7 +124,7 @@ class _PhLevelState extends State<PhLevel> {
                     pointers: <GaugePointer>[
                       MarkerPointer(
                         animationDuration: 2000,
-                        value: widget.ph,
+                        value: ph,
                         markerOffset: -10,
                         color: Colors.black,
                         enableAnimation: true,
@@ -123,8 +139,8 @@ class _PhLevelState extends State<PhLevel> {
                           angle: 90,
                           widget: SizedBox(
                               child: GradientText(
-                            "${widget.ph}",
-                            colors: getColor(widget.ph),
+                            "$ph",
+                            colors: getColor(ph),
                             style: const TextStyle(
                                 fontSize: 45, fontWeight: FontWeight.bold),
                           )))
@@ -137,26 +153,5 @@ class _PhLevelState extends State<PhLevel> {
         ),
       ),
     );
-  }
-}
-
-getColor(double ph) {
-  late List<Color> color;
-
-  if (ph < 3) {
-    color = [Colors.red, Colors.red];
-    return color;
-  } else if (ph < 6) {
-    color = [Colors.orange, Colors.yellow];
-    return color;
-  } else if (ph == 7) {
-    color = [Colors.green, Colors.lightGreen];
-    return color;
-  } else if (ph > 7 && ph < 11) {
-    color = [Colors.blue, Colors.purple];
-    return color;
-  } else {
-    color = [Colors.purple, Colors.indigo];
-    return color;
   }
 }

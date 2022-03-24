@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
-
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,34 +14,45 @@ import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
 
 class WebGarden extends ConsumerWidget {
-  bool isTapped;
-  String gardenID;
-  WebGarden({Key? key, required this.isTapped, required this.gardenID})
-      : super(key: key);
+  WebGarden({
+    Key? key,
+  }) : super(key: key);
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final token = ref.watch(tokenProvider);
-    return SizedBox(
-      child: isTapped
+    final gardenID = ref.watch(gardenIDProvider);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
+      child: ref.watch(selectionProvider).isSelected
           ? SingleChildScrollView(
-              child: _Status(gardenID: gardenID, token: token))
+              controller: _scrollController,
+              scrollDirection: Axis.vertical,
+
+              //
+              child: _Status(
+                token: token,
+                gardenID: gardenID,
+              ))
           : Opacity(opacity: 0.25, child: Image.asset('Logo/Logo.png')),
     );
   }
 }
 
-class _Status extends ConsumerStatefulWidget {
-  String gardenID;
-  String token;
-  _Status({Key? key, required this.gardenID, required this.token})
+class _Status extends StatefulWidget {
+  String token, gardenID;
+  _Status({Key? key, required this.token, required this.gardenID})
       : super(key: key);
 
   @override
-  ConsumerState<_Status> createState() => __StatusState();
+  State<_Status> createState() => __StatusState();
 }
 
-class __StatusState extends ConsumerState<_Status> {
+class __StatusState extends State<_Status> {
   // var
 
   Map<String, double> sampleNPK = {"n": 20, "p": 25, "k": 40};
@@ -51,13 +61,13 @@ class __StatusState extends ConsumerState<_Status> {
   double moisture = 0.1;
   double humidity = 30;
   bool isLoading = false;
-  late Future<dynamic> _garden;
-  //
+  dynamic _garden = {};
+
   getSingleGarden() async {
-    final url = "https://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    // final url = "https://soilanalysis.loca.lt/v1/garden/get/$gardenID";
+    final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
     var response = await http.get(Uri.parse(url), headers: {
       'Authorization': 'Bearer ${widget.token}',
-      'Content-Type': 'application/json'
     });
     var item = jsonDecode(response.body);
     return item;
@@ -65,7 +75,6 @@ class __StatusState extends ConsumerState<_Status> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _garden = getSingleGarden();
   }
@@ -75,8 +84,13 @@ class __StatusState extends ConsumerState<_Status> {
     return FutureBuilder<dynamic>(
         future: _garden,
         builder: (BuildContext context, AsyncSnapshot<dynamic> garden) {
-          if (garden.hasData) {
-            return Card(
+          if (!garden.hasData) {
+            return const LoadingPage();
+          }
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.linear,
+            child: Card(
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               color: const Color(0xff669D6B),
@@ -88,19 +102,17 @@ class __StatusState extends ConsumerState<_Status> {
                       enabled: true,
                       opacityDisabled: 0,
                       opacityEnabled: 1,
-                      child: Wrap(children: [
-                        Container(
-                            margin: const EdgeInsets.all(8),
-                            padding: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 246, 245, 245),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Text(
-                              garden.data['data']['name'],
-                              style: const TextStyle(fontSize: 35),
-                            )),
-                      ])),
+                      child: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 246, 245, 245),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Text(
+                            garden.data['data']['name'],
+                            style: const TextStyle(fontSize: 35),
+                          ))),
                   // Status
                   Wrap(
                     children: [
@@ -149,7 +161,7 @@ class __StatusState extends ConsumerState<_Status> {
                     thickness: 3,
                   ),
 
-                  //
+                  //TODO: Create History page
                   const SizedBox(
                     height: 500,
                   )
@@ -157,10 +169,8 @@ class __StatusState extends ConsumerState<_Status> {
                   //
                 ],
               ),
-            );
-          } else {
-            return const LoadingPage();
-          }
+            ),
+          );
         }
         //
 
@@ -171,18 +181,15 @@ class __StatusState extends ConsumerState<_Status> {
 // If the width is less tha 550
 class WebGardenMini extends StatelessWidget {
   bool isTapped;
-  String gardenID;
-  WebGardenMini({Key? key, required this.isTapped, required this.gardenID})
-      : super(key: key);
+  WebGardenMini({Key? key, required this.isTapped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: WebGarden(
-        isTapped: isTapped,
-        gardenID: gardenID,
-        //gardenID: gardenID,
-      ),
+
+          //gardenID: gardenID,
+          ),
     );
   }
 }
