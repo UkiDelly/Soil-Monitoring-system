@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final userIDProvider = StateProvider<String>((ref) => "");
 final tokenProvider = StateProvider<String>((ref) => "");
 final gardenIDProvider = StateProvider<String>((ref) => "");
 final selectionProvider =

@@ -14,7 +14,7 @@ class WebGardenCard extends ConsumerWidget {
     print(ref.watch(selectionProvider).index);
     return Card(
       color: ref.watch(selectionProvider).index == (index - 1)
-          ? Colors.red
+          ? const Color(0xff528966)
           : const Color(0xff669D6B),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25))),
