@@ -38,7 +38,9 @@ class WebGarden extends ConsumerWidget {
                 token: token,
                 gardenID: gardenID,
               ))
-          : Opacity(opacity: 0.25, child: Image.asset('Logo/Logo.png')),
+          : Opacity(
+              opacity: 0.25,
+              child: Center(child: Image.asset('Logo/Logo.png'))),
     );
   }
 }
@@ -55,7 +57,11 @@ class _Status extends StatefulWidget {
 class __StatusState extends State<_Status> {
   // var
 
-  Map<String, double> sampleNPK = {"n": 20, "p": 25, "k": 40};
+  Map<String, double> sampleNPK = {
+    "Nutrient": 20,
+    "Potassium": 25,
+    "Phosphorus": 40
+  };
   double ph = 7.5;
   double temp = 99.9;
   double moisture = 0.1;

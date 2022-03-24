@@ -103,7 +103,7 @@ class __WebMainState extends State<_WebMain> {
 
   @override
   Widget build(BuildContext context) {
-    final witdh = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
     return SizedBox(
@@ -127,7 +127,7 @@ class __WebMainState extends State<_WebMain> {
                           child: Column(
                             children: [
                               _gardenTextAndAddButton(),
-                              Expanded(child: _list(witdh))
+                              Expanded(child: _list(width))
                             ],
                           ),
                         );
@@ -136,18 +136,23 @@ class __WebMainState extends State<_WebMain> {
                       return SizedBox(
                         child: Row(
                           children: [
-                            SizedBox(
-                              width: witdh * 0.5,
+                            ConstrainedBox(
+                              constraints:
+                                  BoxConstraints(maxWidth: width * 0.3),
                               child: Column(
                                 children: [
                                   _gardenTextAndAddButton(),
-                                  Expanded(child: _list(witdh))
+                                  Expanded(child: _list(width))
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: witdh * 0.5,
-                              child: WebGarden(),
+                            const VerticalDivider(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: SizedBox(
+                                child: WebGarden(),
+                              ),
                             )
                           ],
                         ),

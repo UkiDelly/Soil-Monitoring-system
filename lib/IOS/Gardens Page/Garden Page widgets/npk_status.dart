@@ -10,8 +10,7 @@ class NPKstatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
-      height: 170,
+      width: 300,
       child: Card(
         clipBehavior: Clip.hardEdge,
         elevation: 10,

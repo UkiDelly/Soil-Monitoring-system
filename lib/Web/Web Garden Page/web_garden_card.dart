@@ -19,33 +19,34 @@ class WebGardenCard extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25))),
       child: SizedBox(
-          height: 100,
-          child: Center(
-              child: Stack(
-            children: [
-              //* Index of the list
-              Positioned(
-                child: Text(
-                  "#$index",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 30),
-                ),
-                top: 10,
-                left: 20,
-              ),
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //* Index of the list
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "#$index",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            ),
+          ),
 
-              //* Garden Name
-              Center(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                      color: Color.fromARGB(255, 246, 245, 245),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
-                ),
-              )
-            ],
-          ))),
+          //* Garden Name
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15.0),
+              child: Text(
+                name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 246, 245, 245),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
+              ),
+            ),
+          )
+        ],
+      )),
     );
   }
 }

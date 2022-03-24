@@ -83,7 +83,6 @@ class __LoginState extends ConsumerState<_Login> {
       setState(() {
         username = usernameController.text;
         succesLogin = true;
-        isLoading = false;
       });
     } else if (response.statusCode == 401) {
       item = jsonDecode(response.body);
