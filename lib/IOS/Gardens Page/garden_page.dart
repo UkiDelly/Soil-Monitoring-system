@@ -73,26 +73,13 @@ class GardenPage extends StatelessWidget {
 
         //* Content
         backgroundColor: const Color(0xff669D6B),
-        body: Consumer(
-          builder: (ctx, ref, child) {
-            final token = ref.watch(tokenProvider);
-            final gardenID = ref.watch(gardenIDProvider);
-            return _Garden(
-              token: token,
-              gardenID: gardenID,
-            );
-          },
-        ));
+        body: const _Garden());
   }
 }
 
 // ignore: must_be_immutable
 class _Garden extends ConsumerStatefulWidget {
-  String token;
-  String gardenID;
-
-  _Garden({Key? key, required this.token, required this.gardenID})
-      : super(key: key);
+  const _Garden({Key? key}) : super(key: key);
 
   @override
   ConsumerState<_Garden> createState() => __GardenState();
@@ -107,17 +94,19 @@ class __GardenState extends ConsumerState<_Garden> {
     setState(() {
       isLoading = true;
     });
-    final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
+
+    final token = ref.watch(tokenProvider);
+    final gardenID = ref.watch(gardenIDProvider);
+    final url = "http://localhost:3000/v1/garden/get/$gardenID";
     // final url =
     //     "http://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
-    var gardenResponse = await http.get(Uri.parse(url),
-        headers: {'Authorization': 'Bearer ${widget.token}'});
+    var gardenResponse = await http
+        .get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
     var gardenItem = jsonDecode(gardenResponse.body);
 
-    final sensorUrl =
-        "http://soilanalysis.loca.lt/v1/sensor/get/${widget.gardenID}";
-    var sensorResponse = await http.get(Uri.parse(sensorUrl),
-        headers: {'Authorization': 'Bearer ${widget.token}'});
+    final sensorUrl = "http://soilanalysis.loca.lt/v1/sensor/get/$gardenID";
+    var sensorResponse = await http
+        .get(Uri.parse(sensorUrl), headers: {'Authorization': 'Bearer $token'});
     var sensorItem = jsonDecode(sensorResponse.body);
     print(sensorItem);
     setState(() {
