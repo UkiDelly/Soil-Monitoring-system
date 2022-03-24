@@ -22,7 +22,9 @@ class WebGarden extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
       child: isTapped
           ? SingleChildScrollView(
               controller: _scrollController,
@@ -86,84 +88,88 @@ class __StatusState extends State<_Status> {
           if (!garden.hasData) {
             return const LoadingPage();
           }
-          return Card(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            color: const Color(0xff669D6B),
-            child: Column(
-              children: [
-                //* Garden Name
-                OpacityAnimatedWidget.tween(
-                    duration: const Duration(seconds: 1),
-                    enabled: true,
-                    opacityDisabled: 0,
-                    opacityEnabled: 1,
-                    child: Container(
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 246, 245, 245),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Text(
-                          garden.data['data']['name'],
-                          style: const TextStyle(fontSize: 35),
-                        ))),
-                // Status
-                Wrap(
-                  children: [
-                    OpacityAnimatedWidget(
-                        delay: const Duration(milliseconds: 300),
-                        duration: const Duration(seconds: 1),
-                        enabled: true,
-                        child: NPKstatus(dataMap: sampleNPK)),
-
-                    //
-                    OpacityAnimatedWidget(
-                        delay: const Duration(milliseconds: 600),
-                        duration: const Duration(seconds: 1),
-                        enabled: true,
-                        child: PhLevel(ph: ph)),
-
-                    //
-                    OpacityAnimatedWidget(
-                      delay: const Duration(milliseconds: 900),
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.linear,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              color: const Color(0xff669D6B),
+              child: Column(
+                children: [
+                  //* Garden Name
+                  OpacityAnimatedWidget.tween(
                       duration: const Duration(seconds: 1),
                       enabled: true,
-                      child: Temp(temp: temp),
-                    ),
+                      opacityDisabled: 0,
+                      opacityEnabled: 1,
+                      child: Container(
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 246, 245, 245),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Text(
+                            garden.data['data']['name'],
+                            style: const TextStyle(fontSize: 35),
+                          ))),
+                  // Status
+                  Wrap(
+                    children: [
+                      OpacityAnimatedWidget(
+                          delay: const Duration(milliseconds: 300),
+                          duration: const Duration(seconds: 1),
+                          enabled: true,
+                          child: NPKstatus(dataMap: sampleNPK)),
 
-                    //
-                    OpacityAnimatedWidget(
-                      delay: const Duration(milliseconds: 1200),
-                      duration: const Duration(seconds: 1),
-                      enabled: true,
-                      child: MoistureLevel(moisture: moisture),
-                    ),
+                      //
+                      OpacityAnimatedWidget(
+                          delay: const Duration(milliseconds: 600),
+                          duration: const Duration(seconds: 1),
+                          enabled: true,
+                          child: PhLevel(ph: ph)),
 
-                    //
-                    OpacityAnimatedWidget(
-                        delay: const Duration(milliseconds: 1600),
+                      //
+                      OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 900),
                         duration: const Duration(seconds: 1),
                         enabled: true,
-                        child: Humidity(humidity: humidity)),
-                  ],
-                ),
+                        child: Temp(temp: temp),
+                      ),
 
-                //
-                const Divider(
-                  indent: 10,
-                  endIndent: 10,
-                  thickness: 3,
-                ),
+                      //
+                      OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 1200),
+                        duration: const Duration(seconds: 1),
+                        enabled: true,
+                        child: MoistureLevel(moisture: moisture),
+                      ),
 
-                //TODO: Create History
-                const SizedBox(
-                  height: 500,
-                )
+                      //
+                      OpacityAnimatedWidget(
+                          delay: const Duration(milliseconds: 1600),
+                          duration: const Duration(seconds: 1),
+                          enabled: true,
+                          child: Humidity(humidity: humidity)),
+                    ],
+                  ),
 
-                //
-              ],
+                  //
+                  const Divider(
+                    indent: 10,
+                    endIndent: 10,
+                    thickness: 3,
+                  ),
+
+                  //TODO: Create History
+                  const SizedBox(
+                    height: 500,
+                  )
+
+                  //
+                ],
+              ),
             ),
           );
         }
