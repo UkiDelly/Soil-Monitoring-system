@@ -13,31 +13,30 @@ import 'package:thesis/loading.dart';
 import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
 
-class WebGarden extends StatelessWidget {
-  bool isTapped;
-
-  WebGarden({Key? key, required this.isTapped}) : super(key: key);
+class WebGarden extends ConsumerWidget {
+  WebGarden({
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController _scrollController = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final token = ref.watch(tokenProvider);
+    final gardenID = ref.watch(gardenIDProvider);
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.linear,
-      child: isTapped
+      child: ref.watch(selectionProvider).isSelected
           ? SingleChildScrollView(
               controller: _scrollController,
               scrollDirection: Axis.vertical,
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final token = ref.watch(tokenProvider);
-                  final gardenID = ref.watch(gardenIDProvider);
-                  return _Status(
-                    token: token,
-                    gardenID: gardenID,
-                  );
-                },
+
+              //
+              child: _Status(
+                token: token,
+                gardenID: gardenID,
               ))
           : Opacity(opacity: 0.25, child: Image.asset('Logo/Logo.png')),
     );
@@ -162,7 +161,7 @@ class __StatusState extends State<_Status> {
                     thickness: 3,
                   ),
 
-                  //TODO: Create History
+                  //TODO: Create History page
                   const SizedBox(
                     height: 500,
                   )
@@ -188,10 +187,9 @@ class WebGardenMini extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: WebGarden(
-        isTapped: isTapped,
 
-        //gardenID: gardenID,
-      ),
+          //gardenID: gardenID,
+          ),
     );
   }
 }

@@ -2,19 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final tokenProvider = StateProvider<String>((ref) => "");
 final gardenIDProvider = StateProvider<String>((ref) => "");
+final selectionProvider =
+    StateProvider<dynamic>((ref) => SelectGarden(false, null));
 
-  setToken(String token) {
-    state = token;
-  }
+class SelectGarden {
+  bool isSelected;
+  int? index;
+
+  SelectGarden(this.isSelected, this.index);
 }
-
-final tokenProvider = StateNotifierProvider<Token, String>((ref) => Token());
-
-// grdenID
-final gardenIdProvider = StateProvider<String>(
-  (ref) => "",
-);
-
 //user ID
 final userIdProvider = StateProvider<String>(
   (ref) => "",

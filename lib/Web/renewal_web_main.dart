@@ -53,7 +53,15 @@ class WebMain extends StatelessWidget {
 
       //
       backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-      body: const _WebMain(),
+      body: Consumer(builder: (context, ref, child) {
+        //? Cancel the selection
+        return GestureDetector(
+            onTap: () {
+              ref.watch(selectionProvider.notifier).state =
+                  SelectGarden(false, null);
+            },
+            child: const _WebMain());
+      }),
     );
   }
 }
@@ -139,9 +147,7 @@ class __WebMainState extends State<_WebMain> {
                             ),
                             SizedBox(
                               width: witdh * 0.5,
-                              child: WebGarden(
-                                isTapped: isTapped,
-                              ),
+                              child: WebGarden(),
                             )
                           ],
                         ),
@@ -204,10 +210,10 @@ class __WebMainState extends State<_WebMain> {
             itemBuilder: (BuildContext context, int index) => GestureDetector(
               onTap: () {
                 //
-                setState(() {
-                  isTapped = !isTapped;
-                  selectedGarden = index;
-                });
+
+                //tell it is selected
+                ref.watch(selectionProvider.notifier).state =
+                    SelectGarden(true, index);
 
                 //contain the garden Id ins the provider
                 ref.watch(gardenIDProvider.notifier).state =

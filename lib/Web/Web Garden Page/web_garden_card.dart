@@ -1,17 +1,21 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/provider.dart';
 
-class WebGardenCard extends StatelessWidget {
+class WebGardenCard extends ConsumerWidget {
   int index;
   String name;
   WebGardenCard({Key? key, required this.index, required this.name})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    print(ref.watch(selectionProvider).index);
     return Card(
-      color: const Color(0xff669D6B),
+      color: ref.watch(selectionProvider).index == (index - 1)
+          ? Colors.red
+          : const Color(0xff669D6B),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25))),
       child: SizedBox(
