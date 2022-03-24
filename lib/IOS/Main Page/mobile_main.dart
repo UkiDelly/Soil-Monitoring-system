@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/loading.dart';
+import 'package:thesis/Main/loading.dart';
 import 'package:thesis/provider.dart';
 import '../New Garden Page/new_garden_page.dart';
 import 'garden_card.dart';

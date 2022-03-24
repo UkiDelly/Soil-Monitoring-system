@@ -8,11 +8,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-import 'package:thesis/Web/renewal_web_main.dart';
+import 'package:thesis/Web/web_main.dart';
 
-import 'new_user.dart';
+import 'Main/new_user.dart';
 
-import 'loading.dart';
+import 'Main/loading.dart';
 import 'provider.dart';
 
 //! Error message if the token is invalid

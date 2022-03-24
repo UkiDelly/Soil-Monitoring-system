@@ -9,7 +9,7 @@ import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/moisture.dart'
 import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/npk_status.dart';
 import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/ph_level.dart';
 import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/tempurature.dart';
-import 'package:thesis/loading.dart';
+import 'package:thesis/Main/loading.dart';
 import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
 

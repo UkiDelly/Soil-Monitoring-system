@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
-import 'package:thesis/loading.dart';
+import 'package:thesis/Main/loading.dart';
 import 'package:thesis/provider.dart';
 import '../History Page/history_page.dart';
 import 'Garden Page widgets/humidity.dart';

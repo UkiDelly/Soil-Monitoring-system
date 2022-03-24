@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
-import 'package:thesis/loading.dart';
+import 'package:thesis/Main/loading.dart';
 
-import 'login.dart';
+import '../login.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
