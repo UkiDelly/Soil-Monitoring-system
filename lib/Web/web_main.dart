@@ -123,12 +123,19 @@ class __WebMainState extends State<_WebMain> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       //? if the witdh is small
-                      if (constraints.maxWidth < 550) {
+                      if (constraints.maxWidth < 850) {
                         return SizedBox(
                           child: Column(
                             children: [
                               _gardenTextAndAddButton(),
-                              Expanded(child: _list(width))
+                              Expanded(
+                                  child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.1),
+                                child: _list(width),
+                              ))
                             ],
                           ),
                         );
@@ -176,6 +183,7 @@ class __WebMainState extends State<_WebMain> {
           ),
           const Text(
             "Garden list",
+            // if the screen width is not enough
             style: TextStyle(fontSize: 40),
           ),
           const Spacer(
@@ -226,14 +234,16 @@ class __WebMainState extends State<_WebMain> {
                     gardenList[index]['_id'];
 
                 // if the with is not enough
-                if (width < 550) {
+                if (width < 850) {
                   Navigator.push(
-                      context,
-                      PageTransition(
-                          child: WebGardenMini(
-                            isTapped: isTapped,
-                          ),
-                          type: PageTransitionType.rightToLeft));
+                          context,
+                          PageTransition(
+                              child: WebGardenMini(),
+                              type: PageTransitionType.rightToLeft))
+                      .then((value) {
+                    ref.watch(selectionProvider.notifier).state =
+                        SelectGarden(false, null);
+                  });
                 }
               },
               child: WebGardenCard(

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 import 'line_chart_history.dart';
 
-class NPKHistory extends StatelessWidget {
+class NpkHistory extends StatelessWidget {
   double? width;
-  NPKHistory({Key? key, this.width}) : super(key: key);
+  NpkHistory({Key? key, this.width}) : super(key: key);
 
   List<FlSpot> nSpot = [
     const FlSpot(1, 100),

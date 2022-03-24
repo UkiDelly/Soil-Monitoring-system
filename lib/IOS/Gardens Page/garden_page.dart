@@ -8,12 +8,12 @@ import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
 import 'package:thesis/Main/loading.dart';
 import 'package:thesis/provider.dart';
+import '../../Status widgets/humidity.dart';
+import '../../Status widgets/moisture.dart';
+import '../../Status widgets/ph_level.dart';
+import '../../Status widgets/tempurature.dart';
 import '../History Page/history_page.dart';
-import 'Garden Page widgets/humidity.dart';
-import 'Garden Page widgets/moisture.dart';
-import 'Garden Page widgets/npk_status.dart';
-import 'Garden Page widgets/ph_level.dart';
-import 'Garden Page widgets/tempurature.dart';
+import '../../Status widgets/npk_status.dart';
 import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
