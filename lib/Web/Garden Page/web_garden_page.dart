@@ -38,6 +38,7 @@ class WebGarden extends ConsumerWidget {
               child: _Status(
                 token: token,
                 gardenID: gardenID,
+                key: UniqueKey(),
               ))
           : Opacity(
               opacity: 0.25,
