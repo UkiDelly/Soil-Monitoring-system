@@ -59,136 +59,155 @@ class _Status extends StatefulWidget {
 class __StatusState extends State<_Status> {
   // var
 
-  Map<String, double> sampleNPK = {
-    "Nutrient": 20,
-    "Potassium": 25,
-    "Phosphorus": 40
+  late Map<String, double> npkMap = {
+    "Nitrogen": 10,
+    "Potassium": 10,
+    "Phosphorous": 10
   };
-  double ph = 7.5;
-  double temp = 99.9;
-  double moisture = 0.1;
-  double humidity = 30;
+  late double ph, temp, moisture, humidity;
   bool isLoading = false;
-  dynamic _garden = {};
+  var garden;
 
-  getSingleGarden() async {
+  getData() async {
+    setState(() {
+      isLoading = true;
+    });
     // final url = "https://soilanalysis.loca.lt/v1/garden/get/$gardenID";
     final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
     var response = await http.get(Uri.parse(url), headers: {
       'Authorization': 'Bearer ${widget.token}',
     });
     var item = jsonDecode(response.body);
-    return item;
+
+    var _gardenName = item['data']['name'];
+    var sensorId = item['data']['sensorId'];
+
+    final sensorUrl = "http://localhost:3000/v1/sensor/get/$sensorId";
+    response = await http.get(Uri.parse(sensorUrl), headers: {
+      'Authorization': 'Bearer ${widget.token}',
+    });
+
+    item = jsonDecode(response.body);
+    item['data']["name"] = _gardenName;
+
+    if (response.statusCode == 200) {
+      var sensorData = item['data']['data'][(item['data']['data'].length - 1)];
+
+      if (mounted) {
+        setState(() {
+          garden = item;
+          npkMap["Nitrogen"] = sensorData['nitrogen'].toDouble();
+          npkMap["Potassium"] = sensorData['potassium'].toDouble();
+          npkMap["Phosphorous"] = sensorData['phosphorous'].toDouble();
+          ph = sensorData['pH'].toDouble();
+          temp = sensorData['temperature'].toDouble();
+          moisture = sensorData['moisture'].toDouble();
+          humidity = sensorData['humidity'].toDouble();
+
+          isLoading = false;
+        });
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _garden = getSingleGarden();
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-        future: _garden,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> garden) {
-          if (!garden.hasData) {
-            return const LoadingPage();
-          }
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.linear,
-            child: Card(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              color: const Color(0xff669D6B),
-              child: Column(
-                children: [
-                  //* Garden Name
-                  OpacityAnimatedWidget.tween(
+    return isLoading
+        ? const Center(
+            child: LoadingPage(),
+          )
+        : Card(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            color: const Color(0xff669D6B),
+            child: Column(
+              children: [
+                //* Garden Name
+                OpacityAnimatedWidget.tween(
+                    duration: const Duration(seconds: 1),
+                    enabled: true,
+                    opacityDisabled: 0,
+                    opacityEnabled: 1,
+                    child: Container(
+                        margin: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 246, 245, 245),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: Text(
+                          garden['data']['name'],
+                          style: const TextStyle(fontSize: 35),
+                        ))),
+                // Status
+                Wrap(
+                  children: [
+                    OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 300),
+                        duration: const Duration(seconds: 1),
+                        enabled: true,
+                        child: NPKstatus(dataMap: npkMap)),
+
+                    //
+                    OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 600),
+                        duration: const Duration(seconds: 1),
+                        enabled: true,
+                        child: PhLevel(ph: ph)),
+
+                    //
+                    OpacityAnimatedWidget(
+                      delay: const Duration(milliseconds: 900),
                       duration: const Duration(seconds: 1),
                       enabled: true,
-                      opacityDisabled: 0,
-                      opacityEnabled: 1,
-                      child: Container(
-                          margin: const EdgeInsets.all(8),
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 246, 245, 245),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          child: Text(
-                            garden.data['data']['name'],
-                            style: const TextStyle(fontSize: 35),
-                          ))),
-                  // Status
-                  Wrap(
-                    children: [
-                      OpacityAnimatedWidget(
-                          delay: const Duration(milliseconds: 300),
-                          duration: const Duration(seconds: 1),
-                          enabled: true,
-                          child: NPKstatus(dataMap: sampleNPK)),
+                      child: Temp(temp: temp),
+                    ),
 
-                      //
-                      OpacityAnimatedWidget(
-                          delay: const Duration(milliseconds: 600),
-                          duration: const Duration(seconds: 1),
-                          enabled: true,
-                          child: PhLevel(ph: ph)),
+                    //
+                    OpacityAnimatedWidget(
+                      delay: const Duration(milliseconds: 1200),
+                      duration: const Duration(seconds: 1),
+                      enabled: true,
+                      child: MoistureLevel(moisture: moisture),
+                    ),
 
-                      //
-                      OpacityAnimatedWidget(
-                        delay: const Duration(milliseconds: 900),
+                    //
+                    OpacityAnimatedWidget(
+                        delay: const Duration(milliseconds: 1600),
                         duration: const Duration(seconds: 1),
                         enabled: true,
-                        child: Temp(temp: temp),
-                      ),
+                        child: Humidity(humidity: humidity)),
+                  ],
+                ),
 
-                      //
-                      OpacityAnimatedWidget(
-                        delay: const Duration(milliseconds: 1200),
-                        duration: const Duration(seconds: 1),
-                        enabled: true,
-                        child: MoistureLevel(moisture: moisture),
-                      ),
+                //
+                const Divider(
+                  indent: 10,
+                  endIndent: 10,
+                  thickness: 3,
+                ),
 
-                      //
-                      OpacityAnimatedWidget(
-                          delay: const Duration(milliseconds: 1600),
-                          duration: const Duration(seconds: 1),
-                          enabled: true,
-                          child: Humidity(humidity: humidity)),
-                    ],
-                  ),
+                //TODO: Create History page
+                const SizedBox(
+                  child: WebHistory(),
+                )
 
-                  //
-                  const Divider(
-                    indent: 10,
-                    endIndent: 10,
-                    thickness: 3,
-                  ),
-
-                  //TODO: Create History page
-                  const SizedBox(
-                    child: WebHistory(),
-                  )
-
-                  //
-                ],
-              ),
+                //
+              ],
             ),
           );
-        }
-        //
-
-        );
   }
 }
 
 // If the width is less tha 550
 class WebGardenMini extends StatelessWidget {
-  WebGardenMini({
+  const WebGardenMini({
     Key? key,
   }) : super(key: key);
 

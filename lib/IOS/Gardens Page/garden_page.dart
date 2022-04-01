@@ -133,9 +133,9 @@ class __GardenState extends ConsumerState<_Garden> {
         npkMap["Potassium"] = sensorData['potassium'].toDouble();
         npkMap["Phosphorous"] = sensorData['phosphorous'].toDouble();
         ph = sensorData['pH'] * 1.0;
-        temp = sensorData['temperature'] * 1.0;
-        moisture = sensorData['moisture'] * 1.0;
-        humidity = sensorData['humidity'] * 1.0;
+        temp = sensorData['temperature'].toDouble();
+        moisture = sensorData['moisture'].toDouble();
+        humidity = sensorData['humidity'].toDouble();
 
         isLoading = false;
       });
