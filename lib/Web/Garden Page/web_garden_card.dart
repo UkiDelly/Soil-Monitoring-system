@@ -11,7 +11,6 @@ class WebGardenCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(ref.watch(selectionProvider).index);
     return Card(
       color: ref.watch(selectionProvider).index == (index - 1)
           ? const Color(0xff528966)

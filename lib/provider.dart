@@ -6,7 +6,7 @@ final tokenProvider = StateProvider<String>((ref) => "");
 final gardenIDProvider = StateProvider<String>((ref) => "");
 final selectionProvider =
     StateProvider<dynamic>((ref) => SelectGarden(false, null));
-final gardenListProvider = StateProvider<dynamic>((ref) => "");
+final sensorIDProvider = StateProvider<String>((ref) => "");
 
 class SelectGarden {
   bool isSelected;

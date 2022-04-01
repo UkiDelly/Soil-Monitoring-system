@@ -8,11 +8,13 @@ class GardenCard extends StatefulWidget {
   String gardenID;
   String gardenName;
   int index;
+  String sensorId;
   GardenCard(
       {Key? key,
       required this.index,
       required this.gardenID,
-      required this.gardenName})
+      required this.gardenName,
+      required this.sensorId})
       : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class _GardenCardState extends State<GardenCard> {
                   GardenPage(
                 gardenID: widget.gardenID,
                 gardenName: widget.gardenName,
+                sensorId: widget.sensorId,
               );
             }));
   }
