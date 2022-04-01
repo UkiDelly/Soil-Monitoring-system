@@ -117,7 +117,7 @@ class AboveGardenList extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class GardenList extends StatefulWidget {
+class GardenList extends ConsumerStatefulWidget {
   var token = "";
   GardenList({
     Key? key,
@@ -125,11 +125,14 @@ class GardenList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<GardenList> createState() => _GardenListState();
+  ConsumerState<GardenList> createState() => _GardenListState();
 }
 
-class _GardenListState extends State<GardenList> {
+class _GardenListState extends ConsumerState<GardenList> {
   //
+  List gardenList = [];
+  int gardenCount = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -142,26 +145,31 @@ class _GardenListState extends State<GardenList> {
     setState(() {
       isLoading = true;
     });
-
     // const url = "http://soilanalysis.loca.lt/v1/garden/list";
     const url = "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);
 
+    List temp = item['data'];
+    List _gardenList = [];
+    final userID = ref.watch(userIDProvider);
+
+    for (int i = 0; i < temp.length; i++) {
+      if (temp[i]['createdBy'] == userID) {
+        _gardenList = [..._gardenList, temp[i]];
+      }
+    }
+
     setState(() {
-      data = item["data"];
-      gardenCount = data.length;
+      gardenList = _gardenList;
       isLoading = false;
     });
   }
 
-  List data = [];
-  bool isLoading = false;
-  int gardenCount = 0;
   @override
   Widget build(BuildContext context) {
-    //! if the app is getting the data from the api show loading widget
+    //! if the app is getting the gardenList from the api show loading widget
     return isLoading
         ? const Center(child: LoadingPage())
 
@@ -170,18 +178,13 @@ class _GardenListState extends State<GardenList> {
             // width: MediaQuery.of(context).size.width * 0.95,
             // height: MediaQuery.of(context).size.height * 0.75,
             child: ListView.builder(
-                itemCount: gardenCount,
+                itemCount: gardenList.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
-                  return Consumer(
-                    builder: (ctx, ref, child) {
-                      ref.watch(gardenIDProvider.notifier).state =
-                          data[index]["_id"];
-                      return GardenCard(
-                        index: index + 1,
-                        gardenName: "${data[index]["name"]}",
-                      );
-                    },
+                  return GardenCard(
+                    index: index + 1,
+                    gardenID: gardenList[index]['_id'],
+                    gardenName: gardenList[index]['name'],
                   );
                 }),
           );

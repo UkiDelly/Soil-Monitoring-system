@@ -67,14 +67,14 @@ class WebMain extends StatelessWidget {
   }
 }
 
-class _WebMain extends StatefulWidget {
+class _WebMain extends ConsumerStatefulWidget {
   const _WebMain({Key? key}) : super(key: key);
 
   @override
-  State<_WebMain> createState() => __WebMainState();
+  ConsumerState<_WebMain> createState() => __WebMainState();
 }
 
-class __WebMainState extends State<_WebMain> {
+class __WebMainState extends ConsumerState<_WebMain> {
   //? variable
 
   dynamic gardenList = {};
@@ -89,8 +89,18 @@ class __WebMainState extends State<_WebMain> {
     var response = await http.get(Uri.parse(url));
     var item = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      List temp = item['data'];
+      List _gardenList = [];
+      final userID = ref.watch(userIDProvider);
+
+      for (int i = 0; i < temp.length; i++) {
+        if (temp[i]['createdBy'] == userID) {
+          _gardenList = [..._gardenList, temp[i]];
+        }
+      }
+
       setState(() {
-        gardenList = item['data'];
+        gardenList = _gardenList;
         isLoading = false;
       });
     }
@@ -123,12 +133,19 @@ class __WebMainState extends State<_WebMain> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       //? if the witdh is small
-                      if (constraints.maxWidth < 550) {
+                      if (constraints.maxWidth < 850) {
                         return SizedBox(
                           child: Column(
                             children: [
                               _gardenTextAndAddButton(),
-                              Expanded(child: _list(width))
+                              Expanded(
+                                  child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.1),
+                                child: _list(width),
+                              ))
                             ],
                           ),
                         );
@@ -176,6 +193,7 @@ class __WebMainState extends State<_WebMain> {
           ),
           const Text(
             "Garden list",
+            // if the screen width is not enough
             style: TextStyle(fontSize: 40),
           ),
           const Spacer(
@@ -206,8 +224,7 @@ class __WebMainState extends State<_WebMain> {
 
   Widget _list(var width) {
     return SizedBox(
-      child: Flexible(
-          child: Consumer(
+      child: Consumer(
         builder: (context, ref, child) => SizedBox(
           child: ListView.builder(
             scrollDirection: Axis.vertical,
@@ -220,28 +237,34 @@ class __WebMainState extends State<_WebMain> {
                 //tell it is selected
                 ref.watch(selectionProvider.notifier).state =
                     SelectGarden(true, index);
+                setState(() {});
 
                 //contain the garden Id ins the provider
                 ref.watch(gardenIDProvider.notifier).state =
                     gardenList[index]['_id'];
 
                 // if the with is not enough
-                if (width < 550) {
+                if (width < 850) {
                   Navigator.push(
-                      context,
-                      PageTransition(
-                          child: WebGardenMini(
-                            isTapped: isTapped,
-                          ),
-                          type: PageTransitionType.rightToLeft));
+                          context,
+                          PageTransition(
+                              child: WebGardenMini(),
+                              type: PageTransitionType.rightToLeft))
+                      .then((value) {
+                    ref.watch(selectionProvider.notifier).state =
+                        SelectGarden(false, null);
+                  });
                 }
               },
               child: WebGardenCard(
-                  index: index + 1, name: gardenList[index]['name']),
+                index: index + 1,
+                name: gardenList[index]['name'],
+                key: UniqueKey(),
+              ),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 }

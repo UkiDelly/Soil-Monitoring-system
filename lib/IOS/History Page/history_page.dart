@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'History page Widgets/humidity_history.dart';
-import 'History page Widgets/moisture_history.dart';
-import 'History page Widgets/npk_history.dart';
-import 'History page Widgets/ph_history.dart';
-import 'History page Widgets/temperature.dart';
+import '../../History page Widgets/humidity_history.dart';
+import '../../History page Widgets/moisture_history.dart';
+import '../../History page Widgets/npk_history.dart';
+import '../../History page Widgets/ph_history.dart';
+import '../../History page Widgets/temperature.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -44,7 +44,7 @@ class HistoryPage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  NPKHistory(),
+                  NpkHistory(),
 
                   /// Ph history
                   const SizedBox(

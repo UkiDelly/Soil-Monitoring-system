@@ -4,14 +4,15 @@ import 'dart:convert';
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/humidity.dart';
-import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/moisture.dart';
-import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/npk_status.dart';
-import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/ph_level.dart';
-import 'package:thesis/IOS/Gardens%20Page/Garden%20Page%20widgets/tempurature.dart';
+import 'package:thesis/Status%20widgets/npk_status.dart';
 import 'package:thesis/Main/loading.dart';
 import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
+import '../../Status widgets/humidity.dart';
+import '../../Status widgets/moisture.dart';
+import '../../Status widgets/ph_level.dart';
+import '../../Status widgets/tempurature.dart';
+import '../History Page/history_page.dart';
 
 class WebGarden extends ConsumerWidget {
   WebGarden({
@@ -37,6 +38,7 @@ class WebGarden extends ConsumerWidget {
               child: _Status(
                 token: token,
                 gardenID: gardenID,
+                key: UniqueKey(),
               ))
           : Opacity(
               opacity: 0.25,
@@ -169,7 +171,7 @@ class __StatusState extends State<_Status> {
 
                   //TODO: Create History page
                   const SizedBox(
-                    height: 500,
+                    child: WebHistory(),
                   )
 
                   //
@@ -186,8 +188,9 @@ class __StatusState extends State<_Status> {
 
 // If the width is less tha 550
 class WebGardenMini extends StatelessWidget {
-  bool isTapped;
-  WebGardenMini({Key? key, required this.isTapped}) : super(key: key);
+  WebGardenMini({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
@@ -78,8 +79,12 @@ class __LoginState extends ConsumerState<_Login> {
       item = jsonDecode(response.body);
       //* Save the token
       ref.watch(tokenProvider.notifier).state = item['data']['authToken'];
+
+      var tokenDecode = Jwt.parseJwt(item['data']['authToken']);
+
       //* Save the userID
-      ref.watch(userIdProvider.notifier).state = "";
+      ref.watch(userIDProvider.notifier).state = tokenDecode['_id'];
+
       setState(() {
         username = usernameController.text;
         succesLogin = true;
@@ -88,7 +93,7 @@ class __LoginState extends ConsumerState<_Login> {
       item = jsonDecode(response.body);
 //!  When authorization is fail
 
-      ref.watch(tokenProvider.notifier).state = item['data']['authToken'];
+      ref.watch(tokenProvider.notifier).state = "";
       //? Done loading data
       setState(() {
         isLoading = false;
