@@ -15,7 +15,7 @@ class WebAddGarden extends ConsumerStatefulWidget {
 
 class _WebAddGardenState extends ConsumerState<WebAddGarden> {
   //text controller
-  var _nameControl = TextEditingController(),
+  final _nameControl = TextEditingController(),
       _noteControl = TextEditingController();
 
   _createGarden() async {
