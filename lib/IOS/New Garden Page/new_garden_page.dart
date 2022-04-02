@@ -29,18 +29,36 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
     var _gardenId;
 
     const _url = "http://localhost:3000/v1/garden/create";
-
     var _response = await http.post(Uri.parse(_url),
         body: {"name": nameControl.text, "notes": noteControl.text},
         headers: {'Authorization': "Bearer $_token"});
+
+    //? get the gardenId from the response
     if (_response.statusCode == 200) {
       var _item = jsonDecode(_response.body);
-      _gardenId = _item['data']['gardenId'];
+      _gardenId = _item['data']['insertedId'];
+      print(_gardenId);
+    }
+
+    const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
+    _response = await http.post(Uri.parse(_sensorUrl),
+        body: {"name": nameControl.text, "gardenId": _gardenId},
+        headers: {'Authorization': "Bearer $_token"});
+    if (_response.statusCode == 200) {
+      var _item = jsonDecode(_response.body);
+      print(_item);
+
+      setState(() {
+        nameControl.text = "";
+        noteControl.text = "";
+      });
+
+      //show Toast message
+      _showToast(context);
     }
 
     //TODO: finish the create garden
-    //TODO: ask nong the add gardenId in the response of the create garden
-    //TODO create new sensor immedialety
+    //TODO: Add a toast message after successfully created.
   }
 
   @override
@@ -83,7 +101,17 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  createGarden();
+
+                  Future.delayed(const Duration(seconds: 1), () {
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child: const MobileHome(),
+                            type: PageTransitionType.leftToRight));
+                  });
+                },
                 child: const Text(
                   "Add",
                   style: TextStyle(
@@ -111,7 +139,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
               SizedBox(
                 width: 300,
                 child: TextField(
-                  controller: noteControl,
+                  controller: nameControl,
                   decoration: const InputDecoration(
                     hintText: "Enter a name",
                     filled: true,
@@ -137,7 +165,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 width: 350,
                 height: 400,
                 child: TextField(
-                  controller: nameControl,
+                  controller: noteControl,
                   maxLines: 10,
                   decoration: const InputDecoration(
                     hintText: "Enter a note",
@@ -155,4 +183,13 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       ),
     );
   }
+}
+
+void _showToast(BuildContext context) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    const SnackBar(
+      content: Text('Successfully created a new Garden!'),
+    ),
+  );
 }
