@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:thesis/provider.dart';
+
+import '../../Main/provider.dart';
 
 class WebAddNewGarden extends ConsumerStatefulWidget {
   const WebAddNewGarden({Key? key}) : super(key: key);
@@ -73,47 +74,6 @@ class _AddNewGardenState extends ConsumerState<WebAddNewGarden> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //buttons
-              Container(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                          //disable splash
-                          style: ButtonStyle(
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 246, 245, 245)),
-                          ),
-                          child: const Text(
-                            "Cancel",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () {}),
-                      ElevatedButton(
-                          //disable splash
-                          style: ButtonStyle(
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 246, 245, 245)),
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            "Add",
-                            style: TextStyle(
-                                color: Color(0xff669D6B),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ))
-                    ]),
-              ),
-
               // Name
               const Text(
                 "Name",
@@ -162,6 +122,26 @@ class _AddNewGardenState extends ConsumerState<WebAddNewGarden> {
                   ),
                 ),
               ),
+
+              const SizedBox(
+                height: 50,
+              ),
+
+              ElevatedButton(
+                  //disable splash
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 246, 245, 245)),
+                  ),
+                  onPressed: () {},
+                  child: const Text(
+                    "Add",
+                    style: TextStyle(
+                        color: Color(0xff669D6B),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ))
             ],
           ),
         ),

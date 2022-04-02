@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-import 'package:thesis/provider.dart';
+
+import '../../Main/provider.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
   const AddNewGarden({Key? key}) : super(key: key);

@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/Status%20widgets/npk_status.dart';
 import 'package:thesis/Main/loading.dart';
-import 'package:thesis/provider.dart';
+
 import 'package:http/http.dart' as http;
+import '../../Main/provider.dart';
 import '../../Status widgets/humidity.dart';
 import '../../Status widgets/moisture.dart';
 import '../../Status widgets/ph_level.dart';

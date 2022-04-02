@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
 import 'package:thesis/Main/loading.dart';
-import 'package:thesis/provider.dart';
+
+import '../../Main/provider.dart';
 import '../../Status widgets/humidity.dart';
 import '../../Status widgets/moisture.dart';
 import '../../Status widgets/ph_level.dart';

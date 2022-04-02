@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
+
 import 'package:thesis/Web/New%20Garden%20Dialog/web_new_garden.dart';
-import 'package:thesis/login.dart';
-import 'package:thesis/provider.dart';
+
 import 'package:http/http.dart' as http;
 
+import '../Main/login.dart';
+import '../Main/provider.dart';
 import 'Garden Page/web_garden_card.dart';
 import 'Garden Page/web_garden_page.dart';
 
@@ -61,6 +63,7 @@ class WebMain extends StatelessWidget {
             onTap: () {
               ref.watch(selectionProvider.notifier).state =
                   SelectGarden(false, null);
+              ref.watch(webAddgardenActiveProvider.notifier).state = false;
             },
             child: const _WebMain());
       }),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/provider.dart';
+
 import '../../History page Widgets/humidity_history.dart';
 import '../../History page Widgets/moisture_history.dart';
 import '../../History page Widgets/npk_history.dart';

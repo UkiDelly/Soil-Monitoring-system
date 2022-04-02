@@ -1,7 +1,8 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/provider.dart';
+
+import '../../Main/provider.dart';
 
 class WebGardenCard extends ConsumerWidget {
   int index;
