@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/Web/New%20Garden%20Page/web_new_garden.dart';
 import '../Main/login.dart';
 import '../Main/provider.dart';
 import 'Garden Page/web_garden_card.dart';
@@ -184,7 +185,11 @@ class __WebMainState extends ConsumerState<_WebMain> {
                             Expanded(
                               child: SizedBox(
                                 child: createNewGarden
-                                    ? _webAddNewGarden()
+                                    ? WebAddGarden(onPressed: () {
+                                        setState(() {
+                                          createNewGarden = false;
+                                        });
+                                      })
                                     : WebGarden(),
                               ),
                             )
@@ -288,188 +293,190 @@ class __WebMainState extends ConsumerState<_WebMain> {
     );
   }
 
-  Widget _webAddNewGarden() {
-    //text controller
-    var _nameControl = TextEditingController(),
-        _noteControl = TextEditingController();
+  //Widget _webAddNewGarden() {
 
-    _createGarden() async {
-      final _token = ref.watch(tokenProvider);
-      var _gardenId;
+  // //text controller
+  // var _nameControl = TextEditingController(),
+  //     _noteControl = TextEditingController();
 
-      const _url = "http://localhost:3000/v1/garden/create";
-      var _response = await http.post(Uri.parse(_url),
-          body: {"name": _nameControl.text, "notes": _noteControl.text},
-          headers: {'Authorization': "Bearer $_token"});
+  // _createGarden() async {
+  //   final _token = ref.watch(tokenProvider);
+  //   var _gardenId;
 
-      //? get the gardenId from the response
-      if (_response.statusCode == 200) {
-        var _item = jsonDecode(_response.body);
-        _gardenId = _item['data']['insertedId'];
-        print(_gardenId);
-      }
+  //   const _url = "http://localhost:3000/v1/garden/create";
+  //   var _response = await http.post(Uri.parse(_url),
+  //       body: {"name": _nameControl.text, "notes": _noteControl.text},
+  //       headers: {'Authorization': "Bearer $_token"});
 
-      const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
-      _response = await http.post(Uri.parse(_sensorUrl),
-          body: {"name": _nameControl.text, "gardenId": _gardenId},
-          headers: {'Authorization': "Bearer $_token"});
-      if (_response.statusCode == 200) {
-        var _item = jsonDecode(_response.body);
-        print(_item);
+  //   //? get the gardenId from the response
+  //   if (_response.statusCode == 200) {
+  //     var _item = jsonDecode(_response.body);
+  //     _gardenId = _item['data']['insertedId'];
+  //     print(_gardenId);
+  //   }
 
-        setState(() {
-          _nameControl.text = "";
-          _noteControl.text = "";
-        });
+  //   const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
+  //   _response = await http.post(Uri.parse(_sensorUrl),
+  //       body: {"name": _nameControl.text, "gardenId": _gardenId},
+  //       headers: {'Authorization': "Bearer $_token"});
+  //   if (_response.statusCode == 200) {
+  //     var _item = jsonDecode(_response.body);
+  //     print(_item);
 
-        //show Toast message
+  //     setState(() {
+  //       _nameControl.text = "";
+  //       _noteControl.text = "";
+  //     });
 
-      }
+  //     //show Toast message
 
-      //TODO: finish the create garden
-      //TODO: Add a toast message after successfully created.
-    }
+  //   }
 
-    return GestureDetector(
-      //unfocuse eveything if tap the background
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Card(
-        color: const Color(0xff669D6B),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              // Name
-              const Text(
-                "Name",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
+  //   //TODO: finish the create garden
+  //   //TODO: Add a toast message after successfully created.
+  // }
 
-              // Name text field
-              SizedBox(
-                width: 300,
-                child: TextField(
-                  controller: _nameControl,
-                  decoration: const InputDecoration(
-                    hintText: "Enter a name",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                  ),
-                ),
-              ),
+  //return
+  // GestureDetector(
+  //   //unfocuse eveything if tap the background
+  //   onTap: () {
+  //     FocusScope.of(context).requestFocus(FocusNode());
+  //   },
+  //   child: Card(
+  //     color: const Color(0xff669D6B),
+  //     child: Center(
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.start,
+  //         crossAxisAlignment: CrossAxisAlignment.center,
+  //         children: [
+  //           const SizedBox(
+  //             height: 30,
+  //           ),
+  //           // Name
+  //           const Text(
+  //             "Name",
+  //             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+  //           ),
 
-              const SizedBox(
-                height: 10,
-              ),
+  //           // Name text field
+  //           SizedBox(
+  //             width: 300,
+  //             child: TextField(
+  //               controller: _nameControl,
+  //               decoration: const InputDecoration(
+  //                 hintText: "Enter a name",
+  //                 filled: true,
+  //                 fillColor: Colors.white,
+  //                 border: OutlineInputBorder(
+  //                     borderSide: BorderSide(),
+  //                     borderRadius: BorderRadius.all(Radius.circular(15))),
+  //               ),
+  //             ),
+  //           ),
 
-              const Text(
-                "Notes",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
+  //           const SizedBox(
+  //             height: 10,
+  //           ),
 
-              // notes
-              SizedBox(
-                width: 350,
-                child: TextField(
-                  controller: _noteControl,
-                  maxLines: 10,
-                  decoration: const InputDecoration(
-                    hintText: "Enter a note",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                  ),
-                ),
-              ),
+  //           const Text(
+  //             "Notes",
+  //             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+  //           ),
 
-              const SizedBox(
-                height: 30,
-              ),
+  //           // notes
+  //           SizedBox(
+  //             width: 350,
+  //             child: TextField(
+  //               controller: _noteControl,
+  //               maxLines: 10,
+  //               decoration: const InputDecoration(
+  //                 hintText: "Enter a note",
+  //                 filled: true,
+  //                 fillColor: Colors.white,
+  //                 border: OutlineInputBorder(
+  //                     borderSide: BorderSide(),
+  //                     borderRadius: BorderRadius.all(Radius.circular(15))),
+  //               ),
+  //             ),
+  //           ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(
-                    flex: 2,
-                  ),
-                  // Cancel
-                  SizedBox(
-                    child: ElevatedButton(
-                        //disable splash
-                        style: ButtonStyle(
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color.fromARGB(255, 246, 245, 245)),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            createNewGarden = false;
-                          });
-                        },
-                        child: const SizedBox(
-                          width: 100,
-                          height: 50,
-                          child: Center(
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                          ),
-                        )),
-                  ),
+  //           const SizedBox(
+  //             height: 30,
+  //           ),
 
-                  const Spacer(
-                    flex: 1,
-                  ),
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               const Spacer(
+  //                 flex: 2,
+  //               ),
+  //               // Cancel
+  //               SizedBox(
+  //                 child: ElevatedButton(
+  //                     //disable splash
+  //                     style: ButtonStyle(
+  //                       overlayColor:
+  //                           MaterialStateProperty.all(Colors.transparent),
+  //                       backgroundColor: MaterialStateProperty.all(
+  //                           const Color.fromARGB(255, 246, 245, 245)),
+  //                     ),
+  //                     onPressed: () {
+  //                       setState(() {
+  //                         createNewGarden = false;
+  //                       });
+  //                     },
+  //                     child: const SizedBox(
+  //                       width: 100,
+  //                       height: 50,
+  //                       child: Center(
+  //                         child: Text(
+  //                           "Cancel",
+  //                           style: TextStyle(
+  //                               fontSize: 20,
+  //                               fontWeight: FontWeight.bold,
+  //                               color: Colors.black),
+  //                         ),
+  //                       ),
+  //                     )),
+  //               ),
 
-                  // Add
-                  ElevatedButton(
-                      //disable splash
-                      style: ButtonStyle(
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(255, 246, 245, 245)),
-                      ),
-                      onPressed: () {},
-                      child: const SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            "Add",
-                            style: TextStyle(
-                                color: Color(0xff669D6B),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      )),
+  //               const Spacer(
+  //                 flex: 1,
+  //               ),
 
-                  const Spacer(
-                    flex: 2,
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  //               // Add
+  //               ElevatedButton(
+  //                   //disable splash
+  //                   style: ButtonStyle(
+  //                     overlayColor:
+  //                         MaterialStateProperty.all(Colors.transparent),
+  //                     backgroundColor: MaterialStateProperty.all(
+  //                         const Color.fromARGB(255, 246, 245, 245)),
+  //                   ),
+  //                   onPressed: () {},
+  //                   child: const SizedBox(
+  //                     width: 100,
+  //                     height: 50,
+  //                     child: Center(
+  //                       child: Text(
+  //                         "Add",
+  //                         style: TextStyle(
+  //                             color: Color(0xff669D6B),
+  //                             fontSize: 20,
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                     ),
+  //                   )),
+
+  //               const Spacer(
+  //                 flex: 2,
+  //               )
+  //             ],
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   ),
+  // );
+  // }
 }
