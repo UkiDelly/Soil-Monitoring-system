@@ -11,9 +11,9 @@ import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 import 'package:thesis/Web/web_main.dart';
 
-import 'Main/new_user.dart';
+import 'new_user.dart';
 
-import 'Main/loading.dart';
+import 'loading.dart';
 import 'provider.dart';
 
 //! Error message if the token is invalid
@@ -69,6 +69,8 @@ class __LoginState extends ConsumerState<_Login> {
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
+    }, headers: {
+      "Access-Control_Allow_Origin": "*"
     });
 
     //TODO: request nong to add userID to the response

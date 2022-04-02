@@ -84,26 +84,41 @@ class __WebMainState extends ConsumerState<_WebMain> {
 
   //* Get garden list
   getGardenList() async {
-    // final url = "https://soilanalysis.loca.lt/v1/garden/list";
+    // const url = "http://soilanalysis.loca.lt/v1/garden/list";
     const url = "http://localhost:3000/v1/garden/list";
-    var response = await http.get(Uri.parse(url));
-    var item = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      List temp = item['data'];
-      List _gardenList = [];
-      final userID = ref.watch(userIDProvider);
+    var _response = await http.get(Uri.parse(url));
+    var _item = jsonDecode(_response.body);
 
-      for (int i = 0; i < temp.length; i++) {
-        if (temp[i]['createdBy'] == userID) {
-          _gardenList = [..._gardenList, temp[i]];
-        }
+    List _temp = _item['data'];
+    List _gardenList = [];
+    final _userId = ref.watch(userIDProvider);
+
+    for (var item in _temp) {
+      if (item['createdBy'] == _userId) {
+        _gardenList.add(item);
       }
+    }
 
-      setState(() {
-        gardenList = _gardenList;
-        isLoading = false;
+    //get the sensor list and save in the provider
+    const sensorUrl = "http://localhost:3000/v1/sensor/list";
+    _response = await http.get(Uri.parse(sensorUrl));
+    _item = jsonDecode(_response.body);
+    _temp = _item['data'];
+
+    var _tempSensorIdList = [];
+    for (var item in _temp) {
+      _tempSensorIdList.add({
+        "sensorId": item['_id'],
+        "gardenId": item['gardenId'],
       });
     }
+
+    ref.watch(sensorIdListProvider.notifier).state = _tempSensorIdList;
+
+    setState(() {
+      gardenList = _gardenList;
+      isLoading = false;
+    });
   }
 
   @override
@@ -248,7 +263,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
                   Navigator.push(
                           context,
                           PageTransition(
-                              child: WebGardenMini(),
+                              child: const WebGardenMini(),
                               type: PageTransitionType.rightToLeft))
                       .then((value) {
                     ref.watch(selectionProvider.notifier).state =

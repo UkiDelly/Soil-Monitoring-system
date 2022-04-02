@@ -131,7 +131,6 @@ class GardenList extends ConsumerStatefulWidget {
 class _GardenListState extends ConsumerState<GardenList> {
   //
   List gardenList = [];
-  int gardenCount = 0;
   bool isLoading = false;
 
   @override
@@ -145,21 +144,37 @@ class _GardenListState extends ConsumerState<GardenList> {
     setState(() {
       isLoading = true;
     });
+
     // const url = "http://soilanalysis.loca.lt/v1/garden/list";
     const url = "http://localhost:3000/v1/garden/list";
-    var response = await http.get(Uri.parse(url),
-        headers: {'Authorization': 'Bearer ${widget.token}'});
-    var item = jsonDecode(response.body);
+    var _response = await http.get(Uri.parse(url));
+    var _item = jsonDecode(_response.body);
 
-    List temp = item['data'];
+    List _temp = _item['data'];
     List _gardenList = [];
-    final userID = ref.watch(userIDProvider);
+    final _userId = ref.watch(userIDProvider);
 
-    for (int i = 0; i < temp.length; i++) {
-      if (temp[i]['createdBy'] == userID) {
-        _gardenList = [..._gardenList, temp[i]];
+    for (var item in _temp) {
+      if (item['createdBy'] == _userId) {
+        _gardenList.add(item);
       }
     }
+
+    //get the sensor list and save in the provider
+    const sensorUrl = "http://localhost:3000/v1/sensor/list";
+    _response = await http.get(Uri.parse(sensorUrl));
+    _item = jsonDecode(_response.body);
+    _temp = _item['data'];
+
+    var _tempSensorIdList = [];
+    for (var item in _temp) {
+      _tempSensorIdList.add({
+        "sensorId": item['_id'],
+        "gardenId": item['gardenId'],
+      });
+    }
+
+    ref.watch(sensorIdListProvider.notifier).state = _tempSensorIdList;
 
     setState(() {
       gardenList = _gardenList;
@@ -175,8 +190,6 @@ class _GardenListState extends ConsumerState<GardenList> {
 
         //? Show the garden List
         : Expanded(
-            // width: MediaQuery.of(context).size.width * 0.95,
-            // height: MediaQuery.of(context).size.height * 0.75,
             child: ListView.builder(
                 itemCount: gardenList.length,
                 scrollDirection: Axis.vertical,

@@ -8,12 +8,13 @@ class GardenCard extends StatefulWidget {
   String gardenID;
   String gardenName;
   int index;
-  GardenCard(
-      {Key? key,
-      required this.index,
-      required this.gardenID,
-      required this.gardenName})
-      : super(key: key);
+
+  GardenCard({
+    Key? key,
+    required this.index,
+    required this.gardenID,
+    required this.gardenName,
+  }) : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
