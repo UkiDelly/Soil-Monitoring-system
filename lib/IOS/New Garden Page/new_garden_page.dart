@@ -1,14 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class AddNewGarden extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'package:page_transition/page_transition.dart';
+import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/provider.dart';
+
+class AddNewGarden extends ConsumerStatefulWidget {
   const AddNewGarden({Key? key}) : super(key: key);
 
   @override
-  State<AddNewGarden> createState() => _AddNewGardenState();
+  ConsumerState<AddNewGarden> createState() => _AddNewGardenState();
 }
 
-class _AddNewGardenState extends State<AddNewGarden> {
+class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   @override
   void initState() {
     super.initState();
@@ -18,12 +24,23 @@ class _AddNewGardenState extends State<AddNewGarden> {
   var nameControl = TextEditingController(),
       noteControl = TextEditingController();
 
-  createGarden() {
-    const url = "http://localhost:3000/v1/garden/create";
-    var response = http.post(Uri.parse(url),
-        body: {"name": nameControl.text, "notes": noteControl.text});
+  createGarden() async {
+    final _token = ref.watch(tokenProvider);
+    var _gardenId;
+
+    const _url = "http://localhost:3000/v1/garden/create";
+
+    var _response = await http.post(Uri.parse(_url),
+        body: {"name": nameControl.text, "notes": noteControl.text},
+        headers: {'Authorization': "Bearer $_token"});
+    if (_response.statusCode == 200) {
+      var _item = jsonDecode(_response.body);
+      _gardenId = _item['data']['gardenId'];
+    }
 
     //TODO: finish the create garden
+    //TODO: ask nong the add gardenId in the response of the create garden
+    //TODO create new sensor immedialety
   }
 
   @override
@@ -40,19 +57,22 @@ class _AddNewGardenState extends State<AddNewGarden> {
 
           // Cancel button
           leading: TextButton(
-            //disable splash
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-            ),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
+              //disable splash
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              child: const Text(
+                "Cancel",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+              onPressed: () => Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      child: const MobileHome(),
+                      type: PageTransitionType.leftToRight))),
           leadingWidth: 90,
 
           elevation: 0,

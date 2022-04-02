@@ -142,8 +142,7 @@ class __GardenState extends ConsumerState<_Garden> {
     var item = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      var sensorData = item['data']['data'][(item['data']['data'].length - 1)];
-      print((sensorData['nitrogen'] * 1.0).runtimeType);
+      var sensorData = item['data']['data'].last;
 
       setState(() {
         npkMap["Nitrogen"] = sensorData['nitrogen'].toDouble();

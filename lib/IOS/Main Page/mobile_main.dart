@@ -131,7 +131,6 @@ class GardenList extends ConsumerStatefulWidget {
 class _GardenListState extends ConsumerState<GardenList> {
   //
   List gardenList = [];
-  int gardenCount = 0;
   bool isLoading = false;
 
   @override

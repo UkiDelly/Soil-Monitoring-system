@@ -25,6 +25,7 @@ class WebGarden extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final token = ref.watch(tokenProvider);
     final gardenID = ref.watch(gardenIDProvider);
+    final sensorIdList = ref.watch(sensorIdListProvider);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -39,6 +40,7 @@ class WebGarden extends ConsumerWidget {
                 token: token,
                 gardenID: gardenID,
                 key: UniqueKey(),
+                sensorIdList: sensorIdList,
               ))
           : Opacity(
               opacity: 0.25,
@@ -49,7 +51,12 @@ class WebGarden extends ConsumerWidget {
 
 class _Status extends StatefulWidget {
   String token, gardenID;
-  _Status({Key? key, required this.token, required this.gardenID})
+  var sensorIdList;
+  _Status(
+      {Key? key,
+      required this.token,
+      required this.gardenID,
+      required this.sensorIdList})
       : super(key: key);
 
   @override
@@ -72,6 +79,16 @@ class __StatusState extends State<_Status> {
     setState(() {
       isLoading = true;
     });
+
+    var _sensorId;
+
+    //search the match gardenId inside the sensorId List
+    for (var item in widget.sensorIdList) {
+      if (widget.gardenID == item['gardenId']) {
+        _sensorId = item['sensorId'];
+      }
+    }
+
     // final url = "https://soilanalysis.loca.lt/v1/garden/get/$gardenID";
     final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
     var response = await http.get(Uri.parse(url), headers: {
@@ -79,20 +96,24 @@ class __StatusState extends State<_Status> {
     });
     var item = jsonDecode(response.body);
 
+    // get the gardne name
     var _gardenName = item['data']['name'];
-    var sensorId = item['data']['sensorId'];
 
-    final sensorUrl = "http://localhost:3000/v1/sensor/get/$sensorId";
+    // get the sensor
+    final sensorUrl = "http://localhost:3000/v1/sensor/get/$_sensorId";
     response = await http.get(Uri.parse(sensorUrl), headers: {
       'Authorization': 'Bearer ${widget.token}',
     });
-
     item = jsonDecode(response.body);
+
+    // set the garden name
     item['data']["name"] = _gardenName;
 
+    // get the latest data
     if (response.statusCode == 200) {
-      var sensorData = item['data']['data'][(item['data']['data'].length - 1)];
+      var sensorData = item['data']['data'].last;
 
+      // get the sensor data values
       if (mounted) {
         setState(() {
           garden = item;
