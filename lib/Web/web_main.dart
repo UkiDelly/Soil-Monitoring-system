@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
+import 'package:thesis/Web/New%20Garden%20Dialog/web_new_garden.dart';
 import 'package:thesis/login.dart';
 import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
@@ -79,8 +80,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
 
   dynamic gardenList = {};
   bool isLoading = true;
-  bool isTapped = false;
-  int selectedGarden = 0;
+  bool createNewGarden = false;
 
   //* Get garden list
   getGardenList() async {
@@ -130,7 +130,6 @@ class __WebMainState extends ConsumerState<_WebMain> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     return SizedBox(
       child: isLoading
@@ -184,7 +183,9 @@ class __WebMainState extends ConsumerState<_WebMain> {
                             ),
                             Expanded(
                               child: SizedBox(
-                                child: WebGarden(),
+                                child: createNewGarden
+                                    ? const WebAddNewGarden()
+                                    : WebGarden(),
                               ),
                             )
                           ],
@@ -222,7 +223,9 @@ class __WebMainState extends ConsumerState<_WebMain> {
               highlightColor: Colors.transparent,
               onPressed: () {
                 //* Lead to the add garden
-
+                setState(() {
+                  createNewGarden = true;
+                });
                 //
               },
               icon: const Icon(
@@ -252,7 +255,9 @@ class __WebMainState extends ConsumerState<_WebMain> {
                 //tell it is selected
                 ref.watch(selectionProvider.notifier).state =
                     SelectGarden(true, index);
-                setState(() {});
+                setState(() {
+                  createNewGarden = false;
+                });
 
                 //contain the garden Id ins the provider
                 ref.watch(gardenIDProvider.notifier).state =

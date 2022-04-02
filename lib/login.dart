@@ -102,7 +102,7 @@ class __LoginState extends ConsumerState<_Login> {
       });
     } else {
 //? Done loading data
-      showAlertDialog(context);
+      _showAlertDialog(context);
       setState(() {
         isLoading = false;
         usernameController.text = "";
@@ -264,7 +264,7 @@ class __LoginState extends ConsumerState<_Login> {
 }
 
 //! Show the alert if the server is offline
-showAlertDialog(BuildContext context) {
+_showAlertDialog(BuildContext context) {
   // set up the button
   Widget okButton = TextButton(
     child: const Text(

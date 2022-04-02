@@ -7,6 +7,7 @@ final gardenIDProvider = StateProvider<String>((ref) => "");
 final selectionProvider =
     StateProvider<dynamic>((ref) => SelectGarden(false, null));
 final sensorIDProvider = StateProvider<String>((ref) => "");
+final webAddgardenActiveProvider = StateProvider<bool>((ref) => false);
 
 class SelectGarden {
   bool isSelected;
