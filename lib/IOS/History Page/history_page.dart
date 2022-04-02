@@ -31,7 +31,8 @@ class HistoryPage extends StatelessWidget {
         ),
         body: Consumer(
           builder: (ctx, ref, child) {
-            final sensorId = ref.watch(sensorIDProvider);
+            const sensorId =
+                "623bde62d90c4c4fce78124a"; //ref.watch(sensorIDProvider);
             return _History(sensorId: sensorId);
           },
         ));

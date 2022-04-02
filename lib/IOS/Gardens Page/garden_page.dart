@@ -18,16 +18,14 @@ import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class GardenPage extends StatelessWidget {
-  GardenPage(
-      {Key? key,
-      required this.gardenID,
-      required this.gardenName,
-      required this.sensorId})
-      : super(key: key);
+  GardenPage({
+    Key? key,
+    required this.gardenID,
+    required this.gardenName,
+  }) : super(key: key);
 
   String gardenID;
   String gardenName;
-  String sensorId;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +81,13 @@ class GardenPage extends StatelessWidget {
         body: Consumer(
           builder: (context, ref, child) {
             final token = ref.watch(tokenProvider);
-            return _Garden(sensorId: sensorId, token: token);
+            final sensorIdList = ref.watch(sensorIdListProvider);
+            print(sensorIdList);
+            return _Garden(
+              token: token,
+              gardenId: gardenID,
+              sensorIdList: sensorIdList,
+            );
           },
         ));
   }
@@ -91,9 +95,14 @@ class GardenPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _Garden extends ConsumerStatefulWidget {
-  String sensorId;
   String token;
-  _Garden({Key? key, required this.sensorId, required this.token})
+  String gardenId;
+  var sensorIdList;
+  _Garden(
+      {Key? key,
+      required this.token,
+      required this.gardenId,
+      required this.sensorIdList})
       : super(key: key);
 
   @override
@@ -118,12 +127,20 @@ class __GardenState extends ConsumerState<_Garden> {
     setState(() {
       isLoading = true;
     });
-    final url = "http://localhost:3000/v1/sensor/get/${widget.sensorId}";
+
+    var _sensorId = "";
+
+    //search the match gardenId inside the sensorId List
+    for (var item in widget.sensorIdList) {
+      if (widget.gardenId == item['gardenId']) {
+        _sensorId = item['sensorId'];
+      }
+    }
+    final url = "http://localhost:3000/v1/sensor/get/$_sensorId";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);
 
-    //TODO convert the data into double to insert into the chart
     if (response.statusCode == 200) {
       var sensorData = item['data']['data'][(item['data']['data'].length - 1)];
       print((sensorData['nitrogen'] * 1.0).runtimeType);

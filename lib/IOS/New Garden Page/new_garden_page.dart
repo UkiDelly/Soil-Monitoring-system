@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class AddNewGarden extends StatefulWidget {
   const AddNewGarden({Key? key}) : super(key: key);
@@ -14,7 +15,16 @@ class _AddNewGardenState extends State<AddNewGarden> {
   }
 
   //text controller
-  var nameControl = TextEditingController();
+  var nameControl = TextEditingController(),
+      noteControl = TextEditingController();
+
+  createGarden() {
+    const url = "http://localhost:3000/v1/garden/create";
+    var response = http.post(Uri.parse(url),
+        body: {"name": nameControl.text, "notes": noteControl.text});
+
+    //TODO: finish the create garden
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +76,7 @@ class _AddNewGardenState extends State<AddNewGarden> {
 
         backgroundColor: const Color(0xff669D6B),
 
-        body: Container(
-          padding: const EdgeInsets.only(top: 20),
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,8 +91,9 @@ class _AddNewGardenState extends State<AddNewGarden> {
               SizedBox(
                 width: 300,
                 child: TextField(
-                  controller: nameControl,
+                  controller: noteControl,
                   decoration: const InputDecoration(
+                    hintText: "Enter a name",
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -93,18 +103,32 @@ class _AddNewGardenState extends State<AddNewGarden> {
                 ),
               ),
 
-              // Avail sensor
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  height: 500,
-                  decoration: const BoxDecoration(
-                      color: Color(0xfffefefe),
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
+              const SizedBox(
+                height: 10,
+              ),
+
+              const Text(
+                "Notes",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+
+              // notes
+              SizedBox(
+                width: 350,
+                height: 400,
+                child: TextField(
+                  controller: nameControl,
+                  maxLines: 10,
+                  decoration: const InputDecoration(
+                    hintText: "Enter a note",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(),
+                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
