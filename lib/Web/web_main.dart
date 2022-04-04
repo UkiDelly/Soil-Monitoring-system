@@ -1,20 +1,21 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
-import 'package:thesis/login.dart';
-import 'package:thesis/provider.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:thesis/Web/New%20Garden%20Page/web_new_garden.dart';
+import '../Main/login.dart';
+import '../Main/provider.dart';
 import 'Garden Page/web_garden_card.dart';
 import 'Garden Page/web_garden_page.dart';
 
 class WebMain extends StatelessWidget {
   String username;
-  WebMain({Key? key, required this.username}) : super(key: key);
+  bool? createNewGarden = false;
+  WebMain({Key? key, required this.username, this.createNewGarden})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,7 @@ class WebMain extends StatelessWidget {
             onTap: () {
               ref.watch(selectionProvider.notifier).state =
                   SelectGarden(false, null);
+              ref.watch(webAddgardenActiveProvider.notifier).state = false;
             },
             child: const _WebMain());
       }),
@@ -79,8 +81,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
 
   dynamic gardenList = {};
   bool isLoading = true;
-  bool isTapped = false;
-  int selectedGarden = 0;
+  bool createNewGarden = false;
 
   //* Get garden list
   getGardenList() async {
@@ -130,7 +131,6 @@ class __WebMainState extends ConsumerState<_WebMain> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     return SizedBox(
       child: isLoading
@@ -184,7 +184,20 @@ class __WebMainState extends ConsumerState<_WebMain> {
                             ),
                             Expanded(
                               child: SizedBox(
-                                child: WebGarden(),
+                                child: createNewGarden
+                                    ? WebAddGarden(
+                                        cancel: () {
+                                          setState(() {
+                                            createNewGarden = false;
+                                          });
+                                        },
+                                        add: () {
+                                          setState(() {
+                                            getGardenList();
+                                          });
+                                        },
+                                      )
+                                    : WebGarden(),
                               ),
                             )
                           ],
@@ -222,7 +235,9 @@ class __WebMainState extends ConsumerState<_WebMain> {
               highlightColor: Colors.transparent,
               onPressed: () {
                 //* Lead to the add garden
-
+                setState(() {
+                  createNewGarden = true;
+                });
                 //
               },
               icon: const Icon(
@@ -252,7 +267,9 @@ class __WebMainState extends ConsumerState<_WebMain> {
                 //tell it is selected
                 ref.watch(selectionProvider.notifier).state =
                     SelectGarden(true, index);
-                setState(() {});
+                setState(() {
+                  createNewGarden = false;
+                });
 
                 //contain the garden Id ins the provider
                 ref.watch(gardenIDProvider.notifier).state =

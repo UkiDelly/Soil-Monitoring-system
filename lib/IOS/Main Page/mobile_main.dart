@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
-import 'package:thesis/provider.dart';
+
+import '../../Main/provider.dart';
 import '../New Garden Page/new_garden_page.dart';
 import 'garden_card.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,7 @@ class MobileHome extends StatelessWidget {
           child: SizedBox(
             child: Column(
               children: [
-                const AboveGardenList(),
+                aboveGardenList(context),
 
                 const SizedBox(
                   height: 10,
@@ -52,13 +53,8 @@ class MobileHome extends StatelessWidget {
       ),
     );
   }
-}
 
-class AboveGardenList extends StatelessWidget {
-  const AboveGardenList({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget aboveGardenList(context) {
     return SizedBox(
       child: Column(
         children: [
@@ -196,7 +192,7 @@ class _GardenListState extends ConsumerState<GardenList> {
                 itemBuilder: (BuildContext context, int index) {
                   return GardenCard(
                     index: index + 1,
-                    gardenID: gardenList[index]['_id'],
+                    gardenId: gardenList[index]['_id'],
                     gardenName: gardenList[index]['name'],
                   );
                 }),

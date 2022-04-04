@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
 
 class GardenCard extends StatefulWidget {
-  String gardenID;
+  String gardenId;
   String gardenName;
   int index;
 
   GardenCard({
     Key? key,
     required this.index,
-    required this.gardenID,
+    required this.gardenId,
     required this.gardenName,
   }) : super(key: key);
 
@@ -48,7 +48,7 @@ class _GardenCardState extends State<GardenCard> {
               return
                   // Center(child: Text(widget.gardenID));
                   GardenPage(
-                gardenID: widget.gardenID,
+                gardenId: widget.gardenId,
                 gardenName: widget.gardenName,
               );
             }));

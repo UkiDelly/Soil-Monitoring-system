@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
 import 'package:thesis/Main/loading.dart';
-import 'package:thesis/provider.dart';
+
+import '../../Main/provider.dart';
 import '../../Status widgets/humidity.dart';
 import '../../Status widgets/moisture.dart';
 import '../../Status widgets/ph_level.dart';
@@ -20,11 +21,11 @@ import 'package:http/http.dart' as http;
 class GardenPage extends StatelessWidget {
   GardenPage({
     Key? key,
-    required this.gardenID,
+    required this.gardenId,
     required this.gardenName,
   }) : super(key: key);
 
-  String gardenID;
+  String gardenId;
   String gardenName;
 
   @override
@@ -82,10 +83,10 @@ class GardenPage extends StatelessWidget {
           builder: (context, ref, child) {
             final token = ref.watch(tokenProvider);
             final sensorIdList = ref.watch(sensorIdListProvider);
-            print(sensorIdList);
+
             return _Garden(
               token: token,
-              gardenId: gardenID,
+              gardenId: gardenId,
               sensorIdList: sensorIdList,
             );
           },
@@ -142,16 +143,20 @@ class __GardenState extends ConsumerState<_Garden> {
     var item = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      var sensorData = item['data']['data'].last;
+      var _sensorData = item['data']['data'].last;
+      ref.watch(sensorDataProvider.notifier).state = item['data']['data'];
 
       setState(() {
-        npkMap["Nitrogen"] = sensorData['nitrogen'].toDouble();
-        npkMap["Potassium"] = sensorData['potassium'].toDouble();
-        npkMap["Phosphorous"] = sensorData['phosphorous'].toDouble();
-        ph = sensorData['pH'] * 1.0;
-        temp = sensorData['temperature'].toDouble();
-        moisture = sensorData['moisture'].toDouble();
-        humidity = sensorData['humidity'].toDouble();
+        npkMap = {
+          "Nitrogen": _sensorData['nitrogen'].toDouble(),
+          "Potassium": _sensorData['potassium'].toDouble(),
+          "Phosphorous": _sensorData['phosphorous'].toDouble()
+        };
+
+        ph = _sensorData['pH'].toDouble();
+        temp = _sensorData['temperature'].toDouble();
+        moisture = _sensorData['moisture'].toDouble();
+        humidity = _sensorData['humidity'].toDouble();
 
         isLoading = false;
       });
@@ -164,421 +169,226 @@ class __GardenState extends ConsumerState<_Garden> {
     getSensorData();
   }
 
-  Widget tmp(context) {
-    return isLoading
-        ? const Center(child: LoadingPage())
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-
-              //* Body
-              SizedBox(
-                child: Column(
-                  children: [
-                    //* NPK status
-                    TranslationAnimatedWidget.tween(
-                      duration: const Duration(seconds: 1),
-                      enabled: true,
-                      translationDisabled: const Offset(-500, 0),
-                      translationEnabled: const Offset(0, 0),
-                      curve: Curves.fastOutSlowIn,
-                      child: OpacityAnimatedWidget.tween(
-                        duration: const Duration(seconds: 1),
-                        enabled: true,
-                        opacityDisabled: 0,
-                        opacityEnabled: 1,
-                        child: NPKstatus(dataMap: npkMap),
-                      ),
-                    ),
-
-                    Container(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //? Left Column
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //
-                                const SizedBox(
-                                  height: 10,
-                                ),
-
-                                //
-                                const SizedBox(
-                                  height: 10,
-                                ),
-
-                                //* Temperature
-                                TranslationAnimatedWidget.tween(
-                                  delay: const Duration(milliseconds: 300),
-                                  duration: const Duration(seconds: 1),
-                                  enabled: true,
-                                  translationDisabled: const Offset(-500, 0),
-                                  translationEnabled: const Offset(0, 0),
-                                  curve: Curves.fastOutSlowIn,
-                                  child: OpacityAnimatedWidget.tween(
-                                      duration: const Duration(seconds: 1),
-                                      enabled: true,
-                                      opacityDisabled: 0,
-                                      opacityEnabled: 1,
-                                      child: Temp(
-                                        temp: temp.toDouble(),
-                                      )),
-                                ),
-
-                                //* Humidity
-                                TranslationAnimatedWidget.tween(
-                                  delay: const Duration(milliseconds: 500),
-                                  duration: const Duration(seconds: 1),
-                                  enabled: true,
-                                  translationDisabled: const Offset(-500, 0),
-                                  translationEnabled: const Offset(0, 0),
-                                  curve: Curves.fastOutSlowIn,
-                                  child: OpacityAnimatedWidget.tween(
-                                    duration: const Duration(seconds: 1),
-                                    enabled: true,
-                                    opacityDisabled: 0,
-                                    opacityEnabled: 1,
-                                    child: Humidity(
-                                      humidity: humidity.toDouble(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          //? Right Column
-                          Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              //* Ph Level
-                              TranslationAnimatedWidget.tween(
-                                delay: const Duration(milliseconds: 300),
-                                duration: const Duration(seconds: 1),
-                                enabled: true,
-                                translationDisabled: const Offset(500, 0),
-                                translationEnabled: const Offset(0, 0),
-                                curve: Curves.fastOutSlowIn,
-                                child: OpacityAnimatedWidget.tween(
-                                  duration: const Duration(seconds: 1),
-                                  enabled: true,
-                                  opacityDisabled: 0,
-                                  opacityEnabled: 1,
-                                  child: PhLevel(
-                                    ph: ph.toDouble(),
-                                  ),
-                                ),
-                              ),
-
-                              //
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              //* Moisture
-                              TranslationAnimatedWidget.tween(
-                                delay: const Duration(milliseconds: 500),
-                                duration: const Duration(seconds: 1),
-                                enabled: true,
-                                translationDisabled: const Offset(500, 0),
-                                translationEnabled: const Offset(0, 0),
-                                curve: Curves.fastOutSlowIn,
-                                child: OpacityAnimatedWidget.tween(
-                                  duration: const Duration(seconds: 1),
-                                  enabled: true,
-                                  opacityDisabled: 0,
-                                  opacityEnabled: 1,
-                                  child: MoistureLevel(
-                                    moisture: moisture.toDouble(),
-                                  ),
-                                ),
-                              ),
-
-                              //
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              //? Divider
-              const SizedBox(
-                height: 10,
-              ),
-
-              const Divider(
-                color: Color.fromARGB(255, 246, 245, 245),
-                indent: 20,
-                endIndent: 20,
-                thickness: 1,
-                height: 10,
-              ),
-
-              const SizedBox(
-                height: 10,
-              ),
-              //* Plants
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: const [
-                    SizedBox(
-                      width: 25,
-                    ),
-                    Text(
-                      "Plants",
-                      style: (TextStyle(
-                          fontSize: 40, fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
-              ),
-
-              //*Plants card
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2.8,
-                child: ListView.builder(
-                    itemCount: 3,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return const PlantCard();
-                    }),
-              ),
-            ],
-          );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SafeArea(
         bottom: true,
-        child: SizedBox(child: tmp(context)
-            // isLoading
-            //     ? const Center(
-            //         child: LoadingPage(),
-            //       )
-            //     : Column(
-            //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //         crossAxisAlignment: CrossAxisAlignment.center,
-            //         children: [
-            //           const SizedBox(
-            //             height: 10,
-            //           ),
+        child: SizedBox(
+            child: isLoading
+                ? const Center(child: LoadingPage())
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
 
-            //           //* Body
-            //           SizedBox(
-            //             child: Column(
-            //               children: [
-            //                 //* NPK status
-            //                 TranslationAnimatedWidget.tween(
-            //                   duration: const Duration(seconds: 1),
-            //                   enabled: true,
-            //                   translationDisabled: const Offset(-500, 0),
-            //                   translationEnabled: const Offset(0, 0),
-            //                   curve: Curves.fastOutSlowIn,
-            //                   child: OpacityAnimatedWidget.tween(
-            //                     duration: const Duration(seconds: 1),
-            //                     enabled: true,
-            //                     opacityDisabled: 0,
-            //                     opacityEnabled: 1,
-            //                     child: NPKstatus(dataMap: npkMap),
-            //                   ),
-            //                 ),
+                      //* Body
+                      SizedBox(
+                        child: Column(
+                          children: [
+                            //* NPK status
+                            TranslationAnimatedWidget.tween(
+                              duration: const Duration(seconds: 1),
+                              enabled: true,
+                              translationDisabled: const Offset(-500, 0),
+                              translationEnabled: const Offset(0, 0),
+                              curve: Curves.fastOutSlowIn,
+                              child: OpacityAnimatedWidget.tween(
+                                duration: const Duration(seconds: 1),
+                                enabled: true,
+                                opacityDisabled: 0,
+                                opacityEnabled: 1,
+                                child: NPKstatus(dataMap: npkMap),
+                              ),
+                            ),
 
-            //                 Container(
-            //                   padding: const EdgeInsets.only(top: 10),
-            //                   child: Row(
-            //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: [
-            //                       //? Left Column
-            //                       SizedBox(
-            //                         width: MediaQuery.of(context).size.width / 2,
-            //                         child: Column(
-            //                           mainAxisAlignment: MainAxisAlignment.start,
-            //                           children: [
-            //                             //
-            //                             const SizedBox(
-            //                               height: 10,
-            //                             ),
+                            Container(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //? Left Column
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        //
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
 
-            //                             //
-            //                             const SizedBox(
-            //                               height: 10,
-            //                             ),
+                                        //
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
 
-            //                             //* Temperature
-            //                             TranslationAnimatedWidget.tween(
-            //                               delay:
-            //                                   const Duration(milliseconds: 300),
-            //                               duration: const Duration(seconds: 1),
-            //                               enabled: true,
-            //                               translationDisabled:
-            //                                   const Offset(-500, 0),
-            //                               translationEnabled: const Offset(0, 0),
-            //                               curve: Curves.fastOutSlowIn,
-            //                               child: OpacityAnimatedWidget.tween(
-            //                                   duration:
-            //                                       const Duration(seconds: 1),
-            //                                   enabled: true,
-            //                                   opacityDisabled: 0,
-            //                                   opacityEnabled: 1,
-            //                                   child: Temp(
-            //                                     temp: temp,
-            //                                   )),
-            //                             ),
+                                        //* Temperature
+                                        TranslationAnimatedWidget.tween(
+                                          delay:
+                                              const Duration(milliseconds: 300),
+                                          duration: const Duration(seconds: 1),
+                                          enabled: true,
+                                          translationDisabled:
+                                              const Offset(-500, 0),
+                                          translationEnabled:
+                                              const Offset(0, 0),
+                                          curve: Curves.fastOutSlowIn,
+                                          child: OpacityAnimatedWidget.tween(
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              enabled: true,
+                                              opacityDisabled: 0,
+                                              opacityEnabled: 1,
+                                              child: Temp(
+                                                temp: temp.toDouble(),
+                                              )),
+                                        ),
 
-            //                             //* Humidity
-            //                             TranslationAnimatedWidget.tween(
-            //                               delay:
-            //                                   const Duration(milliseconds: 500),
-            //                               duration: const Duration(seconds: 1),
-            //                               enabled: true,
-            //                               translationDisabled:
-            //                                   const Offset(-500, 0),
-            //                               translationEnabled: const Offset(0, 0),
-            //                               curve: Curves.fastOutSlowIn,
-            //                               child: OpacityAnimatedWidget.tween(
-            //                                 duration: const Duration(seconds: 1),
-            //                                 enabled: true,
-            //                                 opacityDisabled: 0,
-            //                                 opacityEnabled: 1,
-            //                                 child: Humidity(
-            //                                   humidity: humidity,
-            //                                 ),
-            //                               ),
-            //                             ),
-            //                           ],
-            //                         ),
-            //                       ),
+                                        //* Humidity
+                                        TranslationAnimatedWidget.tween(
+                                          delay:
+                                              const Duration(milliseconds: 500),
+                                          duration: const Duration(seconds: 1),
+                                          enabled: true,
+                                          translationDisabled:
+                                              const Offset(-500, 0),
+                                          translationEnabled:
+                                              const Offset(0, 0),
+                                          curve: Curves.fastOutSlowIn,
+                                          child: OpacityAnimatedWidget.tween(
+                                            duration:
+                                                const Duration(seconds: 1),
+                                            enabled: true,
+                                            opacityDisabled: 0,
+                                            opacityEnabled: 1,
+                                            child: Humidity(
+                                              humidity: humidity.toDouble(),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
 
-            //                       //? Right Column
-            //                       Column(
-            //                         children: [
-            //                           const SizedBox(
-            //                             height: 10,
-            //                           ),
-            //                           //* Ph Level
-            //                           TranslationAnimatedWidget.tween(
-            //                             delay: const Duration(milliseconds: 300),
-            //                             duration: const Duration(seconds: 1),
-            //                             enabled: true,
-            //                             translationDisabled: const Offset(500, 0),
-            //                             translationEnabled: const Offset(0, 0),
-            //                             curve: Curves.fastOutSlowIn,
-            //                             child: OpacityAnimatedWidget.tween(
-            //                               duration: const Duration(seconds: 1),
-            //                               enabled: true,
-            //                               opacityDisabled: 0,
-            //                               opacityEnabled: 1,
-            //                               child: PhLevel(
-            //                                 ph: ph,
-            //                               ),
-            //                             ),
-            //                           ),
+                                  //? Right Column
+                                  Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      //* Ph Level
+                                      TranslationAnimatedWidget.tween(
+                                        delay:
+                                            const Duration(milliseconds: 300),
+                                        duration: const Duration(seconds: 1),
+                                        enabled: true,
+                                        translationDisabled:
+                                            const Offset(500, 0),
+                                        translationEnabled: const Offset(0, 0),
+                                        curve: Curves.fastOutSlowIn,
+                                        child: OpacityAnimatedWidget.tween(
+                                          duration: const Duration(seconds: 1),
+                                          enabled: true,
+                                          opacityDisabled: 0,
+                                          opacityEnabled: 1,
+                                          child: PhLevel(
+                                            ph: ph.toDouble(),
+                                          ),
+                                        ),
+                                      ),
 
-            //                           //
-            //                           const SizedBox(
-            //                             height: 10,
-            //                           ),
+                                      //
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
 
-            //                           //* Moisture
-            //                           TranslationAnimatedWidget.tween(
-            //                             delay: const Duration(milliseconds: 500),
-            //                             duration: const Duration(seconds: 1),
-            //                             enabled: true,
-            //                             translationDisabled: const Offset(500, 0),
-            //                             translationEnabled: const Offset(0, 0),
-            //                             curve: Curves.fastOutSlowIn,
-            //                             child: OpacityAnimatedWidget.tween(
-            //                               duration: const Duration(seconds: 1),
-            //                               enabled: true,
-            //                               opacityDisabled: 0,
-            //                               opacityEnabled: 1,
-            //                               child: MoistureLevel(
-            //                                 moisture: moisture,
-            //                               ),
-            //                             ),
-            //                           ),
+                                      //* Moisture
+                                      TranslationAnimatedWidget.tween(
+                                        delay:
+                                            const Duration(milliseconds: 500),
+                                        duration: const Duration(seconds: 1),
+                                        enabled: true,
+                                        translationDisabled:
+                                            const Offset(500, 0),
+                                        translationEnabled: const Offset(0, 0),
+                                        curve: Curves.fastOutSlowIn,
+                                        child: OpacityAnimatedWidget.tween(
+                                          duration: const Duration(seconds: 1),
+                                          enabled: true,
+                                          opacityDisabled: 0,
+                                          opacityEnabled: 1,
+                                          child: MoistureLevel(
+                                            moisture: moisture.toDouble(),
+                                          ),
+                                        ),
+                                      ),
 
-            //                           //
-            //                           const SizedBox(
-            //                             height: 20,
-            //                           ),
-            //                         ],
-            //                       )
-            //                     ],
-            //                   ),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
+                                      //
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-            //           //? Divider
-            //           const SizedBox(
-            //             height: 10,
-            //           ),
+                      //? Divider
+                      const SizedBox(
+                        height: 10,
+                      ),
 
-            //           const Divider(
-            //             color: Color.fromARGB(255, 246, 245, 245),
-            //             indent: 20,
-            //             endIndent: 20,
-            //             thickness: 1,
-            //             height: 10,
-            //           ),
+                      const Divider(
+                        color: Color.fromARGB(255, 246, 245, 245),
+                        indent: 20,
+                        endIndent: 20,
+                        thickness: 1,
+                        height: 10,
+                      ),
 
-            //           const SizedBox(
-            //             height: 10,
-            //           ),
-            //           //* Plants
-            //           Container(
-            //             alignment: Alignment.centerLeft,
-            //             child: Row(
-            //               children: const [
-            //                 SizedBox(
-            //                   width: 25,
-            //                 ),
-            //                 Text(
-            //                   "Plants",
-            //                   style: (TextStyle(
-            //                       fontSize: 40, fontWeight: FontWeight.bold)),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //* Plants
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: const [
+                            SizedBox(
+                              width: 25,
+                            ),
+                            Text(
+                              "Plants",
+                              style: (TextStyle(
+                                  fontSize: 40, fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ),
+                      ),
 
-            //           //*Plants card
-            //           SizedBox(
-            //             height: MediaQuery.of(context).size.height / 2.8,
-            //             child: ListView.builder(
-            //                 itemCount: 3,
-            //                 scrollDirection: Axis.horizontal,
-            //                 itemBuilder: (BuildContext context, int index) {
-            //                   return const PlantCard();
-            //                 }),
-            //           ),
-            //         ],
-            //       ),
-            ),
+                      //*Plants card
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 2.8,
+                        child: ListView.builder(
+                            itemCount: 3,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              return const PlantCard();
+                            }),
+                      ),
+                    ],
+                  )),
       ),
     );
   }

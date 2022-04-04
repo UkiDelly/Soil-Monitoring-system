@@ -73,8 +73,6 @@ class __LoginState extends ConsumerState<_Login> {
       "Access-Control_Allow_Origin": "*"
     });
 
-    //TODO: request nong to add userID to the response
-
     var item = {};
     //* Login is success
     if (response.statusCode == 200) {
