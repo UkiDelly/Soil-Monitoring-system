@@ -185,11 +185,18 @@ class __WebMainState extends ConsumerState<_WebMain> {
                             Expanded(
                               child: SizedBox(
                                 child: createNewGarden
-                                    ? WebAddGarden(onPressed: () {
-                                        setState(() {
-                                          createNewGarden = false;
-                                        });
-                                      })
+                                    ? WebAddGarden(
+                                        cancel: () {
+                                          setState(() {
+                                            createNewGarden = false;
+                                          });
+                                        },
+                                        add: () {
+                                          setState(() {
+                                            getGardenList();
+                                          });
+                                        },
+                                      )
                                     : WebGarden(),
                               ),
                             )

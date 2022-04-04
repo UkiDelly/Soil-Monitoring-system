@@ -6,8 +6,11 @@ import 'package:http/http.dart' as http;
 import '../../Main/provider.dart';
 
 class WebAddGarden extends ConsumerStatefulWidget {
-  final Function() onPressed;
-  const WebAddGarden({Key? key, required this.onPressed}) : super(key: key);
+  final Function() cancel;
+  final Function() add;
+
+  const WebAddGarden({Key? key, required this.cancel, required this.add})
+      : super(key: key);
 
   @override
   ConsumerState<WebAddGarden> createState() => _WebAddGardenState();
@@ -40,7 +43,6 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
         headers: {'Authorization': "Bearer $_token"});
     if (_response.statusCode == 200) {
       var _item = jsonDecode(_response.body);
-      print(_item);
 
       setState(() {
         _nameControl.text = "";
@@ -48,11 +50,10 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
       });
 
       //show Toast message
-
+      _showToast(context);
     }
 
-    //TODO: finish the create garden
-    //TODO: Add a toast message after successfully created.
+    //TODO: find way the rebuild the web main
   }
 
   @override
@@ -141,7 +142,7 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
                               const Color.fromARGB(255, 246, 245, 245)),
                         ),
                         onPressed: () {
-                          widget.onPressed();
+                          widget.cancel();
                         },
                         child: const SizedBox(
                           width: 100,
@@ -171,7 +172,11 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
                         backgroundColor: MaterialStateProperty.all(
                             const Color.fromARGB(255, 246, 245, 245)),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _createGarden();
+                        Future.delayed(const Duration(seconds: 1));
+                        widget.add();
+                      },
                       child: const SizedBox(
                         width: 100,
                         height: 50,
@@ -197,4 +202,13 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
       ),
     );
   }
+}
+
+void _showToast(BuildContext context) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    const SnackBar(
+      content: Text('Successfully created a new Garden!'),
+    ),
+  );
 }
