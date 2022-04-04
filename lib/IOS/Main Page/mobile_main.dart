@@ -33,7 +33,7 @@ class MobileHome extends StatelessWidget {
           child: SizedBox(
             child: Column(
               children: [
-                const AboveGardenList(),
+                aboveGardenList(context),
 
                 const SizedBox(
                   height: 10,
@@ -53,13 +53,8 @@ class MobileHome extends StatelessWidget {
       ),
     );
   }
-}
 
-class AboveGardenList extends StatelessWidget {
-  const AboveGardenList({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget aboveGardenList(context) {
     return SizedBox(
       child: Column(
         children: [
@@ -197,7 +192,7 @@ class _GardenListState extends ConsumerState<GardenList> {
                 itemBuilder: (BuildContext context, int index) {
                   return GardenCard(
                     index: index + 1,
-                    gardenID: gardenList[index]['_id'],
+                    gardenId: gardenList[index]['_id'],
                     gardenName: gardenList[index]['name'],
                   );
                 }),

@@ -7,9 +7,10 @@ import 'line_chart_history.dart';
 
 class PhHistory extends StatelessWidget {
   double? width;
-  PhHistory({Key? key, this.width}) : super(key: key);
+  List<FlSpot>? phSpot;
+  PhHistory({Key? key, this.width, this.phSpot}) : super(key: key);
 
-  final List<FlSpot> pHspots = const [
+  final _pHSpots = const [
     FlSpot(1, 7),
     FlSpot(2, 3),
     FlSpot(3, 2),
@@ -41,7 +42,7 @@ class PhHistory extends StatelessWidget {
       maxX: 7,
       minY: 1,
       maxY: 14,
-      spots: pHspots,
+      spots: phSpot ?? _pHSpots,
       showDot: false,
       belowBarArea: true,
       lineChartBarWidth: false,

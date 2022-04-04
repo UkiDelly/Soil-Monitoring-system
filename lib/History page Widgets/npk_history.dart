@@ -7,9 +7,11 @@ import 'line_chart_history.dart';
 
 class NpkHistory extends StatelessWidget {
   double? width;
-  NpkHistory({Key? key, this.width}) : super(key: key);
+  List<FlSpot>? nSpot, pSpot, kSpot;
+  NpkHistory({Key? key, this.width, this.nSpot, this.pSpot, this.kSpot})
+      : super(key: key);
 
-  List<FlSpot> nSpot = [
+  final _nSpot = [
     const FlSpot(1, 100),
     const FlSpot(2, 90),
     const FlSpot(3, 80),
@@ -18,7 +20,7 @@ class NpkHistory extends StatelessWidget {
     const FlSpot(6, 50),
     const FlSpot(7, 40),
   ];
-  List<FlSpot> pSpot = [
+  final _pSpot = [
     const FlSpot(7, 15),
     const FlSpot(6, 15),
     const FlSpot(5, 94),
@@ -27,7 +29,7 @@ class NpkHistory extends StatelessWidget {
     const FlSpot(2, 84),
     const FlSpot(1, 28),
   ];
-  List<FlSpot> kSpot = [
+  final _kSpot = [
     const FlSpot(7, 29),
     const FlSpot(6, 52),
     const FlSpot(5, 23),
@@ -70,7 +72,7 @@ class NpkHistory extends StatelessWidget {
       //? N
       LineChartBarData(
         //* Spots
-        spots: nSpot,
+        spots: nSpot ?? _nSpot,
         isCurved: true,
         colors: [Colors.lightBlue],
 
@@ -84,7 +86,7 @@ class NpkHistory extends StatelessWidget {
       //? P
       LineChartBarData(
         //* Spots
-        spots: pSpot,
+        spots: pSpot ?? _pSpot,
         isCurved: true,
         colors: [Colors.redAccent],
 
@@ -98,7 +100,7 @@ class NpkHistory extends StatelessWidget {
       //? K
       LineChartBarData(
         //* Spots
-        spots: kSpot,
+        spots: kSpot ?? _kSpot,
         isCurved: true,
         colors: [Colors.purpleAccent],
 

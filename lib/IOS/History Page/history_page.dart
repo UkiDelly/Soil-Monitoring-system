@@ -1,5 +1,7 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/Main/provider.dart';
 
 import '../../History page Widgets/humidity_history.dart';
 import '../../History page Widgets/moisture_history.dart';
@@ -31,9 +33,11 @@ class HistoryPage extends StatelessWidget {
         ),
         body: Consumer(
           builder: (ctx, ref, child) {
-            const sensorId =
-                "623bde62d90c4c4fce78124a"; //ref.watch(sensorIDProvider);
-            return _History(sensorId: sensorId);
+            final sensorDataList = ref.watch(sensorDataProvider);
+
+            return _History(
+              sensorData: sensorDataList,
+            );
           },
         ));
   }
@@ -41,8 +45,8 @@ class HistoryPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _History extends StatefulWidget {
-  String sensorId;
-  _History({Key? key, required this.sensorId}) : super(key: key);
+  List sensorData;
+  _History({Key? key, required this.sensorData}) : super(key: key);
 
   @override
   State<_History> createState() => __HistoryState();
@@ -50,9 +54,44 @@ class _History extends StatefulWidget {
 
 class __HistoryState extends State<_History> {
   //* Get sensor data
+  List<FlSpot> nSpot = [],
+      pSpot = [],
+      kSpot = [],
+      phSpot = [],
+      tempSpot = [],
+      moistureSpot = [],
+      humiditySpot = [];
 
   //TODO: create sensor data history
-  getSensorData() {}
+  getSensorData() {
+    for (int i = 0; i < 7; i++) {
+      // get each sensor data and covert into a spot
+      nSpot.add(FlSpot(
+          (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
+      pSpot.add(FlSpot(
+          (i + 1).toDouble(), widget.sensorData[i]['phosphorous'].toDouble()));
+      kSpot.add(FlSpot(
+          (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
+      phSpot.add(
+          FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
+      tempSpot.add(FlSpot(
+          (i + 1).toDouble(), widget.sensorData[i]['temperature'].toDouble()));
+      moistureSpot.add(FlSpot(
+          (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
+      humiditySpot.add(FlSpot(
+          (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
+    }
+
+    setState(() {
+      nSpot;
+      pSpot;
+      kSpot;
+      phSpot;
+      tempSpot;
+      moistureSpot;
+      humiditySpot;
+    });
+  }
 
   @override
   void initState() {
@@ -73,31 +112,49 @@ class __HistoryState extends State<_History> {
               const SizedBox(
                 height: 10,
               ),
-              NpkHistory(),
+              NpkHistory(nSpot: nSpot, pSpot: pSpot, kSpot: kSpot),
 
               /// Ph history
               const SizedBox(
                 height: 10,
               ),
-              PhHistory(),
+              PhHistory(
+                phSpot: phSpot,
+              ),
+
+              /// Temperature history
+              const SizedBox(height: 10),
+              TempHistory(
+                tempSpot: tempSpot,
+              ),
 
               /// Moisture history
               const SizedBox(
                 height: 10,
               ),
-              MoistureHistory(),
-
-              /// Temperature history
-              const SizedBox(height: 10),
-              TempHistory(),
+              MoistureHistory(
+                moistureSpot: moistureSpot,
+              ),
 
               /// Humidity history
               const SizedBox(height: 10),
-              HumidityHistory()
+              HumidityHistory(
+                humiditySpot: humiditySpot,
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    // TODO: implement ==
+    return super == other;
   }
 }

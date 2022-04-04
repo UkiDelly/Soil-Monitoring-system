@@ -7,7 +7,8 @@ import 'line_chart_history.dart';
 
 class HumidityHistory extends StatelessWidget {
   double? width;
-  HumidityHistory({Key? key, this.width}) : super(key: key);
+  List<FlSpot>? humiditySpot;
+  HumidityHistory({Key? key, this.width, this.humiditySpot}) : super(key: key);
 
   List<FlSpot> spots = [const FlSpot(3, 50), const FlSpot(1, 44)];
 
@@ -21,7 +22,7 @@ class HumidityHistory extends StatelessWidget {
         minY: 0,
         leftSideInterval: 20,
         maxY: 100,
-        spots: spots,
+        spots: humiditySpot ?? spots,
         showDot: true,
         lineColor: [Colors.black87],
         lineChartBarWidth: true,

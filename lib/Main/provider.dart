@@ -8,6 +8,7 @@ final selectionProvider =
     StateProvider<dynamic>((ref) => SelectGarden(false, null));
 final sensorIdListProvider = StateProvider<List>((ref) => []);
 final webAddgardenActiveProvider = StateProvider<bool>((ref) => false);
+final sensorDataProvider = StateProvider<dynamic>((ref) => {});
 
 class SelectGarden {
   bool isSelected;

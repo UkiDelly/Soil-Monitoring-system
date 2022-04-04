@@ -7,9 +7,10 @@ import 'line_chart_history.dart';
 
 class TempHistory extends StatelessWidget {
   double? width;
-  TempHistory({Key? key, this.width}) : super(key: key);
+  List<FlSpot>? tempSpot;
+  TempHistory({Key? key, this.width, this.tempSpot}) : super(key: key);
 
-  List<FlSpot> spots = [
+  final _spots = [
     const FlSpot(1, 20),
     const FlSpot(2, 30),
     const FlSpot(3, 13),
@@ -34,7 +35,7 @@ class TempHistory extends StatelessWidget {
         minY: 0,
         leftSideInterval: 20,
         maxY: 100,
-        spots: spots,
+        spots: tempSpot ?? _spots,
         showDot: false,
         lineChartBarWidth: false,
         belowBarArea: true,
