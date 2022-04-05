@@ -28,8 +28,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   createGarden() async {
     final _token = ref.watch(tokenProvider);
     var _gardenId;
-
-    const _url = "http://localhost:3000/v1/garden/create";
+    const _url = "https://soilanalysis.loca.lt/v1/garden/create";
+    // const _url = "http://localhost:3000/v1/garden/create";
     var _response = await http.post(Uri.parse(_url),
         body: {"name": nameControl.text, "notes": noteControl.text},
         headers: {'Authorization': "Bearer $_token"});
@@ -38,16 +38,14 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
     if (_response.statusCode == 200) {
       var _item = jsonDecode(_response.body);
       _gardenId = _item['data']['insertedId'];
-      print(_gardenId);
     }
-
-    const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
+    const _sensorUrl = 'https://soilanalysis.loca.lt/v1/sensor/create';
+    // const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
     _response = await http.post(Uri.parse(_sensorUrl),
         body: {"name": nameControl.text, "gardenId": _gardenId},
         headers: {'Authorization': "Bearer $_token"});
     if (_response.statusCode == 200) {
       var _item = jsonDecode(_response.body);
-      print(_item);
 
       setState(() {
         nameControl.text = "";
@@ -57,9 +55,6 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       //show Toast message
       _showToast(context);
     }
-
-    //TODO: finish the create garden
-    //TODO: Add a toast message after successfully created.
   }
 
   @override
@@ -87,11 +82,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
-              onPressed: () => Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      child: const MobileHome(),
-                      type: PageTransitionType.leftToRight))),
+              onPressed: () => Navigator.pop(context)),
           leadingWidth: 90,
 
           elevation: 0,
@@ -105,8 +96,10 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 onPressed: () {
                   createGarden();
 
+                  _showToast(context);
+
                   Future.delayed(const Duration(seconds: 1), () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         PageTransition(
                             child: const MobileHome(),

@@ -141,8 +141,8 @@ class _GardenListState extends ConsumerState<GardenList> {
       isLoading = true;
     });
 
-    // const url = "http://soilanalysis.loca.lt/v1/garden/list";
-    const url = "http://localhost:3000/v1/garden/list";
+    const url = "https://soilanalysis.loca.lt/v1/garden/list";
+    // const url = "http://localhost:3000/v1/garden/list";
     var _response = await http.get(Uri.parse(url));
     var _item = jsonDecode(_response.body);
 
@@ -157,7 +157,8 @@ class _GardenListState extends ConsumerState<GardenList> {
     }
 
     //get the sensor list and save in the provider
-    const sensorUrl = "http://localhost:3000/v1/sensor/list";
+    const sensorUrl = "https://soilanalysis.loca.lt/v1/sensor/list";
+    // const sensorUrl = "http://localhost:3000/v1/sensor/list";
     _response = await http.get(Uri.parse(sensorUrl));
     _item = jsonDecode(_response.body);
     _temp = _item['data'];

@@ -99,8 +99,8 @@ class __StatusState extends ConsumerState<_Status> {
       }
     }
 
-    // final url = "https://soilanalysis.loca.lt/v1/garden/get/$gardenID";
-    final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
+    final url = "https://soilanalysis.loca.lt/v1/garden/get/${widget.gardenID}";
+    // final url = "http://localhost:3000/v1/garden/get/${widget.gardenID}";
     var response = await http.get(Uri.parse(url), headers: {
       'Authorization': 'Bearer ${widget.token}',
     });
@@ -110,7 +110,8 @@ class __StatusState extends ConsumerState<_Status> {
     var _gardenName = item['data']['name'];
 
     // get the sensor
-    final sensorUrl = "http://localhost:3000/v1/sensor/get/$_sensorId";
+    final sensorUrl = "https://soilanalysis.loca.lt/v1/sensor/get/$_sensorId";
+    // final sensorUrl = "http://localhost:3000/v1/sensor/get/$_sensorId";
     response = await http.get(Uri.parse(sensorUrl), headers: {
       'Authorization': 'Bearer ${widget.token}',
     });
