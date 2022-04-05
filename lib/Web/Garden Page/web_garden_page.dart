@@ -235,21 +235,30 @@ class __StatusState extends ConsumerState<_Status> {
                         delay: const Duration(milliseconds: 300),
                         duration: const Duration(seconds: 1),
                         enabled: true,
-                        child: NPKstatus(dataMap: npkMap)),
+                        child: NPKstatus(
+                          dataMap: npkMap,
+                          width: 400,
+                        )),
 
                     //
                     OpacityAnimatedWidget(
                         delay: const Duration(milliseconds: 600),
                         duration: const Duration(seconds: 1),
                         enabled: true,
-                        child: PhLevel(ph: ph)),
+                        child: PhLevel(
+                          ph: ph,
+                          width: 400,
+                        )),
 
                     //
                     OpacityAnimatedWidget(
                       delay: const Duration(milliseconds: 900),
                       duration: const Duration(seconds: 1),
                       enabled: true,
-                      child: Temp(temp: temp),
+                      child: Temp(
+                        temp: temp,
+                        width: 400,
+                      ),
                     ),
 
                     //
@@ -257,7 +266,10 @@ class __StatusState extends ConsumerState<_Status> {
                       delay: const Duration(milliseconds: 1200),
                       duration: const Duration(seconds: 1),
                       enabled: true,
-                      child: MoistureLevel(moisture: moisture),
+                      child: MoistureLevel(
+                        moisture: moisture,
+                        width: 400,
+                      ),
                     ),
 
                     //
@@ -265,7 +277,10 @@ class __StatusState extends ConsumerState<_Status> {
                         delay: const Duration(milliseconds: 1600),
                         duration: const Duration(seconds: 1),
                         enabled: true,
-                        child: Humidity(humidity: humidity)),
+                        child: Humidity(
+                          humidity: humidity,
+                          width: 400,
+                        )),
                   ],
                 ),
 

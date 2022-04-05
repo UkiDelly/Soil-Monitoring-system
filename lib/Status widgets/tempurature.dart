@@ -19,13 +19,14 @@ List<Color> getColor(temp) {
 }
 
 class Temp extends StatelessWidget {
-  double temp;
-  Temp({Key? key, required this.temp}) : super(key: key);
+  double temp, width;
+  Temp({Key? key, required this.temp, required this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
+      //180
+      width: width,
       height: 125,
       child: Card(
         elevation: 10,

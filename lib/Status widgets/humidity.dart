@@ -3,16 +3,15 @@
 import 'package:flutter/material.dart';
 
 class Humidity extends StatelessWidget {
-  double humidity;
-  Humidity({
-    Key? key,
-    required this.humidity,
-  }) : super(key: key);
+  double humidity, width;
+  Humidity({Key? key, required this.humidity, required this.width})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
+      //180
+      width: width,
       height: 80,
       child: Card(
         elevation: 10,

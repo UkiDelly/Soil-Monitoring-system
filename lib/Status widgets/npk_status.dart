@@ -5,12 +5,15 @@ import 'package:pie_chart/pie_chart.dart';
 
 class NPKstatus extends StatelessWidget {
   late Map<String, double> dataMap;
-  NPKstatus({Key? key, required this.dataMap}) : super(key: key);
+  double width;
+  NPKstatus({Key? key, required this.dataMap, required this.width})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      //300
+      width: width,
       child: Card(
         clipBehavior: Clip.hardEdge,
         elevation: 10,

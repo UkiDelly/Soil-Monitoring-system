@@ -201,7 +201,10 @@ class __GardenState extends ConsumerState<_Garden> {
                                 enabled: true,
                                 opacityDisabled: 0,
                                 opacityEnabled: 1,
-                                child: NPKstatus(dataMap: npkMap),
+                                child: NPKstatus(
+                                  dataMap: npkMap,
+                                  width: 400,
+                                ),
                               ),
                             ),
 
@@ -249,6 +252,7 @@ class __GardenState extends ConsumerState<_Garden> {
                                               opacityEnabled: 1,
                                               child: Temp(
                                                 temp: temp.toDouble(),
+                                                width: 200,
                                               )),
                                         ),
 
@@ -271,6 +275,7 @@ class __GardenState extends ConsumerState<_Garden> {
                                             opacityEnabled: 1,
                                             child: Humidity(
                                               humidity: humidity.toDouble(),
+                                              width: 200,
                                             ),
                                           ),
                                         ),
@@ -301,6 +306,7 @@ class __GardenState extends ConsumerState<_Garden> {
                                           opacityEnabled: 1,
                                           child: PhLevel(
                                             ph: ph.toDouble(),
+                                            width: 200,
                                           ),
                                         ),
                                       ),
@@ -327,6 +333,7 @@ class __GardenState extends ConsumerState<_Garden> {
                                           opacityEnabled: 1,
                                           child: MoistureLevel(
                                             moisture: moisture.toDouble(),
+                                            width: 200,
                                           ),
                                         ),
                                       ),

@@ -26,13 +26,14 @@ getColor(double ph) {
 }
 
 class PhLevel extends StatelessWidget {
-  double ph;
-  PhLevel({Key? key, required this.ph}) : super(key: key);
+  double ph, width;
+  PhLevel({Key? key, required this.ph, required this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
+      //180
+      width: width,
       child: Card(
         elevation: 10,
         shape: const RoundedRectangleBorder(

@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class MoistureLevel extends StatefulWidget {
-  double moisture;
-  MoistureLevel({Key? key, required this.moisture}) : super(key: key);
+  double moisture, width;
+  MoistureLevel({Key? key, required this.moisture, required this.width})
+      : super(key: key);
 
   @override
   _MoistureLevelState createState() => _MoistureLevelState();
@@ -16,7 +17,8 @@ class _MoistureLevelState extends State<MoistureLevel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180,
+      //180
+      width: widget.width,
       height: 130,
       child: Card(
         elevation: 10,
