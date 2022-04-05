@@ -65,7 +65,6 @@ class GardenPage extends StatelessWidget {
                   Navigator.push(
                       context,
                       PageTransition(
-                          duration: const Duration(milliseconds: 595),
                           child: const HistoryPage(),
                           type: PageTransitionType.rightToLeft));
                 },

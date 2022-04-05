@@ -54,8 +54,6 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
       //show Toast message
       _showToast(context);
     }
-
-    //TODO: find way the rebuild the web main
   }
 
   @override

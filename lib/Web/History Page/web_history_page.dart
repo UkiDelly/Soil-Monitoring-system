@@ -6,6 +6,7 @@ import 'package:thesis/History%20page%20Widgets/npk_history.dart';
 import 'package:thesis/History%20page%20Widgets/ph_history.dart';
 import 'package:thesis/History%20page%20Widgets/temperature.dart';
 
+// ignore: must_be_immutable
 class WebHistory extends StatelessWidget {
   WebHistory(
       {Key? key,
