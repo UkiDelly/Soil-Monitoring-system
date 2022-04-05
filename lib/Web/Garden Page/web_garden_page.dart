@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:animated_widgets/widgets/opacity_animated.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/Status%20widgets/npk_status.dart';
@@ -13,7 +14,7 @@ import '../../Status widgets/humidity.dart';
 import '../../Status widgets/moisture.dart';
 import '../../Status widgets/ph_level.dart';
 import '../../Status widgets/tempurature.dart';
-import '../History Page/history_page.dart';
+import '../History Page/web_history_page.dart';
 
 class WebGarden extends ConsumerWidget {
   WebGarden({
@@ -50,7 +51,7 @@ class WebGarden extends ConsumerWidget {
   }
 }
 
-class _Status extends StatefulWidget {
+class _Status extends ConsumerStatefulWidget {
   String token, gardenID;
   var sensorIdList;
   _Status(
@@ -61,10 +62,10 @@ class _Status extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<_Status> createState() => __StatusState();
+  ConsumerState<_Status> createState() => __StatusState();
 }
 
-class __StatusState extends State<_Status> {
+class __StatusState extends ConsumerState<_Status> {
   // var
 
   late Map<String, double> npkMap = {
@@ -75,6 +76,14 @@ class __StatusState extends State<_Status> {
   late double ph, temp, moisture, humidity;
   bool isLoading = false;
   var garden;
+
+  List<FlSpot> nSpot = [],
+      pSpot = [],
+      kSpot = [],
+      phSpot = [],
+      tempSpot = [],
+      moistureSpot = [],
+      humiditySpot = [];
 
   getData() async {
     setState(() {
@@ -113,10 +122,52 @@ class __StatusState extends State<_Status> {
     // get the latest data
     if (response.statusCode == 200) {
       var sensorData = item['data']['data'].last;
+      var _sensorDataList = item['data']['data'];
+
+      //Make the Histroy
+      //If the data list is more than 7,
+      if (_sensorDataList.length > 7) {
+        for (int i = 0; i < 7; i++) {
+          // get each sensor data and covert into a spot
+          nSpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['nitrogen'].toDouble()));
+          pSpot.add(FlSpot((i + 1).toDouble(),
+              _sensorDataList[i]['phosphorous'].toDouble()));
+          kSpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['potassium'].toDouble()));
+          phSpot.add(
+              FlSpot((i + 1).toDouble(), _sensorDataList[i]['pH'].toDouble()));
+          tempSpot.add(FlSpot((i + 1).toDouble(),
+              _sensorDataList[i]['temperature'].toDouble()));
+          moistureSpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['moisture'].toDouble()));
+          humiditySpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['humidity'].toDouble()));
+        }
+        //if less than 7,
+      } else {
+        for (int i = _sensorDataList.length - 1; i >= 0; i--) {
+          nSpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['nitrogen'].toDouble()));
+          pSpot.add(FlSpot((i + 1).toDouble(),
+              _sensorDataList[i]['phosphorous'].toDouble()));
+          kSpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['potassium'].toDouble()));
+          phSpot.add(
+              FlSpot((i + 1).toDouble(), _sensorDataList[i]['pH'].toDouble()));
+          tempSpot.add(FlSpot((i + 1).toDouble(),
+              _sensorDataList[i]['temperature'].toDouble()));
+          moistureSpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['moisture'].toDouble()));
+          humiditySpot.add(FlSpot(
+              (i + 1).toDouble(), _sensorDataList[i]['humidity'].toDouble()));
+        }
+      }
 
       // get the sensor data values
       if (mounted) {
         setState(() {
+          // latest data
           garden = item;
           npkMap["Nitrogen"] = sensorData['nitrogen'].toDouble();
           npkMap["Potassium"] = sensorData['potassium'].toDouble();
@@ -125,6 +176,15 @@ class __StatusState extends State<_Status> {
           temp = sensorData['temperature'].toDouble();
           moisture = sensorData['moisture'].toDouble();
           humidity = sensorData['humidity'].toDouble();
+
+          //History
+          nSpot;
+          pSpot;
+          kSpot;
+          phSpot;
+          tempSpot;
+          moistureSpot;
+          humiditySpot;
 
           isLoading = false;
         });
@@ -216,8 +276,16 @@ class __StatusState extends State<_Status> {
                 ),
 
                 //TODO: Create History page
-                const SizedBox(
-                  child: WebHistory(),
+                SizedBox(
+                  child: WebHistory(
+                    nSpot: nSpot,
+                    pSpot: pSpot,
+                    kSpot: kSpot,
+                    phSpot: phSpot,
+                    tempSpot: tempSpot,
+                    moistureSpot: moistureSpot,
+                    humiditySpot: humiditySpot,
+                  ),
                 )
 
                 //

@@ -79,7 +79,7 @@ class _WebMain extends ConsumerStatefulWidget {
 class __WebMainState extends ConsumerState<_WebMain> {
   //? variable
 
-  dynamic gardenList = {};
+  var gardenList;
   bool isLoading = true;
   bool createNewGarden = false;
 
@@ -101,6 +101,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
     }
 
     //get the sensor list and save in the provider
+    // const sensorUrl = "https://soilanalysis.loca.lt/v1/sensor/list";
     const sensorUrl = "http://localhost:3000/v1/sensor/list";
     _response = await http.get(Uri.parse(sensorUrl));
     _item = jsonDecode(_response.body);
@@ -116,10 +117,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
 
     ref.watch(sensorIdListProvider.notifier).state = _tempSensorIdList;
 
-    setState(() {
-      gardenList = _gardenList;
-      isLoading = false;
-    });
+    return _gardenList;
   }
 
   @override
@@ -132,82 +130,85 @@ class __WebMainState extends ConsumerState<_WebMain> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return SizedBox(
-      child: isLoading
-          ? const Center(child: LoadingPage())
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //
-                const SizedBox(
-                  height: 50,
-                ),
+    return FutureBuilder(
+      future: getGardenList(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: LoadingPage(),
+          );
+        }
 
-                //* Garden list
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      //? if the witdh is small
-                      if (constraints.maxWidth < 850) {
-                        return SizedBox(
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            //
+            const SizedBox(
+              height: 50,
+            ),
+
+            //* Garden list
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  //? if the witdh is small
+                  if (constraints.maxWidth < 850) {
+                    return SizedBox(
+                      child: Column(
+                        children: [
+                          _gardenTextAndAddButton(),
+                          Expanded(
+                              child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.1),
+                            child: _list(width, snapshot),
+                          ))
+                        ],
+                      ),
+                    );
+                  }
+
+                  return SizedBox(
+                    child: Row(
+                      children: [
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: width * 0.3),
                           child: Column(
                             children: [
                               _gardenTextAndAddButton(),
-                              Expanded(
-                                  child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.1),
-                                child: _list(width),
-                              ))
+                              Expanded(child: _list(width, snapshot.data))
                             ],
                           ),
-                        );
-                      }
-
-                      return SizedBox(
-                        child: Row(
-                          children: [
-                            ConstrainedBox(
-                              constraints:
-                                  BoxConstraints(maxWidth: width * 0.3),
-                              child: Column(
-                                children: [
-                                  _gardenTextAndAddButton(),
-                                  Expanded(child: _list(width))
-                                ],
-                              ),
-                            ),
-                            const VerticalDivider(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                child: createNewGarden
-                                    ? WebAddGarden(
-                                        cancel: () {
-                                          setState(() {
-                                            createNewGarden = false;
-                                          });
-                                        },
-                                        add: () {
-                                          setState(() {
-                                            getGardenList();
-                                          });
-                                        },
-                                      )
-                                    : WebGarden(),
-                              ),
-                            )
-                          ],
                         ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+                        const VerticalDivider(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            child: createNewGarden
+                                ? WebAddGarden(
+                                    cancel: () {
+                                      setState(() {
+                                        createNewGarden = false;
+                                      });
+                                    },
+                                    add: () {
+                                      setState(() {});
+                                    },
+                                  )
+                                : WebGarden(),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 
@@ -252,7 +253,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
     );
   }
 
-  Widget _list(var width) {
+  Widget _list(var width, var gardenList) {
     return SizedBox(
       child: Consumer(
         builder: (context, ref, child) => SizedBox(

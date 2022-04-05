@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
+import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
 
 import 'login.dart';
@@ -35,7 +36,8 @@ class _SignInPageState extends State<SignInPage> {
       "password": password
     };
 
-    const url = "https://soilanalysis.loca.lt/v1/user/create";
+    // const url = "https://soilanalysis.loca.lt/v1/user/create";
+    const url = "http://localhost:3000/v1/user/create";
 
     //* http post request
     var response = await http.post(Uri.parse(url), body: newUser);
@@ -165,6 +167,14 @@ class _SignInPageState extends State<SignInPage> {
                         // create new user
                         createNewUser(nameControl.text, userNameControl.text,
                             passwordControl.text);
+
+                        _showToast(context);
+
+                        Navigator.pushReplacement(
+                            context,
+                            PageTransition(
+                                child: const LoginPage(),
+                                type: PageTransitionType.leftToRight));
                       },
                     ),
                   )
@@ -173,4 +183,13 @@ class _SignInPageState extends State<SignInPage> {
       )),
     );
   }
+}
+
+void _showToast(BuildContext context) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    const SnackBar(
+      content: Text('Successfully Sign Up!'),
+    ),
+  );
 }
