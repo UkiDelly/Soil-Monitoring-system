@@ -62,24 +62,42 @@ class __HistoryState extends State<_History> {
       moistureSpot = [],
       humiditySpot = [];
 
-  //TODO: create sensor data history
   getSensorData() {
-    for (int i = 0; i < 7; i++) {
-      // get each sensor data and covert into a spot
-      nSpot.add(FlSpot(
-          (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
-      pSpot.add(FlSpot(
-          (i + 1).toDouble(), widget.sensorData[i]['phosphorous'].toDouble()));
-      kSpot.add(FlSpot(
-          (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
-      phSpot.add(
-          FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
-      tempSpot.add(FlSpot(
-          (i + 1).toDouble(), widget.sensorData[i]['temperature'].toDouble()));
-      moistureSpot.add(FlSpot(
-          (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
-      humiditySpot.add(FlSpot(
-          (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
+    if (widget.sensorData.length < 7) {
+      for (int i = 0; i < widget.sensorData.length; i++) {
+        nSpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
+        pSpot.add(FlSpot((i + 1).toDouble(),
+            widget.sensorData[i]['phosphorous'].toDouble()));
+        kSpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
+        phSpot.add(
+            FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
+        tempSpot.add(FlSpot((i + 1).toDouble(),
+            widget.sensorData[i]['temperature'].toDouble()));
+        moistureSpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
+        humiditySpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
+      }
+    } else {
+      for (int i = 0; i < 7; i++) {
+        // get each sensor data and covert into a spot
+        nSpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
+        pSpot.add(FlSpot((i + 1).toDouble(),
+            widget.sensorData[i]['phosphorous'].toDouble()));
+        kSpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
+        phSpot.add(
+            FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
+        tempSpot.add(FlSpot((i + 1).toDouble(),
+            widget.sensorData[i]['temperature'].toDouble()));
+        moistureSpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
+        humiditySpot.add(FlSpot(
+            (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
+      }
     }
 
     setState(() {
@@ -146,15 +164,5 @@ class __HistoryState extends State<_History> {
         ),
       ),
     );
-  }
-
-  @override
-  // TODO: implement hashCode
-  int get hashCode => super.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    // TODO: implement ==
-    return super == other;
   }
 }

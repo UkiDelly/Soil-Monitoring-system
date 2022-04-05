@@ -36,8 +36,8 @@ class _SignInPageState extends State<SignInPage> {
       "password": password
     };
 
-    // const url = "https://soilanalysis.loca.lt/v1/user/create";
-    const url = "http://localhost:3000/v1/user/create";
+    const url = "https://soilanalysis.loca.lt/v1/user/create";
+    // const url = "http://localhost:3000/v1/user/create";
 
     //* http post request
     var response = await http.post(Uri.parse(url), body: newUser);

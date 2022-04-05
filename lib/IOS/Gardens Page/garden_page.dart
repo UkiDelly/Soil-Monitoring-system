@@ -65,7 +65,6 @@ class GardenPage extends StatelessWidget {
                   Navigator.push(
                       context,
                       PageTransition(
-                          duration: const Duration(milliseconds: 595),
                           child: const HistoryPage(),
                           type: PageTransitionType.rightToLeft));
                 },
@@ -137,7 +136,8 @@ class __GardenState extends ConsumerState<_Garden> {
         _sensorId = item['sensorId'];
       }
     }
-    final url = "http://localhost:3000/v1/sensor/get/$_sensorId";
+    final url = "https://soilanalysis.loca.lt/v1/sensor/get/$_sensorId";
+    // final url = "http://localhost:3000/v1/sensor/get/$_sensorId";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
     var item = jsonDecode(response.body);

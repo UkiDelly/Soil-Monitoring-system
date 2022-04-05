@@ -25,8 +25,8 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
     final _token = ref.watch(tokenProvider);
     var _gardenId;
 
-    // const _url = "https://soilanalysis.loca.lt/v1/garden/create";
-    const _url = "http://localhost:3000/v1/garden/create";
+    const _url = "https://soilanalysis.loca.lt/v1/garden/create";
+    // const _url = "http://localhost:3000/v1/garden/create";
     var _response = await http.post(Uri.parse(_url),
         body: {"name": _nameControl.text, "notes": _noteControl.text},
         headers: {'Authorization': "Bearer $_token"});
@@ -38,8 +38,8 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
       print(_gardenId);
     }
 
-    // const _url = "https://soilanalysis.loca.lt/v1/sensor/create";
-    const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
+    const _sensorUrl = "https://soilanalysis.loca.lt/v1/sensor/create";
+    // const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
     _response = await http.post(Uri.parse(_sensorUrl),
         body: {"name": _nameControl.text, "gardenId": _gardenId},
         headers: {'Authorization': "Bearer $_token"});
@@ -54,8 +54,6 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
       //show Toast message
       _showToast(context);
     }
-
-    //TODO: find way the rebuild the web main
   }
 
   @override

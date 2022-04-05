@@ -18,7 +18,7 @@ import 'provider.dart';
 
 //! Error message if the token is invalid
 String? _errorText(String token) {
-  if (token == "400") {
+  if (token == "401") {
     return "Incorrect Username or Password";
   } else {
     return null;
@@ -64,8 +64,8 @@ class __LoginState extends ConsumerState<_Login> {
       isLoading = true;
     });
 
-    // const url = "https://soilanalysis.loca.lt/v1/user/login";
-    const url = "http://localhost:3000/v1/user/login";
+    const url = "https://soilanalysis.loca.lt/v1/user/login";
+    // const url = "http://localhost:3000/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
@@ -93,7 +93,7 @@ class __LoginState extends ConsumerState<_Login> {
       item = jsonDecode(response.body);
 //!  When authorization is fail
 
-      ref.watch(tokenProvider.notifier).state = "";
+      ref.watch(tokenProvider.notifier).state = "401";
       //? Done loading data
       setState(() {
         isLoading = false;
