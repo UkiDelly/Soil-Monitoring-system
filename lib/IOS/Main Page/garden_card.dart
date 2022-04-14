@@ -8,13 +8,15 @@ class GardenCard extends StatefulWidget {
   String gardenId;
   String gardenName;
   int index;
+  String notes;
 
-  GardenCard({
-    Key? key,
-    required this.index,
-    required this.gardenId,
-    required this.gardenName,
-  }) : super(key: key);
+  GardenCard(
+      {Key? key,
+      required this.index,
+      required this.gardenId,
+      required this.gardenName,
+      required this.notes})
+      : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
@@ -40,8 +42,7 @@ class _GardenCardState extends State<GardenCard> {
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
-            closedBuilder: (_, openContainer) =>
-                _Contents(name: widget.gardenName, index: widget.index),
+            closedBuilder: (_, openContainer) => _contents(),
 
             //If open
             openBuilder: (_, closeContainer) {
@@ -53,42 +54,18 @@ class _GardenCardState extends State<GardenCard> {
               );
             }));
   }
-}
 
-//* Content of the garden card
-class _Contents extends StatelessWidget {
-  String name;
-  int index;
-
-  _Contents({
-    Key? key,
-    required this.name,
-    required this.index,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  //* Content of the garden card
+  Widget _contents() {
     return SizedBox(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-            child: Text(
-              "#$index",
-              style: const TextStyle(fontSize: 30),
-            ),
-          ),
-          Center(
-            child: Text(name,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-          ),
-          const SizedBox(
-            height: 10,
-          )
-        ],
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(widget.gardenName,
+              textAlign: TextAlign.center,
+              style:
+                  const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+        ),
       ),
     );
   }

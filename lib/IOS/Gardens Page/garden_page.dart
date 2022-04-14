@@ -203,7 +203,8 @@ class __GardenState extends ConsumerState<_Garden> {
                                 opacityEnabled: 1,
                                 child: NPKstatus(
                                   dataMap: npkMap,
-                                  width: 400,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
                                 ),
                               ),
                             ),
@@ -218,7 +219,7 @@ class __GardenState extends ConsumerState<_Garden> {
                                   //? Left Column
                                   SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width / 2,
+                                        MediaQuery.of(context).size.width * 0.5,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -252,7 +253,10 @@ class __GardenState extends ConsumerState<_Garden> {
                                               opacityEnabled: 1,
                                               child: Temp(
                                                 temp: temp.toDouble(),
-                                                width: 200,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.49,
                                               )),
                                         ),
 
@@ -275,7 +279,10 @@ class __GardenState extends ConsumerState<_Garden> {
                                             opacityEnabled: 1,
                                             child: Humidity(
                                               humidity: humidity.toDouble(),
-                                              width: 200,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.49,
                                             ),
                                           ),
                                         ),
@@ -306,7 +313,10 @@ class __GardenState extends ConsumerState<_Garden> {
                                           opacityEnabled: 1,
                                           child: PhLevel(
                                             ph: ph.toDouble(),
-                                            width: 200,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.49,
                                           ),
                                         ),
                                       ),
@@ -333,7 +343,10 @@ class __GardenState extends ConsumerState<_Garden> {
                                           opacityEnabled: 1,
                                           child: MoistureLevel(
                                             moisture: moisture.toDouble(),
-                                            width: 200,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.49,
                                           ),
                                         ),
                                       ),

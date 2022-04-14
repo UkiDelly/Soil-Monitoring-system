@@ -22,12 +22,12 @@ class MobileHome extends StatelessWidget {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-            toolbarOpacity: 0,
-            elevation: 0,
-            toolbarHeight: 0),
+          backgroundColor: Colors.transparent,
+          toolbarOpacity: 0,
+          elevation: 0,
+          actions: [TextButton(onPressed: () {}, child: const Text("Log out"))],
+        ),
         extendBodyBehindAppBar: true,
-        backgroundColor: const Color.fromARGB(255, 246, 245, 245),
         body: SafeArea(
           bottom: false,
           child: SizedBox(
@@ -58,9 +58,6 @@ class MobileHome extends StatelessWidget {
     return SizedBox(
       child: Column(
         children: [
-          const SizedBox(
-            height: 25,
-          ),
           //* Logo
           SizedBox(
             width: 60,
@@ -195,6 +192,7 @@ class _GardenListState extends ConsumerState<GardenList> {
                     index: index + 1,
                     gardenId: gardenList[index]['_id'],
                     gardenName: gardenList[index]['name'],
+                    notes: gardenList[index]['notes'],
                   );
                 }),
           );

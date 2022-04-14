@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -30,16 +29,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-      appBar: AppBar(
-        toolbarHeight: 0,
-        elevation: 0,
-        backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      ),
-      body: const _Login(),
+      body: _Login(),
     );
   }
 }
@@ -159,16 +151,12 @@ class __LoginState extends ConsumerState<_Login> {
                 textInputAction: TextInputAction.next,
                 controller: usernameController,
                 decoration: InputDecoration(
-                  focusColor: const Color.fromARGB(255, 246, 245, 245),
-                  hintText: "username",
-                  prefixIcon: const Icon(Icons.account_circle_outlined),
-                  filled: true,
-                  fillColor: Colors.blue.shade100,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                    focusColor: const Color.fromARGB(255, 246, 245, 245),
+                    hintText: "username",
+                    prefixIcon: const Icon(Icons.account_circle_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    )),
               )),
 
           //
@@ -188,11 +176,11 @@ class __LoginState extends ConsumerState<_Login> {
                       hintText: "password",
                       prefixIcon: const Icon(Icons.lock),
                       filled: true,
-                      fillColor: Colors.blue.shade100,
+                      fillColor: Colors.transparent,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
                       ),
+
                       //! if token is not valid, show error
                       errorText: _errorText(ref.watch(tokenProvider))))),
 
@@ -284,11 +272,10 @@ showAlertDialog(BuildContext context) {
           Icons.warning_amber_rounded,
           color: Colors.redAccent,
         ),
-        Text(" Warning!", style: TextStyle(color: Colors.black)),
+        Text(" Warning!"),
       ],
     ),
-    content: const Text("The Server is offline",
-        style: TextStyle(color: Colors.black)),
+    content: const Text("The Server is offline"),
     actions: [
       okButton,
     ],
