@@ -46,15 +46,6 @@ class GardenPage extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
 
-//* Garden Name
-
-          title: Text(
-            gardenName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-
 //* History button, setting button
           actions: [
             //* History button
@@ -87,6 +78,7 @@ class GardenPage extends StatelessWidget {
               token: token,
               gardenId: gardenId,
               sensorIdList: sensorIdList,
+              gardenName: gardenName,
             );
           },
         ));
@@ -98,11 +90,13 @@ class _Garden extends ConsumerStatefulWidget {
   String token;
   String gardenId;
   var sensorIdList;
+  String gardenName;
   _Garden(
       {Key? key,
       required this.token,
       required this.gardenId,
-      required this.sensorIdList})
+      required this.sensorIdList,
+      required this.gardenName})
       : super(key: key);
 
   @override
@@ -120,6 +114,7 @@ class __GardenState extends ConsumerState<_Garden> {
     "Phosphorous": 30,
   };
   late double ph, moisture, temp, humidity;
+
   //
 
   //? Get Sensor Data
@@ -181,6 +176,12 @@ class __GardenState extends ConsumerState<_Garden> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Text(
+                        widget.gardenName,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
                       const SizedBox(
                         height: 10,
                       ),

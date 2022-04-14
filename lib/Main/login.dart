@@ -1,245 +1,71 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/Main/loading.dart';
 import 'package:thesis/Main/preferences.dart';
-import 'package:thesis/Web/web_main.dart';
+import 'package:thesis/Main/provider.dart';
+
 import 'new_user.dart';
-import 'loading.dart';
-import 'provider.dart';
 
-final formGlobalKey = GlobalKey<FormState>();
-
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class Login extends StatelessWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: _Login(),
-    );
-  }
-}
-
-class _Login extends ConsumerStatefulWidget {
-  const _Login({Key? key}) : super(key: key);
-
-  @override
-  ConsumerState<_Login> createState() => __LoginState();
-}
-
-class __LoginState extends ConsumerState<_Login> {
-  bool isLoading = false;
-  bool? succesLogin;
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  String username = "";
-
-  //*Login func
-  login() async {
-    //? Loading data
-    setState(() {
-      isLoading = true;
-    });
-
-    const url = "https://soilanalysis.loca.lt/v1/user/login";
-    // const url = "http://localhost:3000/v1/user/login";
-    final response = await http.post(Uri.parse(url), body: {
-      'username': usernameController.text,
-      'password': passwordController.text
-    });
-
-    var item = {};
-    //* Login is success
-    if (response.statusCode == 200) {
-      item = jsonDecode(response.body);
-      //* Save the token
-      ref.watch(tokenProvider.notifier).state = item['data']['authToken'];
-
-      var tokenDecode = Jwt.parseJwt(item['data']['authToken']);
-
-      //* Save the userID
-      ref.watch(userIDProvider.notifier).state = tokenDecode['_id'];
-
-      await LoginPreferences.setUserId(usernameController.text);
-      await LoginPreferences.setPassword(passwordController.text);
-
-      setState(() {
-        username = usernameController.text;
-        succesLogin = true;
-      });
-    } else if (response.statusCode == 401) {
-      item = jsonDecode(response.body);
-//!  When authorization is fail
-      ref.watch(tokenProvider.notifier).state = "401";
-      //? Done loading data
-      setState(() {
-        isLoading = false;
-        usernameController.text = "";
-        passwordController.text = "";
-        succesLogin = false;
-      });
-    } else {
-//server is offline
-//? Done loading data
-      showAlertDialog(context);
-      setState(() {
-        isLoading = false;
-        usernameController.text = "";
-        passwordController.text = "";
-        succesLogin = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: isLoading
-            ? const LoadingPage()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  //
-                  const Spacer(),
-                  //* Logo
-                  _logo(),
-
-                  //
-                  const Spacer(),
-
-                  //* Input
-                  _loginInput(),
-
-                  const Spacer(),
-
-                  _register(),
-
-                  const Spacer()
-                ],
-              ));
-  }
-
-  Widget _logo() {
-    return SizedBox(
-        child: SvgPicture.asset(
-      "assets/Logo/Logo.svg",
-      height: 120,
-    ));
-  }
-
-  //? Login
-  Widget _loginInput() {
-    return Form(
-      key: formGlobalKey,
-      child: Column(
+      body: SafeArea(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          //? User name
-          SizedBox(
-              width: 300,
-              child: TextFormField(
-                textInputAction: TextInputAction.next,
-                controller: usernameController,
-                decoration: InputDecoration(
-                    focusColor: const Color.fromARGB(255, 246, 245, 245),
-                    hintText: "username",
-                    prefixIcon: const Icon(Icons.account_circle_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    errorText: succesLogin == false
-                        ? "Enter the right username"
-                        : null),
-                validator: (username) {
-                  if (username == '') {
-                    return "Please enter username";
-                  }
-                  return null;
-                },
-              )),
+          const Spacer(),
+
+          //Logo
+          Center(
+            child: Hero(
+              tag: 'logo',
+              child: Image.asset(
+                'assets/Logo/Logo.png',
+                height: 200,
+              ),
+            ),
+          ),
+
+          const SizedBox(
+            height: 20,
+          ),
+
+          // Login
+          Consumer(
+            builder: (context, ref, child) {
+              var token = ref.watch(tokenProvider.notifier);
+              var userId = ref.watch(userIDProvider.notifier);
+              return _Login(
+                token: token,
+                userId: userId,
+              );
+            },
+          ),
 
           //
-          const SizedBox(
-            height: 15,
+          const Spacer(),
+
+          _register(context),
+
+          const Spacer(
+            flex: 2,
           ),
-
-          //? Password
-          SizedBox(
-              width: 300,
-              child: TextFormField(
-                textInputAction: TextInputAction.done,
-                //* Hide the password
-                obscureText: true,
-                controller: passwordController,
-                decoration: InputDecoration(
-                    hintText: "password",
-                    prefixIcon: const Icon(Icons.lock),
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    errorText: succesLogin == false
-                        ? "Please enter the correct password"
-                        : null),
-                validator: (password) {
-                  if (password == '') {
-                    return "Please enter password";
-                  }
-                  return null;
-                },
-              )),
-
-          const SizedBox(
-            height: 15,
-          ),
-
-          //? Login Button
-          SizedBox(
-            height: 55,
-            width: 150,
-            child: ElevatedButton(
-              onPressed: () async {
-                if (formGlobalKey.currentState!.validate()) {
-                  await login();
-                  //success to login
-
-                  if (succesLogin == true) {
-                    Navigator.pushReplacement(
-                        (context),
-                        PageTransition(
-                            child: kIsWeb
-                                //* if the platform is web, open the web page
-                                ? WebMain(username: username)
-                                //* else open the mobile page
-                                : const MobileHome(),
-                            type: PageTransitionType.fade));
-                  }
-                }
-                //* Check if its
-              },
-              child: const Text(
-                "Login",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(const Color(0xff669d6b))),
-            ),
-          )
         ],
-      ),
+      )),
     );
   }
 
-  Widget _register() {
+  Widget _register(_) {
     return SizedBox(
       child: Column(
         children: [
@@ -250,7 +76,7 @@ class __LoginState extends ConsumerState<_Login> {
             onPressed: () {
 //? Register Page
               Navigator.push(
-                  context,
+                  _,
                   PageTransition(
                       child: const SignInPage(),
                       type: PageTransitionType.rightToLeft));
@@ -264,6 +90,186 @@ class __LoginState extends ConsumerState<_Login> {
           ),
         ],
       ),
+    );
+  }
+}
+
+final _formKey = GlobalKey<FormState>();
+
+class _Login extends StatefulWidget {
+  var token, userId;
+  _Login({Key? key, required this.token, required this.userId})
+      : super(key: key);
+
+  @override
+  State<_Login> createState() => __LoginState();
+}
+
+class __LoginState extends State<_Login> {
+  //
+  TextEditingController usernameController = TextEditingController(),
+      passwordController = TextEditingController();
+  bool? successLogin;
+  bool isLoading = false;
+  //
+
+  //* Login
+  login() async {
+    setState(() {
+      isLoading = true;
+    });
+    const url = "https://soilanalysis.loca.lt/v1/user/login";
+    final response = await http.post(Uri.parse(url), body: {
+      'username': usernameController.text,
+      'password': passwordController.text
+    });
+
+    var _item = {};
+
+    // Login success
+    if (response.statusCode == 200) {
+      successLogin = true;
+      _item = jsonDecode(response.body);
+
+      //Save the token
+      widget.token.state = _item['data']['authToken'];
+      LoginPreferences.saveToken(_item['data']['authToken']);
+
+      var tokenDecode = Jwt.parseJwt(_item['data']['authToken']);
+
+      //Save the user id
+      widget.userId.state = tokenDecode['_id'];
+      LoginPreferences.saveUserId(tokenDecode['_id']);
+
+      // No user exist
+    } else if (response.statusCode == 401) {
+      successLogin = false;
+      isLoading = false;
+
+      // Server is offline
+    } else {
+      successLogin = false;
+      isLoading = false;
+      showAlertDialog(context);
+    }
+
+    setState(() {
+      successLogin;
+      isLoading;
+      usernameController.text = "";
+      passwordController.text = "";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: isLoading
+          ? const Center(
+              child: LoadingPage(),
+            )
+          : Column(
+              children: [
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        //User name
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: TextFormField(
+                              controller: usernameController,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  labelText: "User name",
+                                  border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xff669D6B), width: 3)),
+                                  focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xff669D6B), width: 3)),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 3)),
+                                  errorText: successLogin == false
+                                      ? "No user exist!"
+                                      : null),
+                              validator: (username) {
+                                if (username == "") {
+                                  return "Please enter a username";
+                                }
+                                return null;
+                              },
+                            )),
+
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        //Password
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: TextFormField(
+                            controller: passwordController,
+                            textInputAction: TextInputAction.next,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                                labelText: "Enter Password",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff669D6B), width: 3)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff669D6B), width: 3)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 3))),
+                            validator: (password) {
+                              if (password == "") {
+                                return "Please enter a password";
+                              }
+                              return null;
+                            },
+                          ),
+                        )
+                      ],
+                    )),
+                const SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+                    onPressed: () async {
+                      // if the text of the field is validate
+                      if (_formKey.currentState!.validate()) {
+                        await login();
+
+                        if (successLogin == true) {
+                          Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                  child: const MobileHome(),
+                                  type: PageTransitionType.fade));
+                        }
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
     );
   }
 }

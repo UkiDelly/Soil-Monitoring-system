@@ -173,7 +173,7 @@ class _SignInPageState extends State<SignInPage> {
                         Navigator.pushReplacement(
                             context,
                             PageTransition(
-                                child: const LoginPage(),
+                                child: const Login(),
                                 type: PageTransitionType.leftToRight));
                       },
                     ),

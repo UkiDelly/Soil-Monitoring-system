@@ -43,8 +43,7 @@ class WebMain extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     PageTransition(
-                        child: const LoginPage(),
-                        type: PageTransitionType.fade));
+                        child: const Login(), type: PageTransitionType.fade));
               },
               child: const Text(
                 "Log out",
