@@ -1,8 +1,5 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/Main/provider.dart';
-
 import '../../History page Widgets/humidity_history.dart';
 import '../../History page Widgets/moisture_history.dart';
 import '../../History page Widgets/npk_history.dart';
@@ -10,7 +7,8 @@ import '../../History page Widgets/ph_history.dart';
 import '../../History page Widgets/temperature.dart';
 
 class HistoryPage extends StatelessWidget {
-  const HistoryPage({Key? key}) : super(key: key);
+  var historyData;
+  HistoryPage({Key? key, required this.historyData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +31,8 @@ class HistoryPage extends StatelessWidget {
         ),
         body: Consumer(
           builder: (ctx, ref, child) {
-            final sensorDataList = ref.watch(sensorDataProvider);
-
             return _History(
-              sensorData: sensorDataList,
+              sensorData: historyData,
             );
           },
         ));
@@ -45,7 +41,7 @@ class HistoryPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _History extends StatefulWidget {
-  List sensorData;
+  var sensorData;
   _History({Key? key, required this.sensorData}) : super(key: key);
 
   @override
@@ -54,67 +50,67 @@ class _History extends StatefulWidget {
 
 class __HistoryState extends State<_History> {
   //* Get sensor data
-  List<FlSpot> nSpot = [],
-      pSpot = [],
-      kSpot = [],
-      phSpot = [],
-      tempSpot = [],
-      moistureSpot = [],
-      humiditySpot = [];
+  // List<FlSpot> nSpot = [],
+  //     pSpot = [],
+  //     kSpot = [],
+  //     phSpot = [],
+  //     tempSpot = [],
+  //     moistureSpot = [],
+  //     humiditySpot = [];
 
-  getSensorData() {
-    if (widget.sensorData.length < 7) {
-      for (int i = 0; i < widget.sensorData.length; i++) {
-        nSpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
-        pSpot.add(FlSpot((i + 1).toDouble(),
-            widget.sensorData[i]['phosphorous'].toDouble()));
-        kSpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
-        phSpot.add(
-            FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
-        tempSpot.add(FlSpot((i + 1).toDouble(),
-            widget.sensorData[i]['temperature'].toDouble()));
-        moistureSpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
-        humiditySpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
-      }
-    } else {
-      for (int i = 0; i < 7; i++) {
-        // get each sensor data and covert into a spot
-        nSpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
-        pSpot.add(FlSpot((i + 1).toDouble(),
-            widget.sensorData[i]['phosphorous'].toDouble()));
-        kSpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
-        phSpot.add(
-            FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
-        tempSpot.add(FlSpot((i + 1).toDouble(),
-            widget.sensorData[i]['temperature'].toDouble()));
-        moistureSpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
-        humiditySpot.add(FlSpot(
-            (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
-      }
-    }
+  // getSensorData() {
+  //   if (widget.sensorData.length < 7) {
+  //     for (int i = 0; i < widget.sensorData.length; i++) {
+  //       nSpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
+  //       pSpot.add(FlSpot((i + 1).toDouble(),
+  //           widget.sensorData[i]['phosphorous'].toDouble()));
+  //       kSpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
+  //       phSpot.add(
+  //           FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
+  //       tempSpot.add(FlSpot((i + 1).toDouble(),
+  //           widget.sensorData[i]['temperature'].toDouble()));
+  //       moistureSpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
+  //       humiditySpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
+  //     }
+  //   } else {
+  //     for (int i = 0; i < 7; i++) {
+  //       // get each sensor data and covert into a spot
+  //       nSpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['nitrogen'].toDouble()));
+  //       pSpot.add(FlSpot((i + 1).toDouble(),
+  //           widget.sensorData[i]['phosphorous'].toDouble()));
+  //       kSpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['potassium'].toDouble()));
+  //       phSpot.add(
+  //           FlSpot((i + 1).toDouble(), widget.sensorData[i]['pH'].toDouble()));
+  //       tempSpot.add(FlSpot((i + 1).toDouble(),
+  //           widget.sensorData[i]['temperature'].toDouble()));
+  //       moistureSpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['moisture'].toDouble()));
+  //       humiditySpot.add(FlSpot(
+  //           (i + 1).toDouble(), widget.sensorData[i]['humidity'].toDouble()));
+  //     }
+  //   }
 
-    setState(() {
-      nSpot;
-      pSpot;
-      kSpot;
-      phSpot;
-      tempSpot;
-      moistureSpot;
-      humiditySpot;
-    });
-  }
+  //   setState(() {
+  //     nSpot;
+  //     pSpot;
+  //     kSpot;
+  //     phSpot;
+  //     tempSpot;
+  //     moistureSpot;
+  //     humiditySpot;
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
-    getSensorData();
+    // getSensorData();
   }
 
   @override
@@ -130,20 +126,23 @@ class __HistoryState extends State<_History> {
               const SizedBox(
                 height: 10,
               ),
-              NpkHistory(nSpot: nSpot, pSpot: pSpot, kSpot: kSpot),
+              NpkHistory(
+                  nSpot: widget.sensorData.nSpot,
+                  pSpot: widget.sensorData.pSpot,
+                  kSpot: widget.sensorData.kSpot),
 
               /// Ph history
               const SizedBox(
                 height: 10,
               ),
               PhHistory(
-                phSpot: phSpot,
+                phSpot: widget.sensorData.phSpot,
               ),
 
               /// Temperature history
               const SizedBox(height: 10),
               TempHistory(
-                tempSpot: tempSpot,
+                tempSpot: widget.sensorData.tempSpot,
               ),
 
               /// Moisture history
@@ -151,13 +150,13 @@ class __HistoryState extends State<_History> {
                 height: 10,
               ),
               MoistureHistory(
-                moistureSpot: moistureSpot,
+                moistureSpot: widget.sensorData.moistureSpot,
               ),
 
               /// Humidity history
               const SizedBox(height: 10),
               HumidityHistory(
-                humiditySpot: humiditySpot,
+                humiditySpot: widget.sensorData.humiditySpot,
               )
             ],
           ),
