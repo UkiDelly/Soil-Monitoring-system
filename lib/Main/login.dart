@@ -8,21 +8,13 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/Main/preferences.dart';
 import 'package:thesis/Web/web_main.dart';
-
 import 'new_user.dart';
-
 import 'loading.dart';
 import 'provider.dart';
 
-//! Error message if the token is invalid
-String? _errorText(String token) {
-  if (token == "401") {
-    return "Incorrect Username or Password";
-  } else {
-    return null;
-  }
-}
+final formGlobalKey = GlobalKey<FormState>();
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -44,7 +36,8 @@ class _Login extends ConsumerStatefulWidget {
 }
 
 class __LoginState extends ConsumerState<_Login> {
-  bool isLoading = false, succesLogin = false;
+  bool isLoading = false;
+  bool? succesLogin;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String username = "";
@@ -61,8 +54,6 @@ class __LoginState extends ConsumerState<_Login> {
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
-    }, headers: {
-      "Access-Control_Allow_Origin": "*"
     });
 
     var item = {};
@@ -77,6 +68,9 @@ class __LoginState extends ConsumerState<_Login> {
       //* Save the userID
       ref.watch(userIDProvider.notifier).state = tokenDecode['_id'];
 
+      await LoginPreferences.setUserId(usernameController.text);
+      await LoginPreferences.setPassword(passwordController.text);
+
       setState(() {
         username = usernameController.text;
         succesLogin = true;
@@ -84,21 +78,23 @@ class __LoginState extends ConsumerState<_Login> {
     } else if (response.statusCode == 401) {
       item = jsonDecode(response.body);
 //!  When authorization is fail
-
       ref.watch(tokenProvider.notifier).state = "401";
       //? Done loading data
       setState(() {
         isLoading = false;
         usernameController.text = "";
         passwordController.text = "";
+        succesLogin = false;
       });
     } else {
+//server is offline
 //? Done loading data
       showAlertDialog(context);
       setState(() {
         isLoading = false;
         usernameController.text = "";
         passwordController.text = "";
+        succesLogin = false;
       });
     }
   }
@@ -141,13 +137,14 @@ class __LoginState extends ConsumerState<_Login> {
 
   //? Login
   Widget _loginInput() {
-    return SizedBox(
+    return Form(
+      key: formGlobalKey,
       child: Column(
         children: [
           //? User name
           SizedBox(
               width: 300,
-              child: TextField(
+              child: TextFormField(
                 textInputAction: TextInputAction.next,
                 controller: usernameController,
                 decoration: InputDecoration(
@@ -156,7 +153,16 @@ class __LoginState extends ConsumerState<_Login> {
                     prefixIcon: const Icon(Icons.account_circle_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                    )),
+                    ),
+                    errorText: succesLogin == false
+                        ? "Enter the right username"
+                        : null),
+                validator: (username) {
+                  if (username == '') {
+                    return "Please enter username";
+                  }
+                  return null;
+                },
               )),
 
           //
@@ -167,22 +173,29 @@ class __LoginState extends ConsumerState<_Login> {
           //? Password
           SizedBox(
               width: 300,
-              child: TextField(
-                  textInputAction: TextInputAction.done,
-                  //* Hide the password
-                  obscureText: true,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                      hintText: "password",
-                      prefixIcon: const Icon(Icons.lock),
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-
-                      //! if token is not valid, show error
-                      errorText: _errorText(ref.watch(tokenProvider))))),
+              child: TextFormField(
+                textInputAction: TextInputAction.done,
+                //* Hide the password
+                obscureText: true,
+                controller: passwordController,
+                decoration: InputDecoration(
+                    hintText: "password",
+                    prefixIcon: const Icon(Icons.lock),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    errorText: succesLogin == false
+                        ? "Please enter the correct password"
+                        : null),
+                validator: (password) {
+                  if (password == '') {
+                    return "Please enter password";
+                  }
+                  return null;
+                },
+              )),
 
           const SizedBox(
             height: 15,
@@ -194,19 +207,23 @@ class __LoginState extends ConsumerState<_Login> {
             width: 150,
             child: ElevatedButton(
               onPressed: () async {
-                await login();
-                //* Check if its success to login
-                if (succesLogin) {
-                  Navigator.pushReplacement(
-                      (context),
-                      PageTransition(
-                          child: kIsWeb
-                              //* if the platform is web, open the web page
-                              ? WebMain(username: username)
-                              //* else open the mobile page
-                              : const MobileHome(),
-                          type: PageTransitionType.fade));
+                if (formGlobalKey.currentState!.validate()) {
+                  await login();
+                  //success to login
+
+                  if (succesLogin == true) {
+                    Navigator.pushReplacement(
+                        (context),
+                        PageTransition(
+                            child: kIsWeb
+                                //* if the platform is web, open the web page
+                                ? WebMain(username: username)
+                                //* else open the mobile page
+                                : const MobileHome(),
+                            type: PageTransitionType.fade));
+                  }
                 }
+                //* Check if its
               },
               child: const Text(
                 "Login",
