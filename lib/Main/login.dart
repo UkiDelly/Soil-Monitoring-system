@@ -10,6 +10,8 @@ import 'package:thesis/Main/loading.dart';
 import 'package:thesis/Main/preferences.dart';
 import 'package:thesis/Main/provider.dart';
 
+import 'new_user.dart';
+
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -51,9 +53,43 @@ class Login extends StatelessWidget {
           ),
 
           //
-          const Spacer()
+          const Spacer(),
+
+          _register(context),
+
+          const Spacer(
+            flex: 2,
+          ),
         ],
       )),
+    );
+  }
+
+  Widget _register(_) {
+    return SizedBox(
+      child: Column(
+        children: [
+          //
+          const Text("You don't have an account?",
+              style: TextStyle(fontSize: 25)),
+          TextButton(
+            onPressed: () {
+//? Register Page
+              Navigator.push(
+                  _,
+                  PageTransition(
+                      child: const SignInPage(),
+                      type: PageTransitionType.rightToLeft));
+            },
+            child: const Text(
+              "Sign In!",
+              style:
+                  TextStyle(decoration: TextDecoration.underline, fontSize: 25),
+            ),
+            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+          ),
+        ],
+      ),
     );
   }
 }
