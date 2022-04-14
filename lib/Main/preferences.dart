@@ -3,25 +3,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginPreferences {
   static SharedPreferences _preferences = _preferences;
 
-  //key for id
-  static const _keyId = "";
-  //key for password
-  static const _keyPassword = "";
-
+  //key for the token
+  static const _keyToken = "";
+  //key for the user id
+  static const _keyUserId = "";
   //create a new instance
   static Future init() async {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  //set user id
-  static Future setUserId(String id) async =>
-      await _preferences.setString(_keyId, id);
-  //get id
-  static String? getId() => _preferences.getString(_keyId);
+  //save tokenId
+  static Future saveToken(String token) async =>
+      await _preferences.setString(_keyToken, token);
+  //get token
+  static String? getToken() => _preferences.getString(_keyToken);
 
-  //set password
-  static Future setPassword(String password) async =>
-      await _preferences.setString(_keyPassword, password);
-  //get password
-  static String? getPassword() => _preferences.getString(_keyPassword);
+  //save user id
+  static Future saveUserId(String userId) async =>
+      await _preferences.setString(_keyUserId, userId);
+  //get user id
+  static String? getUserId() => _preferences.getString(_keyUserId);
 }

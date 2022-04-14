@@ -65,7 +65,12 @@ class _MoistureLevelState extends State<MoistureLevel> {
               animateRange: true,
 
               /// the value where the pointer pointing
-              barPointers: [LinearBarPointer(value: widget.moisture)],
+              barPointers: [
+                LinearBarPointer(
+                  value: widget.moisture,
+                  color: Colors.blueAccent,
+                )
+              ],
 
               /// pointer
               markerPointers: [

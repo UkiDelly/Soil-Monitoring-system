@@ -1,14 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/Main/login.dart';
 import 'package:thesis/Main/preferences.dart';
-import 'Main/login.dart';
-import 'Main/provider.dart';
+import 'package:thesis/Main/provider.dart';
 
 void main() async {
   //? disable rotate
@@ -28,40 +25,37 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
-  bool? login;
-
+  bool? successLogin;
   autoLogin() async {
-    const url = "https://soilanalysis.loca.lt/v1/user/login";
-    String userId = '', password = '';
-    if (LoginPreferences.getId() != null &&
-        LoginPreferences.getPassword() != null) {
-      userId = LoginPreferences.getId()!;
-      password = LoginPreferences.getPassword()!;
+    if (LoginPreferences.getToken() != null) {
+      final token = LoginPreferences.getToken();
+      const url = "https://soilanalysis.loca.lt/v1/user/list";
+      var response = await http
+          .get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
+
+      // token is still valid
+      if (response.statusCode == 200) {
+        successLogin = true;
+        //save the token
+        ref.watch(tokenProvider.notifier).state = token!;
+        //save the user Id
+        ref.watch(userIDProvider.notifier).state =
+            LoginPreferences.getUserId()!;
+
+        //token is expired
+      } else if (response.statusCode == 403) {
+        //Go to login page
+        successLogin = false;
+
+        //server is offline
+      } else {
+        successLogin = false;
+        showAlertDialog(context);
+      }
+      setState(() {
+        successLogin;
+      });
     }
-    // const url = "http://localhost:3000/v1/user/login";
-    final response = await http.post(Uri.parse(url),
-        body: {'username': userId, 'password': password},
-        headers: {"Access-Control_Allow_Origin": "*"});
-
-    var _item = {};
-
-    if (response.statusCode == 200) {
-      _item = jsonDecode(response.body);
-      //* Save the token
-      ref.watch(tokenProvider.notifier).state = _item['data']['authToken'];
-
-      var tokenDecode = Jwt.parseJwt(_item['data']['authToken']);
-
-      //* Save the userID
-      ref.watch(userIDProvider.notifier).state = tokenDecode['_id'];
-      login = true;
-    }
-    ref.watch(tokenProvider.notifier).state = "401";
-    login = false;
-
-    setState(() {
-      login;
-    });
   }
 
   @override
@@ -72,23 +66,19 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(login);
     return MaterialApp(
-      theme: ThemeData(
-          backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-          fontFamily: "ReadexPro",
-          primarySwatch: Colors.green,
-          brightness: Brightness.light),
-      darkTheme: ThemeData(
-          backgroundColor: const Color(0xff303030),
-          fontFamily: "ReadexPro",
-          primarySwatch: Colors.green,
-          brightness: Brightness.dark),
-      debugShowCheckedModeBanner: false,
-      title: "Soil Monitoring System",
-      home:
-          //const AddNewGarden()
-          login == true ? const MobileHome() : const LoginPage(),
-    );
+        theme: ThemeData(
+            backgroundColor: const Color.fromARGB(255, 246, 245, 245),
+            fontFamily: "ReadexPro",
+            primarySwatch: Colors.green,
+            brightness: Brightness.light),
+        darkTheme: ThemeData(
+            backgroundColor: const Color(0xff303030),
+            fontFamily: "ReadexPro",
+            primarySwatch: Colors.green,
+            brightness: Brightness.dark),
+        debugShowCheckedModeBanner: false,
+        title: "Soil Monitoring System",
+        home: successLogin == true ? const MobileHome() : const Login());
   }
 }

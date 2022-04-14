@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
+import 'package:thesis/Main/login.dart';
 
 import '../../Main/provider.dart';
 import '../New Garden Page/new_garden_page.dart';
@@ -31,7 +31,10 @@ class MobileHome extends StatelessWidget {
                 "Log out",
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: () {},
+              onPressed: () => Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      child: const Login(), type: PageTransitionType.fade)),
               style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
             )
           ],
@@ -68,11 +71,12 @@ class MobileHome extends StatelessWidget {
       child: Column(
         children: [
           //* Logo
-          SizedBox(
-            width: 60,
-            height: 60,
-            child: SvgPicture.asset("assets/Logo/Logo.svg"),
-          ),
+          Hero(
+              tag: 'logo',
+              child: Image.asset(
+                'assets/Logo/Logo.png',
+                width: 60,
+              )),
           const SizedBox(
             height: 10,
           ),
