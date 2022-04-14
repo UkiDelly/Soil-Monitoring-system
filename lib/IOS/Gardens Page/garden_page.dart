@@ -147,6 +147,17 @@ class _GardenPageState extends State<GardenPage> {
               height: 10,
             ),
 
+            // Pages
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 550),
+              child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: pages,
+                  itemBuilder: ((context, index) {
+                    return _sensor(index, context);
+                  })),
+            ),
+
             //Page indicator
             SmoothPageIndicator(
               controller: _pageController,
@@ -156,18 +167,6 @@ class _GardenPageState extends State<GardenPage> {
                   dotWidth: 10,
                   activeDotColor: Colors.white,
                   dotColor: Colors.grey),
-            ),
-
-            // Pages
-            SizedBox(
-              width: 500,
-              height: 500,
-              child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: pages,
-                  itemBuilder: ((context, index) {
-                    return _sensor(index, context);
-                  })),
             ),
 
             //Fertilizer recommendation
@@ -198,8 +197,7 @@ class _GardenPageState extends State<GardenPage> {
     //
 
     double width = MediaQuery.of(_).size.width * 0.49;
-    return ListView(
-      shrinkWrap: true,
+    return Column(
       children: [
         const SizedBox(
           height: 10,
