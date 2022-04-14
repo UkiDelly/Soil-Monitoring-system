@@ -25,7 +25,16 @@ class MobileHome extends StatelessWidget {
           backgroundColor: Colors.transparent,
           toolbarOpacity: 0,
           elevation: 0,
-          actions: [TextButton(onPressed: () {}, child: const Text("Log out"))],
+          actions: [
+            TextButton(
+              child: const Text(
+                "Log out",
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {},
+              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+            )
+          ],
         ),
         extendBodyBehindAppBar: true,
         body: SafeArea(

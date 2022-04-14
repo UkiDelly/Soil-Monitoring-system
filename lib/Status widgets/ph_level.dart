@@ -127,7 +127,6 @@ class PhLevel extends StatelessWidget {
                         animationDuration: 2000,
                         value: ph,
                         markerOffset: -10,
-                        color: Colors.black,
                         enableAnimation: true,
                         animationType: AnimationType.ease,
                       )

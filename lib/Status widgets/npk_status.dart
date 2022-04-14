@@ -20,6 +20,9 @@ class NPKstatus extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(
+              height: 5,
+            ),
             const Text(
               "Nutrient",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

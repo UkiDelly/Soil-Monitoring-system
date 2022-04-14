@@ -59,6 +59,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return GestureDetector(
       //unfocuse eveything if tap the background
       onTap: () {
@@ -67,14 +69,12 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       child: Scaffold(
         // App bar
         appBar: AppBar(
-          backgroundColor: const Color(0xff669D6B),
+          backgroundColor: Colors.transparent,
 
           // Cancel button
           leading: TextButton(
               //disable splash
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-              ),
+              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
               child: const Text(
                 "Cancel",
                 style: TextStyle(
@@ -116,7 +116,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
           ],
         ),
 
-        backgroundColor: const Color(0xff669D6B),
+        backgroundColor:
+            isDarkMode ? const Color(0xff4f7c53) : const Color(0xff669D6B),
 
         body: Center(
           child: Column(
@@ -135,13 +136,13 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 child: TextField(
                   controller: nameControl,
                   decoration: const InputDecoration(
-                    hintText: "Enter a name",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                  ),
+                      hintText: "Enter a name",
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)))),
                 ),
               ),
 
@@ -159,14 +160,16 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 width: 350,
                 height: 400,
                 child: TextField(
+                  style: const TextStyle(color: Colors.black),
                   controller: noteControl,
                   maxLines: 10,
                   decoration: const InputDecoration(
                     hintText: "Enter a note",
                     filled: true,
                     fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                    focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                   ),
                 ),

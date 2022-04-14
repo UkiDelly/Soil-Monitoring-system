@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:animated_widgets/widgets/opacity_animated.dart';
 import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
@@ -30,13 +29,14 @@ class GardenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           toolbarHeight: 50,
-          backgroundColor: const Color(0xff669D6B),
+          backgroundColor: Colors.transparent,
           elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
 
 //* Back button
           leading: IconButton(
@@ -70,14 +70,14 @@ class GardenPage extends StatelessWidget {
                 },
                 icon: const Icon(
                   Icons.insert_chart_outlined,
-                  color: Colors.white,
                   size: 30,
                 )),
           ],
         ),
 
         //* Content
-        backgroundColor: const Color(0xff669D6B),
+        backgroundColor:
+            isDarkMode ? const Color(0xff4f7c53) : const Color(0xff669D6B),
         body: Consumer(
           builder: (context, ref, child) {
             final token = ref.watch(tokenProvider);

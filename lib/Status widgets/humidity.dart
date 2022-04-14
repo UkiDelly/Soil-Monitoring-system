@@ -30,15 +30,15 @@ class Humidity extends StatelessWidget {
               TextSpan(
                   text: "$humidity",
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.black)),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  )),
               const TextSpan(
                   text: "RH",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.black))
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ))
             ]))
           ],
         ),

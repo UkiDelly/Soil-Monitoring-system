@@ -42,9 +42,9 @@ class _MoistureLevelState extends State<MoistureLevel> {
               TextSpan(
                 text: "${widget.moisture}",
                 style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const TextSpan(
                 text: "%",
