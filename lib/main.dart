@@ -50,7 +50,6 @@ class _MyAppState extends ConsumerState<MyApp> {
         //server is offline
       } else {
         successLogin = false;
-        showAlertDialog(context);
       }
       setState(() {
         successLogin;

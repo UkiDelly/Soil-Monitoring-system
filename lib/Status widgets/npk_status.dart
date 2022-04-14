@@ -34,7 +34,7 @@ class NPKstatus extends StatelessWidget {
               dataMap: dataMap,
               emptyColor: Colors.white,
               chartRadius: 150,
-              animationDuration: const Duration(milliseconds: 1500),
+              animationDuration: const Duration(milliseconds: 1000),
 
               //space between the pie chart and the value name
               chartLegendSpacing: 10,

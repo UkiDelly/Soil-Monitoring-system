@@ -53,43 +53,9 @@ class Login extends StatelessWidget {
           ),
 
           //
-          const Spacer(),
-
-          _register(context),
-
-          const Spacer(
-            flex: 2,
-          ),
+          const Spacer(flex: 2),
         ],
       )),
-    );
-  }
-
-  Widget _register(_) {
-    return SizedBox(
-      child: Column(
-        children: [
-          //
-          const Text("You don't have an account?",
-              style: TextStyle(fontSize: 25)),
-          TextButton(
-            onPressed: () {
-//? Register Page
-              Navigator.push(
-                  _,
-                  PageTransition(
-                      child: const SignInPage(),
-                      type: PageTransitionType.rightToLeft));
-            },
-            child: const Text(
-              "Sign In!",
-              style:
-                  TextStyle(decoration: TextDecoration.underline, fontSize: 25),
-            ),
-            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -118,7 +84,8 @@ class __LoginState extends State<_Login> {
     setState(() {
       isLoading = true;
     });
-    const url = "https://soilanalysis.loca.lt/v1/user/login";
+    // const url = "https://soilanalysis.loca.lt/v1/user/login";
+    const url = "http://localhost:3000/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
       'username': usernameController.text,
       'password': passwordController.text
@@ -267,48 +234,80 @@ class __LoginState extends State<_Login> {
                       }
                     },
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                _register(context),
               ],
             ),
     );
   }
-}
+
+  Widget _register(_) {
+    return SizedBox(
+      child: Column(
+        children: [
+          //
+          const Text("You don't have an account?",
+              style: TextStyle(fontSize: 25)),
+          TextButton(
+            onPressed: () {
+//? Register Page
+              Navigator.push(
+                  _,
+                  PageTransition(
+                      child: const SignInPage(),
+                      type: PageTransitionType.rightToLeft));
+            },
+            child: const Text(
+              "Sign In!",
+              style:
+                  TextStyle(decoration: TextDecoration.underline, fontSize: 25),
+            ),
+            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+          ),
+        ],
+      ),
+    );
+  }
 
 //! Show the alert if the server is offline
-showAlertDialog(BuildContext context) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: const Text(
-      "OK",
-      style: TextStyle(color: Color(0xff669D6B)),
-    ),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: const Text(
+        "OK",
+        style: TextStyle(color: Color(0xff669D6B)),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Row(
-      children: const [
-        Icon(
-          Icons.warning_amber_rounded,
-          color: Colors.redAccent,
-        ),
-        Text(" Warning!"),
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Row(
+        children: const [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.redAccent,
+          ),
+          Text(" Warning!"),
+        ],
+      ),
+      content: const Text("The Server is offline"),
+      actions: [
+        okButton,
       ],
-    ),
-    content: const Text("The Server is offline"),
-    actions: [
-      okButton,
-    ],
-  );
+    );
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

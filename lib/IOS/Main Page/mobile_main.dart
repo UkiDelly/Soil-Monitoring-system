@@ -150,38 +150,28 @@ class _GardenListState extends ConsumerState<GardenList> {
     setState(() {
       isLoading = true;
     });
+    // get the garden list
+    // const url = "https://soilanalysis.loca.lt/v1/garden/list";
+    const url = "http://localhost:3000/v1/garden/list";
 
-    const url = "https://soilanalysis.loca.lt/v1/garden/list";
-    // const url = "http://localhost:3000/v1/garden/list";
     var _response = await http.get(Uri.parse(url));
     var _item = jsonDecode(_response.body);
 
     List _temp = _item['data'];
     List _gardenList = [];
+
+    //get the userId for the provider
     final _userId = ref.watch(userIDProvider);
 
+    //find the garden of the user
     for (var item in _temp) {
       if (item['createdBy'] == _userId) {
         _gardenList.add(item);
       }
     }
 
-    //get the sensor list and save in the provider
-    const sensorUrl = "https://soilanalysis.loca.lt/v1/sensor/list";
-    // const sensorUrl = "http://localhost:3000/v1/sensor/list";
-    _response = await http.get(Uri.parse(sensorUrl));
-    _item = jsonDecode(_response.body);
-    _temp = _item['data'];
-
-    var _tempSensorIdList = [];
-    for (var item in _temp) {
-      _tempSensorIdList.add({
-        "sensorId": item['_id'],
-        "gardenId": item['gardenId'],
-      });
-    }
-
-    ref.watch(sensorIdListProvider.notifier).state = _tempSensorIdList;
+    //save the garden list into the provider
+    ref.watch(gardenIdListProvider.notifier).state = _gardenList;
 
     setState(() {
       gardenList = _gardenList;

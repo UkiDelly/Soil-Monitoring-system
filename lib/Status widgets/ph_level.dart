@@ -54,7 +54,7 @@ class PhLevel extends StatelessWidget {
               child: SfRadialGauge(
                 // loading animation
                 enableLoadingAnimation: true,
-                animationDuration: 2000,
+                animationDuration: 1000,
                 axes: <RadialAxis>[
                   // Axis
                   RadialAxis(
@@ -124,7 +124,7 @@ class PhLevel extends StatelessWidget {
                     // Pointer of the gauge
                     pointers: <GaugePointer>[
                       MarkerPointer(
-                        animationDuration: 2000,
+                        animationDuration: 500,
                         value: ph,
                         markerOffset: -10,
                         enableAnimation: true,

@@ -38,11 +38,14 @@ class Temp extends StatelessWidget {
             // Temperature text
             const Text("Temperature",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+            const SizedBox(
+              height: 5,
+            ),
             // Opacity animation
             OpacityAnimatedWidget(
-              delay: const Duration(milliseconds: 2000),
+              delay: const Duration(milliseconds: 500),
               curve: Curves.ease,
-              duration: const Duration(seconds: 1),
+              duration: const Duration(milliseconds: 500),
               enabled: true,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +72,7 @@ class Temp extends StatelessWidget {
               width: 160,
               child: SfLinearGauge(
                 showTicks: false,
-                animationDuration: 3000,
+                animationDuration: 500,
                 animateRange: true,
                 animateAxis: true,
                 // Gauge division

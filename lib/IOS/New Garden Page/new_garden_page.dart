@@ -134,6 +134,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
               SizedBox(
                 width: 300,
                 child: TextField(
+                  style: TextStyle(
+                      color: isDarkMode ? Colors.black : Colors.white),
                   controller: nameControl,
                   decoration: const InputDecoration(
                       hintText: "Enter a name",

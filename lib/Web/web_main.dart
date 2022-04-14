@@ -114,7 +114,7 @@ class __WebMainState extends ConsumerState<_WebMain> {
       });
     }
 
-    ref.watch(sensorIdListProvider.notifier).state = _tempSensorIdList;
+    // ref.watch(sensorIdListProvider.notifier).state = _tempSensorIdList;
 
     return _gardenList;
   }

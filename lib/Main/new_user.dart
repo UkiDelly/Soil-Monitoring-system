@@ -183,6 +183,45 @@ class _SignInPageState extends State<SignInPage> {
       )),
     );
   }
+
+//! Show the alert if the server is offline
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: const Text(
+        "OK",
+        style: TextStyle(color: Color(0xff669D6B)),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Row(
+        children: const [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.redAccent,
+          ),
+          Text(" Warning!"),
+        ],
+      ),
+      content: const Text("The Server is offline"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
 
 void _showToast(BuildContext context) {

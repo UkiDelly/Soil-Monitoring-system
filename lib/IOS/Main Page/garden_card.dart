@@ -2,7 +2,10 @@
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:thesis/IOS/Gardens%20Page/garden_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/Main/provider.dart';
+
+import '../Gardens Page/garden_page.dart';
 
 class GardenCard extends StatefulWidget {
   String gardenId;
@@ -46,11 +49,15 @@ class _GardenCardState extends State<GardenCard> {
 
             //If open
             openBuilder: (_, closeContainer) {
-              return
-                  // Center(child: Text(widget.gardenID));
-                  GardenPage(
-                gardenId: widget.gardenId,
-                gardenName: widget.gardenName,
+              return Consumer(
+                builder: (ctx, ref, child) {
+                  final token = ref.watch(tokenProvider);
+                  return GardenPage(
+                      gardenId: widget.gardenId,
+                      gardenName: widget.gardenName,
+                      notes: widget.notes,
+                      token: token);
+                },
               );
             }));
   }

@@ -27,7 +27,7 @@ class WebGarden extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final token = ref.watch(tokenProvider);
     final gardenID = ref.watch(gardenIDProvider);
-    final sensorIdList = ref.watch(sensorIdListProvider);
+    final sensorIdList = []; //ref.watch(sensorIdListProvider);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
