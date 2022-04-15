@@ -6,7 +6,7 @@ final tokenProvider = StateProvider<String>((ref) => "");
 final gardenIDProvider = StateProvider<String>((ref) => "");
 final selectionProvider =
     StateProvider<dynamic>((ref) => SelectGarden(false, null));
-final sensorIdListProvider = StateProvider<List>((ref) => []);
+final gardenIdListProvider = StateProvider<dynamic>((ref) => []);
 final webAddgardenActiveProvider = StateProvider<bool>((ref) => false);
 final sensorDataProvider = StateProvider<dynamic>((ref) => {});
 

@@ -23,6 +23,9 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
+const mainColor = Color(0xff669D6B);
+const mainDarkColor = Color(0xff4c7750);
+
 class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   bool? successLogin;
@@ -50,7 +53,6 @@ class _MyAppState extends ConsumerState<MyApp> {
         //server is offline
       } else {
         successLogin = false;
-        showAlertDialog(context);
       }
       setState(() {
         successLogin;

@@ -1,416 +1,329 @@
 import 'dart:convert';
-import 'package:animated_widgets/widgets/opacity_animated.dart';
-import 'package:animated_widgets/widgets/translation_animated.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Gardens%20Page/Plant/plant_card.dart';
-import 'package:thesis/Main/loading.dart';
-
-import '../../Main/provider.dart';
-import '../../Status widgets/humidity.dart';
-import '../../Status widgets/moisture.dart';
-import '../../Status widgets/ph_level.dart';
-import '../../Status widgets/tempurature.dart';
-import '../History Page/history_page.dart';
-import '../../Status widgets/npk_status.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:thesis/IOS/Gardens%20Page/fertilizer.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/Main/loading.dart';
+import 'package:thesis/Status%20widgets/humidity.dart';
+import 'package:thesis/Status%20widgets/moisture.dart';
+import 'package:thesis/Status%20widgets/npk_status.dart';
+import 'package:thesis/Status%20widgets/ph_level.dart';
+import 'package:thesis/Status%20widgets/tempurature.dart';
+import 'package:thesis/data_classes.dart';
+import 'package:thesis/main.dart';
 
-// ignore: must_be_immutable
-class GardenPage extends StatelessWidget {
-  GardenPage({
-    Key? key,
-    required this.gardenId,
-    required this.gardenName,
-  }) : super(key: key);
+import '../History Page/history_page.dart';
 
-  String gardenId;
-  String gardenName;
-
-  @override
-  Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          toolbarHeight: 50,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-
-//* Back button
-          leading: IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pop(context),
-          ),
-
-//* History button, setting button
-          actions: [
-            //* History button
-            IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const HistoryPage(),
-                          type: PageTransitionType.rightToLeft));
-                },
-                icon: const Icon(
-                  Icons.insert_chart_outlined,
-                  size: 30,
-                )),
-          ],
-        ),
-
-        //* Content
-        backgroundColor:
-            isDarkMode ? const Color(0xff4f7c53) : const Color(0xff669D6B),
-        body: Consumer(
-          builder: (context, ref, child) {
-            final token = ref.watch(tokenProvider);
-            final sensorIdList = ref.watch(sensorIdListProvider);
-
-            return _Garden(
-              token: token,
-              gardenId: gardenId,
-              sensorIdList: sensorIdList,
-              gardenName: gardenName,
-            );
-          },
-        ));
-  }
-}
-
-// ignore: must_be_immutable
-class _Garden extends ConsumerStatefulWidget {
-  String token;
-  String gardenId;
-  var sensorIdList;
-  String gardenName;
-  _Garden(
+class GardenPage extends StatefulWidget {
+  String gardenId, gardenName, token, notes;
+  GardenPage(
       {Key? key,
-      required this.token,
       required this.gardenId,
-      required this.sensorIdList,
-      required this.gardenName})
+      required this.gardenName,
+      required this.token,
+      required this.notes})
       : super(key: key);
 
   @override
-  ConsumerState<_Garden> createState() => __GardenState();
+  State<GardenPage> createState() => _GardenPageState();
 }
 
-class __GardenState extends ConsumerState<_Garden> {
-  //
+class _GardenPageState extends State<GardenPage> {
+  final PageController _pageController = PageController(initialPage: 0);
+  int pages = 1;
+  var getData;
+  List<HistoryOfSensorData> history = [];
 
-  bool isLoading = false;
-
-  late Map<String, double> npkMap = {
-    "Nitrogen": 30,
-    "Potassium": 30,
-    "Phosphorous": 30,
-  };
-  late double ph, moisture, temp, humidity;
-
-  //
-
-  //? Get Sensor Data
   getSensorData() async {
-    setState(() {
-      isLoading = true;
-    });
+    // final url =
+    //     "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
+    final url =
+        "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
 
-    var _sensorId = "";
-
-    //search the match gardenId inside the sensorId List
-    for (var item in widget.sensorIdList) {
-      if (widget.gardenId == item['gardenId']) {
-        _sensorId = item['sensorId'];
-      }
-    }
-    final url = "https://soilanalysis.loca.lt/v1/sensor/get/$_sensorId";
-    // final url = "http://localhost:3000/v1/sensor/get/$_sensorId";
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
-    var item = jsonDecode(response.body);
 
+    var item = {};
+    List _sensorList = [];
     if (response.statusCode == 200) {
-      var _sensorData = item['data']['data'].last;
-      ref.watch(sensorDataProvider.notifier).state = item['data']['data'];
-
-      setState(() {
-        npkMap = {
-          "Nitrogen": _sensorData['nitrogen'].toDouble(),
-          "Potassium": _sensorData['potassium'].toDouble(),
-          "Phosphorous": _sensorData['phosphorous'].toDouble()
-        };
-
-        ph = _sensorData['pH'].toDouble();
-        temp = _sensorData['temperature'].toDouble();
-        moisture = _sensorData['moisture'].toDouble();
-        humidity = _sensorData['humidity'].toDouble();
-
-        isLoading = false;
-      });
+      item = jsonDecode(response.body);
+      for (int i = 0; i < item['data'].length; i++) {
+        _sensorList.add(item['data'][i]);
+      }
+      pages = item['data'].length;
+      for (int i = 0; i < pages; i++) {
+        history.add(HistoryOfSensorData(_sensorList[i]));
+        history[i].createHistory();
+      }
     }
+
+    setState(() {
+      history;
+      pages;
+    });
+    return _sensorList;
   }
 
   @override
   void initState() {
     super.initState();
-    getSensorData();
+    getData = getSensorData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SafeArea(
-        bottom: true,
-        child: SizedBox(
-            child: isLoading
-                ? const Center(child: LoadingPage())
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.gardenName,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+    // check dark mode is on
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    return Scaffold(
+      backgroundColor:
+          isDarkMode ? mainDarkColor : mainColor,
 
-                      //* Body
-                      SizedBox(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          const Spacer(),
+          // Add sensor button
+          const IconButton(
+            onPressed: null,
+            icon: Icon(Icons.add, size: 30),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+
+          //History button
+          IconButton(
+            onPressed: () {
+              int index = _pageController.page!.toInt();
+
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: HistoryPage(
+                        historyData: history[index],
+                      ),
+                      type: PageTransitionType.rightToLeft));
+            },
+            icon: const Icon(Icons.history, size: 30),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          const SizedBox(
+            width: 10,
+          )
+        ],
+      ),
+
+      //
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: FutureBuilder(
+            future: getData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: LoadingPage(),
+                );
+              } else if (!snapshot.hasData || snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              //Conver object to list
+              var _sensorList = snapshot.data as List;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: Text(
+                    widget.gardenName,
+                    style: const TextStyle(
+                        fontSize: 33, fontWeight: FontWeight.bold),
+                  )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  //Notes
+                  Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      decoration: BoxDecoration(
+                          color: isDarkMode
+                              ? const Color(0xff424242)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(12.5)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            //* NPK status
-                            TranslationAnimatedWidget.tween(
-                              duration: const Duration(seconds: 1),
-                              enabled: true,
-                              translationDisabled: const Offset(-500, 0),
-                              translationEnabled: const Offset(0, 0),
-                              curve: Curves.fastOutSlowIn,
-                              child: OpacityAnimatedWidget.tween(
-                                duration: const Duration(seconds: 1),
-                                enabled: true,
-                                opacityDisabled: 0,
-                                opacityEnabled: 1,
-                                child: NPKstatus(
-                                  dataMap: npkMap,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                ),
+                            Center(
+                              child: Text(
+                                "notes",
+                                style: TextStyle(
+                                    color: isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 17),
                               ),
                             ),
-
-                            Container(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //? Left Column
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        //
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-
-                                        //
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-
-                                        //* Temperature
-                                        TranslationAnimatedWidget.tween(
-                                          delay:
-                                              const Duration(milliseconds: 300),
-                                          duration: const Duration(seconds: 1),
-                                          enabled: true,
-                                          translationDisabled:
-                                              const Offset(-500, 0),
-                                          translationEnabled:
-                                              const Offset(0, 0),
-                                          curve: Curves.fastOutSlowIn,
-                                          child: OpacityAnimatedWidget.tween(
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              enabled: true,
-                                              opacityDisabled: 0,
-                                              opacityEnabled: 1,
-                                              child: Temp(
-                                                temp: temp.toDouble(),
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.49,
-                                              )),
-                                        ),
-
-                                        //* Humidity
-                                        TranslationAnimatedWidget.tween(
-                                          delay:
-                                              const Duration(milliseconds: 500),
-                                          duration: const Duration(seconds: 1),
-                                          enabled: true,
-                                          translationDisabled:
-                                              const Offset(-500, 0),
-                                          translationEnabled:
-                                              const Offset(0, 0),
-                                          curve: Curves.fastOutSlowIn,
-                                          child: OpacityAnimatedWidget.tween(
-                                            duration:
-                                                const Duration(seconds: 1),
-                                            enabled: true,
-                                            opacityDisabled: 0,
-                                            opacityEnabled: 1,
-                                            child: Humidity(
-                                              humidity: humidity.toDouble(),
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.49,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  //? Right Column
-                                  Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      //* Ph Level
-                                      TranslationAnimatedWidget.tween(
-                                        delay:
-                                            const Duration(milliseconds: 300),
-                                        duration: const Duration(seconds: 1),
-                                        enabled: true,
-                                        translationDisabled:
-                                            const Offset(500, 0),
-                                        translationEnabled: const Offset(0, 0),
-                                        curve: Curves.fastOutSlowIn,
-                                        child: OpacityAnimatedWidget.tween(
-                                          duration: const Duration(seconds: 1),
-                                          enabled: true,
-                                          opacityDisabled: 0,
-                                          opacityEnabled: 1,
-                                          child: PhLevel(
-                                            ph: ph.toDouble(),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.49,
-                                          ),
-                                        ),
-                                      ),
-
-                                      //
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-
-                                      //* Moisture
-                                      TranslationAnimatedWidget.tween(
-                                        delay:
-                                            const Duration(milliseconds: 500),
-                                        duration: const Duration(seconds: 1),
-                                        enabled: true,
-                                        translationDisabled:
-                                            const Offset(500, 0),
-                                        translationEnabled: const Offset(0, 0),
-                                        curve: Curves.fastOutSlowIn,
-                                        child: OpacityAnimatedWidget.tween(
-                                          duration: const Duration(seconds: 1),
-                                          enabled: true,
-                                          opacityDisabled: 0,
-                                          opacityEnabled: 1,
-                                          child: MoistureLevel(
-                                            moisture: moisture.toDouble(),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.49,
-                                          ),
-                                        ),
-                                      ),
-
-                                      //
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //? Divider
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      const Divider(
-                        color: Color.fromARGB(255, 246, 245, 245),
-                        indent: 20,
-                        endIndent: 20,
-                        thickness: 1,
-                        height: 10,
-                      ),
-
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //* Plants
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 25,
+                            Divider(
+                              color: isDarkMode ? Colors.white : Colors.black,
+                              indent: 5,
+                              endIndent: 5,
+                              thickness: 2,
                             ),
                             Text(
-                              "Plants",
-                              style: (TextStyle(
-                                  fontSize: 40, fontWeight: FontWeight.bold)),
+                              widget.notes,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
+                                  fontSize: 20),
                             ),
                           ],
                         ),
                       ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
 
-                      //*Plants card
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 2.8,
-                        child: ListView.builder(
-                            itemCount: 3,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, int index) {
-                              return const PlantCard();
-                            }),
-                      ),
-                    ],
-                  )),
+                  //Pages
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 550),
+                    child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: pages,
+                        itemBuilder: ((context, index) {
+                          //create history
+
+                          var _lastData = _sensorList[index].last;
+                          return _sensor(_lastData, context);
+                        })),
+                  ),
+
+                  // Page indicator
+                  Center(
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: pages,
+                      effect: const ExpandingDotsEffect(
+                          dotHeight: 10,
+                          dotWidth: 10,
+                          activeDotColor: Colors.white,
+                          dotColor: Colors.grey),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  const Divider(
+                    indent: 15,
+                    endIndent: 15,
+                    thickness: 3,
+                  ),
+
+                  //Fertilizer recommendation
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                    child: Text("Fertilizer recommend",
+                        style: TextStyle(
+                            fontSize: 33, fontWeight: FontWeight.w500)),
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  //Fertilizer
+                  const FertilizerCards()
+                ],
+              );
+            },
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget _sensor(var _lastSensorData, _) {
+    // sensor values
+
+    SingleSensorData _singleSensorData = SingleSensorData(
+        npk: {
+          'Nitrogen': _lastSensorData['nitrogen'].toDouble(),
+          'Potassium': _lastSensorData['potassium'].toDouble(),
+          'Phosphorous': _lastSensorData['phosphorous'].toDouble(),
+        },
+        temp: _lastSensorData['temperature'].toDouble(),
+        ph: _lastSensorData['pH'].toDouble(),
+        humidity: _lastSensorData['humidity'].toDouble(),
+        moisture: _lastSensorData['moisture'].toDouble());
+
+    double width = MediaQuery.of(_).size.width * 0.49;
+    return Column(
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        NPKstatus(
+            dataMap: _singleSensorData.npk,
+            width: MediaQuery.of(_).size.width * 0.9),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left Side
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //Temperature
+                Temp(temp: _singleSensorData.temp, width: width),
+
+                //
+                const SizedBox(
+                  height: 10,
+                ),
+
+                //Humidity
+                Humidity(humidity: _singleSensorData.humidity, width: width)
+              ],
+            ),
+
+            //Right Side
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //Ph
+                PhLevel(ph: _singleSensorData.ph, width: width),
+
+                //
+                const SizedBox(
+                  height: 10,
+                ),
+
+                //Moisture
+                MoistureLevel(
+                    moisture: _singleSensorData.moisture, width: width)
+              ],
+            )
+          ],
+        )
+      ],
     );
   }
 }

@@ -32,28 +32,27 @@ class _MoistureLevelState extends State<MoistureLevel> {
 
           /// Opacity animation
           OpacityAnimatedWidget(
-            delay: const Duration(milliseconds: 2000),
+            delay: const Duration(milliseconds: 500),
             curve: Curves.ease,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 500),
             enabled: true,
-            child: RichText(
-                text: TextSpan(children: [
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               /// value
-              TextSpan(
-                text: "${widget.moisture}",
+              Text(
+                "${widget.moisture}",
                 style: const TextStyle(
-                  fontSize: 25,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const TextSpan(
-                text: "%",
+              const Text(
+                "%",
                 style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.blueAccent),
               )
-            ])),
+            ]),
           ),
           SizedBox(
             width: 160,
@@ -61,7 +60,7 @@ class _MoistureLevelState extends State<MoistureLevel> {
             /// Moisture Gauge
             child: SfLinearGauge(
               showTicks: false,
-              animationDuration: 3000,
+              animationDuration: 500,
               animateRange: true,
 
               /// the value where the pointer pointing

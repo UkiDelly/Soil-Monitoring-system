@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/main.dart';
 
 import '../../Main/provider.dart';
 
@@ -117,7 +118,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
         ),
 
         backgroundColor:
-            isDarkMode ? const Color(0xff4f7c53) : const Color(0xff669D6B),
+            isDarkMode ? const Color(0xff4f7c53) : mainColor,
 
         body: Center(
           child: Column(
@@ -134,6 +135,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
               SizedBox(
                 width: 300,
                 child: TextField(
+                  style: TextStyle(
+                      color: isDarkMode ? Colors.black : Colors.white),
                   controller: nameControl,
                   decoration: const InputDecoration(
                       hintText: "Enter a name",

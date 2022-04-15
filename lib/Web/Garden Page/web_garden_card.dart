@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/main.dart';
 
 import '../../Main/provider.dart';
 
@@ -14,8 +15,8 @@ class WebGardenCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       color: ref.watch(selectionProvider).index == (index - 1)
-          ? const Color(0xff528966)
-          : const Color(0xff669D6B),
+          ? mainDarkColor
+          : mainColor,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25))),
       child: SizedBox(
