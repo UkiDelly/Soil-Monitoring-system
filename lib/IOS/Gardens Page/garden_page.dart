@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/IOS/Gardens%20Page/fertilizer.dart';
-import 'package:thesis/IOS/History%20Page/history_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/Main/loading.dart';
 import 'package:thesis/Status%20widgets/humidity.dart';
@@ -13,6 +12,8 @@ import 'package:thesis/Status%20widgets/npk_status.dart';
 import 'package:thesis/Status%20widgets/ph_level.dart';
 import 'package:thesis/Status%20widgets/tempurature.dart';
 import 'package:thesis/data_classes.dart';
+
+import '../History Page/history_page.dart';
 
 class GardenPage extends StatefulWidget {
   String gardenId, gardenName, token, notes;
@@ -32,6 +33,7 @@ class _GardenPageState extends State<GardenPage> {
   final PageController _pageController = PageController(initialPage: 0);
   int pages = 1;
   var getData;
+  List<HistoryOfSensorData> history = [];
 
   getSensorData() async {
     // final url =
@@ -50,9 +52,14 @@ class _GardenPageState extends State<GardenPage> {
         _sensorList.add(item['data'][i]);
       }
       pages = item['data'].length;
+      for (int i = 0; i < pages; i++) {
+        history.add(HistoryOfSensorData(_sensorList[i]));
+        history[i].createHistory();
+      }
     }
 
     setState(() {
+      history;
       pages;
     });
     return _sensorList;
@@ -89,11 +96,17 @@ class _GardenPageState extends State<GardenPage> {
 
           //History button
           IconButton(
-            onPressed: () => Navigator.push(
-                context,
-                PageTransition(
-                    child: const HistoryPage(),
-                    type: PageTransitionType.rightToLeft)),
+            onPressed: () {
+              int index = _pageController.page!.toInt();
+
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: HistoryPage(
+                        historyData: history[index],
+                      ),
+                      type: PageTransitionType.rightToLeft));
+            },
             icon: const Icon(Icons.history, size: 30),
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -120,6 +133,7 @@ class _GardenPageState extends State<GardenPage> {
 
               //Conver object to list
               var _sensorList = snapshot.data as List;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -187,6 +201,8 @@ class _GardenPageState extends State<GardenPage> {
                         controller: _pageController,
                         itemCount: pages,
                         itemBuilder: ((context, index) {
+                          //create history
+
                           var _lastData = _sensorList[index].last;
                           return _sensor(_lastData, context);
                         })),
