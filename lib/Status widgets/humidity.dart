@@ -30,21 +30,20 @@ class Humidity extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: "$humidity",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    )),
-                const TextSpan(
-                    text: "RH",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ))
-              ]))
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "$humidity",
+                    style: const TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    "RH",
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                  )
+                ],
+              )
             ],
           ),
         ),
