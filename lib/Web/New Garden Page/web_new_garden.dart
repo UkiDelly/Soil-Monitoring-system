@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/main.dart';
 import '../../Main/provider.dart';
 
 class WebAddGarden extends ConsumerStatefulWidget {
@@ -64,7 +65,7 @@ class _WebAddGardenState extends ConsumerState<WebAddGarden> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Card(
-        color: const Color(0xff669D6B),
+        color: mainColor,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
