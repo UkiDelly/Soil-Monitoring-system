@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1056233168941",
+    "project_id": "matrix-4c0b0",
+    "storage_bucket": "matrix-4c0b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056233168941:android:3bc1533b3817044dad18a4",
+        "android_client_info": {
+          "package_name": "com.example.thesis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056233168941-1qomp0favqrvmdhbl4361e8blsilc36h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOw48oCUV7k7rLA2Cok0vyI4XLUWTs4vY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056233168941-1qomp0favqrvmdhbl4361e8blsilc36h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
