@@ -12,6 +12,7 @@ import 'package:thesis/Status%20widgets/npk_status.dart';
 import 'package:thesis/Status%20widgets/ph_level.dart';
 import 'package:thesis/Status%20widgets/tempurature.dart';
 import 'package:thesis/data_classes.dart';
+import 'package:thesis/main.dart';
 
 import '../History Page/history_page.dart';
 
@@ -78,7 +79,7 @@ class _GardenPageState extends State<GardenPage> {
     bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
       backgroundColor:
-          isDarkMode ? const Color(0xff4c7750) : const Color(0xff669D6B),
+          isDarkMode ? mainDarkColor : mainColor,
 
       extendBodyBehindAppBar: true,
       appBar: AppBar(

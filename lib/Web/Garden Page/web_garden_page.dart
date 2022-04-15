@@ -9,6 +9,7 @@ import 'package:thesis/Status%20widgets/npk_status.dart';
 import 'package:thesis/Main/loading.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:thesis/main.dart';
 import '../../Main/provider.dart';
 import '../../Status widgets/humidity.dart';
 import '../../Status widgets/moisture.dart';
@@ -208,7 +209,7 @@ class __StatusState extends ConsumerState<_Status> {
         : Card(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20))),
-            color: const Color(0xff669D6B),
+            color: mainColor,
             child: Column(
               children: [
                 //* Garden Name

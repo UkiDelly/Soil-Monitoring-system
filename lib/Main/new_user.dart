@@ -1,234 +1,162 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:thesis/main.dart';
 import 'package:http/http.dart' as http;
-import 'package:page_transition/page_transition.dart';
-import 'package:thesis/Main/loading.dart';
 
-import 'login.dart';
-
-class SignInPage extends StatefulWidget {
+class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  Widget build(BuildContext context) {
+    // check dark mode is on
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: isDarkMode ? mainDarkColor : mainColor,
+        title: const Text("Register"),
+        titleTextStyle:
+            const TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
+      ),
+      body: const Center(child: RegisterInput()),
+    );
+  }
 }
 
-class _SignInPageState extends State<SignInPage> {
-  TextEditingController nameControl = TextEditingController();
-  TextEditingController userNameControl = TextEditingController();
-  TextEditingController passwordControl = TextEditingController();
-  bool isLoading = false;
+final _formKey = GlobalKey<FormState>();
+
+class RegisterInput extends StatefulWidget {
+  const RegisterInput({Key? key}) : super(key: key);
 
   @override
-  void initState() {
-    super.initState();
-  }
+  State<RegisterInput> createState() => _RegisterInputState();
+}
 
-  //* Create new user
-  createNewUser(var name, var username, var password) async {
-    setState(() {
-      isLoading = true;
+class _RegisterInputState extends State<RegisterInput> {
+  TextEditingController nameController = TextEditingController(),
+      usernameController = TextEditingController(),
+      passwordController = TextEditingController();
+  bool showPassword = false;
+
+  // Register
+  register() async {
+    const url = "http://localhost:3000/v1/user/create";
+    // const url = "https://soilanalysis.loca.lt/v1/user/create";
+
+    var response = await http.post(Uri.parse(url), body: {
+      'name': nameController.text,
+      'username': usernameController.text,
+      'password': passwordController.text
     });
-
-    //* make the input data into map
-    Map<String, dynamic> newUser = {
-      "name": name,
-      "username": username,
-      "password": password
-    };
-
-    const url = "https://soilanalysis.loca.lt/v1/user/create";
-    // const url = "http://localhost:3000/v1/user/create";
-
-    //* http post request
-    var response = await http.post(Uri.parse(url), body: newUser);
-
-    //if successfully sign in,
-    if (response.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-      });
-
-      //if user is already exist
-    } else if (response.statusCode == 404) {
-      setState(() {
-        isLoading = false;
-      });
-
-      //if the server is offline
-    } else {
-      showAlertDialog(context);
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff669D6B),
-        title: const Text(
-          "Register",
-          style: TextStyle(fontSize: 30),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 30),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      backgroundColor: const Color.fromARGB(255, 246, 245, 245),
-      body: SafeArea(
-          child: Center(
-        child: isLoading
-            ? const LoadingPage()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //* Full name of the User
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: nameControl,
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          prefixIcon: Icon(Icons.alternate_email_rounded),
-                          labelText: "Name"),
-                    ),
-                  ),
+    return Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // name
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.person),
+                    hintText: "Enter your full name",
+                    filled: true,
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: mainColor))),
 
-                  //
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  //* username of the user
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                        controller: userNameControl,
-                        textInputAction: TextInputAction.next,
-                        decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            prefixIcon: Icon(Icons.account_circle_outlined),
-                            labelText: "User name")),
-                  ),
-
-                  //
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  //* password of the user
-                  SizedBox(
-                      width: 300,
-                      child: TextField(
-                        obscureText: true,
-                        controller: passwordControl,
-                        textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            prefixIcon: Icon(Icons.lock),
-                            labelText: "Password"),
-                      )),
-
-                  // sign up button
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: 200,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color(0xff669D6B))),
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 30),
-                      ),
-                      onPressed: () {
-                        // create new user
-                        createNewUser(nameControl.text, userNameControl.text,
-                            passwordControl.text);
-
-                        _showToast(context);
-
-                        Navigator.pushReplacement(
-                            context,
-                            PageTransition(
-                                child: const Login(),
-                                type: PageTransitionType.leftToRight));
-                      },
-                    ),
-                  )
-                ],
+                //validator
+                validator: (name) {
+                  if (name == "") {
+                    return "Please enter your name";
+                  }
+                  return null;
+                },
               ),
-      )),
-    );
-  }
+              const SizedBox(
+                height: 10,
+              ),
 
-//! Show the alert if the server is offline
-  showAlertDialog(BuildContext context) {
-    // set up the button
-    Widget okButton = TextButton(
-      child: const Text(
-        "OK",
-        style: TextStyle(color: Color(0xff669D6B)),
-      ),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
+              //username
+              TextFormField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.alternate_email),
+                      hintText: "Enter user name",
+                      filled: true,
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: mainColor))), //validator
+                  validator: (username) {
+                    if (username == "") {
+                      return "Please enter a user name";
+                    }
+                    return null;
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
 
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Row(
-        children: const [
-          Icon(
-            Icons.warning_amber_rounded,
-            color: Colors.redAccent,
+              //password
+              TextFormField(
+                  controller: passwordController,
+                  obscureText: showPassword ? false : true,
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      hintText: "Enter your full name",
+                      filled: true,
+                      suffixIcon: showPassword
+                          ? IconButton(
+                              splashColor: Colors.transparent,
+                              onPressed: () => setState(() {
+                                    showPassword = !showPassword;
+                                  }),
+                              icon: const Icon(Icons.visibility_off))
+                          : IconButton(
+                              splashColor: Colors.transparent,
+                              onPressed: () => setState(() {
+                                    showPassword = !showPassword;
+                                  }),
+                              icon: const Icon(Icons.visibility)),
+                      enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: mainColor))),
+                  validator: (password) {
+                    if (password == "") {
+                      return "Please enter a password";
+                    }
+                    return null;
+                  }),
+              const SizedBox(
+                height: 30,
+              ),
+
+              //Register button
+              ElevatedButton(
+                  onPressed: () async {
+                    await register();
+                    if (_formKey.currentState!.validate()) {
+                      await Fluttertoast.showToast(
+                          msg: "Successfully Register!",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: mainColor,
+                          fontSize: 20.0);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      "Register",
+                      style: TextStyle(fontSize: 30),
+                    ),
+                  ))
+            ],
           ),
-          Text(" Warning!"),
-        ],
-      ),
-      content: const Text("The Server is offline"),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+        ));
   }
-}
-
-void _showToast(BuildContext context) {
-  final scaffold = ScaffoldMessenger.of(context);
-  scaffold.showSnackBar(
-    const SnackBar(
-      content: Text('Successfully Sign Up!'),
-    ),
-  );
 }
