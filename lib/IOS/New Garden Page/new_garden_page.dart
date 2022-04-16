@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
+import 'package:thesis/IOS/New%20Garden%20Page/plants.dart';
 import 'package:thesis/main.dart';
 
 import '../../Main/provider.dart';
@@ -117,67 +118,100 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
           ],
         ),
 
-        backgroundColor:
-            isDarkMode ? const Color(0xff4f7c53) : mainColor,
+        backgroundColor: isDarkMode ? const Color(0xff4f7c53) : mainColor,
 
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Name
-              const Text(
-                "Name",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-
-              // Name text field
-              SizedBox(
-                width: 300,
-                child: TextField(
-                  style: TextStyle(
-                      color: isDarkMode ? Colors.black : Colors.white),
-                  controller: nameControl,
-                  decoration: const InputDecoration(
-                      hintText: "Enter a name",
-                      filled: true,
-                      fillColor: Colors.white,
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)))),
-                ),
-              ),
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              const Text(
-                "Notes",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-
-              // notes
-              SizedBox(
-                width: 350,
-                height: 400,
-                child: TextField(
-                  style: const TextStyle(color: Colors.black),
-                  controller: noteControl,
-                  maxLines: 10,
-                  decoration: const InputDecoration(
-                    hintText: "Enter a note",
-                    filled: true,
-                    fillColor: Colors.white,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Name
+                const Center(
+                  child: Text(
+                    "Name",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
-            ],
+
+                // Name text field
+                Center(
+                  child: SizedBox(
+                    width: 300,
+                    child: TextField(
+                      style: TextStyle(
+                          color: isDarkMode ? Colors.black : Colors.white),
+                      controller: nameControl,
+                      decoration: const InputDecoration(
+                          hintText: "Enter a name",
+                          filled: true,
+                          fillColor: Colors.white,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)))),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                const Center(
+                  child: Text(
+                    "Notes",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                // notes
+                Center(
+                  child: TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: noteControl,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      hintText: "Enter a note",
+                      filled: true,
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.9,
+                      ),
+                      fillColor: Colors.white,
+                      enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                const Divider(
+                  indent: 10,
+                  endIndent: 10,
+                  thickness: 3,
+                ),
+
+                // Choose plant
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Text("Plant",
+                      style:
+                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
+                ),
+
+                //
+
+                //Plant Card
+                const PlantCard()
+              ],
+            ),
           ),
         ),
       ),

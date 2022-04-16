@@ -37,10 +37,10 @@ class _GardenPageState extends State<GardenPage> {
   List<HistoryOfSensorData> history = [];
 
   getSensorData() async {
-    // final url =
-    //     "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
     final url =
-        "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
+        "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
+    // final url =
+    //     "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
 
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
@@ -78,8 +78,7 @@ class _GardenPageState extends State<GardenPage> {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor:
-          isDarkMode ? mainDarkColor : mainColor,
+      backgroundColor: isDarkMode ? mainDarkColor : mainColor,
 
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -191,9 +190,7 @@ class _GardenPageState extends State<GardenPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const Divider(indent: 10, endIndent: 10, thickness: 3),
 
                   //Pages
                   ConstrainedBox(
@@ -272,9 +269,6 @@ class _GardenPageState extends State<GardenPage> {
     double width = MediaQuery.of(_).size.width * 0.49;
     return Column(
       children: [
-        const SizedBox(
-          height: 10,
-        ),
         NPKstatus(
             dataMap: _singleSensorData.npk,
             width: MediaQuery.of(_).size.width * 0.9),
