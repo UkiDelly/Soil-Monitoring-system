@@ -40,8 +40,8 @@ class _RegisterInputState extends State<RegisterInput> {
 
   // Register
   register() async {
-    const url = "http://localhost:3000/v1/user/create";
-    // const url = "https://soilanalysis.loca.lt/v1/user/create";
+    // const url = "http://localhost:3000/v1/user/create";
+    const url = "https://soilanalysis.loca.lt/v1/user/create";
 
     var response = await http.post(Uri.parse(url), body: {
       'name': nameController.text,

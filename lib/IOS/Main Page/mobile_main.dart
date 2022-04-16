@@ -151,8 +151,8 @@ class _GardenListState extends ConsumerState<GardenList> {
       isLoading = true;
     });
     // get the garden list
-    // const url = "https://soilanalysis.loca.lt/v1/garden/list";
-    const url = "http://localhost:3000/v1/garden/list";
+    const url = "https://soilanalysis.loca.lt/v1/garden/list";
+    // const url = "http://localhost:3000/v1/garden/list";
 
     var _response = await http.get(Uri.parse(url));
     var _item = jsonDecode(_response.body);
