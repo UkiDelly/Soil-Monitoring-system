@@ -84,4 +84,3 @@ class _MyAppState extends ConsumerState<MyApp> {
         home: successLogin == true ? const MobileHome() : const Login());
   }
 }
-
