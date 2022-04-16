@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:thesis/main.dart';
 
 //? Show this Widget while Loading...
 class LoadingPage extends StatelessWidget {
@@ -10,8 +11,8 @@ class LoadingPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CircularProgressIndicator(
-          color: Color(0xff669D6B),
+        const CircularProgressIndicator.adaptive(
+          valueColor: AlwaysStoppedAnimation<Color>(mainColor),
         ),
         const SizedBox(
           height: 10,

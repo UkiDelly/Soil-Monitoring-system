@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 import 'package:thesis/Main/loading.dart';
@@ -52,10 +53,41 @@ class Login extends StatelessWidget {
             },
           ),
 
+          // Register
+          _register(context),
+
           //
           const Spacer(flex: 2),
         ],
       )),
+    );
+  }
+
+  Widget _register(_) {
+    return SizedBox(
+      child: Column(
+        children: [
+          //
+          const Text("You don't have an account?",
+              style: TextStyle(fontSize: 25)),
+          TextButton(
+            onPressed: () {
+//? Register Page
+              Navigator.push(
+                  _,
+                  PageTransition(
+                      child: const SignInPage(),
+                      type: PageTransitionType.rightToLeft));
+            },
+            child: const Text(
+              "Sign In!",
+              style:
+                  TextStyle(decoration: TextDecoration.underline, fontSize: 25),
+            ),
+            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -76,14 +108,21 @@ class __LoginState extends State<_Login> {
   TextEditingController usernameController = TextEditingController(),
       passwordController = TextEditingController();
   bool? successLogin;
-  bool isLoading = false;
+  //Dialon
+  late CustomProgressDialog loadingDialog;
   //
 
   //* Login
-  login() async {
-    setState(() {
-      isLoading = true;
-    });
+  login(_) async {
+    //show dialog
+    loadingDialog = CustomProgressDialog(
+      context,
+      blur: 10,
+      dismissable: false,
+      loadingWidget: const Center(child: LoadingPage()),
+    );
+
+    loadingDialog.show();
     const url = "https://soilanalysis.loca.lt/v1/user/login";
     // const url = "http://localhost:3000/v1/user/login";
     final response = await http.post(Uri.parse(url), body: {
@@ -111,18 +150,16 @@ class __LoginState extends State<_Login> {
       // No user exist
     } else if (response.statusCode == 401) {
       successLogin = false;
-      isLoading = false;
-
+      loadingDialog.dismiss();
       // Server is offline
     } else {
       successLogin = false;
-      isLoading = false;
+      loadingDialog.dismiss();
       showAlertDialog(context);
     }
 
     setState(() {
       successLogin;
-      isLoading;
       usernameController.text = "";
       passwordController.text = "";
     });
@@ -136,136 +173,103 @@ class __LoginState extends State<_Login> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: isLoading
-          ? const Center(
-              child: LoadingPage(),
-            )
-          : Column(
-              children: [
-                Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        //User name
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: TextFormField(
-                              controller: usernameController,
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                  labelText: "User name",
-                                  border: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xff669D6B), width: 3)),
-                                  focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xff669D6B), width: 3)),
-                                  errorBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.red, width: 3)),
-                                  errorText: successLogin == false
-                                      ? "No user exist!"
-                                      : null),
-                              validator: (username) {
-                                if (username == "") {
-                                  return "Please enter a username";
-                                }
-                                return null;
-                              },
-                            )),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-                        //Password
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: TextFormField(
-                            controller: passwordController,
-                            textInputAction: TextInputAction.next,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                                labelText: "Enter Password",
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xff669D6B), width: 3)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xff669D6B), width: 3)),
-                                errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.red, width: 3))),
-                            validator: (password) {
-                              if (password == "") {
-                                return "Please enter a password";
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      ],
-                    )),
-                const SizedBox(
-                  height: 30,
-                ),
-                SizedBox(
-                  width: 200,
-                  child: ElevatedButton(
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
-                    onPressed: () async {
-                      // if the text of the field is validate
-                      if (_formKey.currentState!.validate()) {
-                        await login();
-
-                        if (successLogin == true) {
-                          Navigator.pushReplacement(
-                              context,
-                              PageTransition(
-                                  child: const MobileHome(),
-                                  type: PageTransitionType.fade));
-                        }
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                _register(context),
-              ],
-            ),
-    );
-  }
-
-  Widget _register(_) {
-    return SizedBox(
       child: Column(
         children: [
-          //
-          const Text("You don't have an account?",
-              style: TextStyle(fontSize: 25)),
-          TextButton(
-            onPressed: () {
-//? Register Page
-              Navigator.push(
-                  _,
-                  PageTransition(
-                      child: const SignInPage(),
-                      type: PageTransitionType.rightToLeft));
-            },
-            child: const Text(
-              "Sign In!",
-              style:
-                  TextStyle(decoration: TextDecoration.underline, fontSize: 25),
+          Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  //User name
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: TextFormField(
+                        controller: usernameController,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                            labelText: "User name",
+                            border: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xff669D6B), width: 3)),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xff669D6B), width: 3)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 3)),
+                            errorText: successLogin == false
+                                ? "No user exist!"
+                                : null),
+                        validator: (username) {
+                          if (username == "") {
+                            return "Please enter a username";
+                          }
+                          return null;
+                        },
+                      )),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  //Password
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextFormField(
+                      controller: passwordController,
+                      textInputAction: TextInputAction.next,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          labelText: "Enter Password",
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xff669D6B), width: 3)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xff669D6B), width: 3)),
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 3))),
+                      validator: (password) {
+                        if (password == "") {
+                          return "Please enter a password";
+                        }
+                        return null;
+                      },
+                    ),
+                  )
+                ],
+              )),
+          const SizedBox(
+            height: 30,
+          ),
+          SizedBox(
+            width: 200,
+            child: ElevatedButton(
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Login",
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+              onPressed: () async {
+                // if the text of the field is validate
+                if (_formKey.currentState!.validate()) {
+                  await login(context);
+
+                  if (successLogin == true) {
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child: const MobileHome(),
+                            type: PageTransitionType.fade));
+                  }
+                }
+              },
             ),
-            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+          ),
+          const SizedBox(
+            height: 20,
           ),
         ],
       ),
@@ -304,6 +308,7 @@ class __LoginState extends State<_Login> {
 
     // show the dialog
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;

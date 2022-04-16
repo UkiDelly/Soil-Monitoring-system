@@ -186,7 +186,7 @@ LineChartData mainData(
     axisTitleData: FlAxisTitleData(
       show: true,
       bottomTitle: AxisTitle(
-          showTitle: true,
+          showTitle: false,
           titleText: "Date",
           textStyle:
               const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
