@@ -62,7 +62,9 @@ class NpkHistory extends StatelessWidget {
     TextSpan(
         text: " History",
         style: TextStyle(
-            fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black)),
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        )),
   ]));
 
   @override
@@ -116,7 +118,7 @@ class NpkHistory extends StatelessWidget {
     HistoryChart npkHistory = HistoryChart(
         title: npkTitle,
         minX: 1,
-        maxX: 7,
+        maxX: nSpot!.length.toDouble(),
         leftSideInterval: 20,
         minY: 0,
         maxY: 100,

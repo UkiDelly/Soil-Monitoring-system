@@ -39,7 +39,7 @@ class PhHistory extends StatelessWidget {
         style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
       ),
       minX: 1,
-      maxX: 7,
+      maxX: phSpot!.length.toDouble(),
       minY: 1,
       maxY: 14,
       spots: phSpot ?? _pHSpots,
@@ -49,6 +49,7 @@ class PhHistory extends StatelessWidget {
       belowBarColors: gradientColors,
       lineChartBarGradient: true,
       width: width,
+      
     );
 
     return phHistory.historyChart(context);

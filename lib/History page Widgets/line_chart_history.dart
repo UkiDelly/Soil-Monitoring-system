@@ -66,7 +66,7 @@ class HistoryChart {
           children: [
             title,
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(5, 5, 40, 5),
               width: MediaQuery.of(_).size.width - 30,
               height: 300,
               child: SizedBox(
@@ -116,7 +116,7 @@ LineChartData mainData(
       show: true,
 
       //* show Vertical Line
-      drawVerticalLine: true,
+      drawVerticalLine: false,
       //* show Horizontal Line
       drawHorizontalLine: true,
 
@@ -144,12 +144,14 @@ LineChartData mainData(
           reservedSize: 22,
           interval: 1,
           getTextStyles: (context, value) => const TextStyle(
-              color: Color(0xff68737d),
+              // color: Color(0xff68737d),
               fontWeight: FontWeight.bold,
               fontSize: 16),
           getTitles: (value) {
-            var valueToInt = value.toInt();
-            return "$valueToInt";
+            if (value == maxX) {
+              return "current";
+            }
+            return "";
           },
         ),
 
@@ -159,13 +161,15 @@ LineChartData mainData(
           reservedSize: 35,
           interval: leftSideInterval ?? 1,
           getTextStyles: (context, value) => const TextStyle(
-            color: Color(0xff67727d),
+            // color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
           getTitles: (value) {
-            var valueToInt = value.toInt();
-            return "$valueToInt";
+            if (value % 5 == 0) {
+              return "${value.toInt()}";
+            }
+            return "";
           },
           margin: 5,
         )),
@@ -174,7 +178,7 @@ LineChartData mainData(
     borderData: FlBorderData(
         show: true,
         border: Border.all(
-          color: const Color(0xff37434d),
+          // color: const Color(0xff37434d),
           width: 3,
         )),
 
