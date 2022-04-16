@@ -18,13 +18,13 @@ class HumidityHistory extends StatelessWidget {
         title: const Text("Humidity History",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         minX: 1,
-        maxX: 7,
+        maxX: humiditySpot!.length.toDouble(),
         minY: 0,
         leftSideInterval: 20,
         maxY: 100,
         spots: humiditySpot ?? spots,
         showDot: true,
-        lineColor: [Colors.black87],
+        // lineColor: [Colors.black87],
         lineChartBarWidth: true,
         width: width);
 

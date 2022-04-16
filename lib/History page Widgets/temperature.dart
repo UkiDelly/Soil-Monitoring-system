@@ -31,7 +31,7 @@ class TempHistory extends StatelessWidget {
         title: const Text("Temp History",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         minX: 1,
-        maxX: 7,
+        maxX: tempSpot!.length.toDouble(),
         minY: 0,
         leftSideInterval: 20,
         maxY: 100,
