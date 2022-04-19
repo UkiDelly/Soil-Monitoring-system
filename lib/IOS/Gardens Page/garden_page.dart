@@ -46,17 +46,22 @@ class _GardenPageState extends State<GardenPage> {
         headers: {'Authorization': 'Bearer ${widget.token}'});
 
     var item = {};
-    List _sensorList = [];
+    List? _sensorList = [];
+
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
-      for (int i = 0; i < item['data'].length; i++) {
-        _sensorList.add(item['data'][i]);
+
+      if (item['data'][0] != []) {
+        for (int i = 0; i < item['data'].length; i++) {
+          _sensorList.add(item['data'][i]);
+        }
+        pages = item['data'].length;
+        for (int i = 0; i < pages; i++) {
+          history.add(HistoryOfSensorData(_sensorList[i]));
+          history[i].createHistory();
+        }
       }
-      pages = item['data'].length;
-      for (int i = 0; i < pages; i++) {
-        history.add(HistoryOfSensorData(_sensorList[i]));
-        history[i].createHistory();
-      }
+      _sensorList = null;
     }
 
     setState(() {
@@ -128,7 +133,73 @@ class _GardenPageState extends State<GardenPage> {
                   child: LoadingPage(),
                 );
               } else if (!snapshot.hasData || snapshot.hasError) {
-                return Text("${snapshot.error}");
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                          child: Text(
+                        widget.gardenName,
+                        style: const TextStyle(
+                            fontSize: 33, fontWeight: FontWeight.bold),
+                      )),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      //Notes
+                      Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          decoration: BoxDecoration(
+                              color: isDarkMode
+                                  ? const Color(0xff424242)
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(12.5)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "notes",
+                                    style: TextStyle(
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 17),
+                                  ),
+                                ),
+                                Divider(
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
+                                  indent: 5,
+                                  endIndent: 5,
+                                  thickness: 2,
+                                ),
+                                Text(
+                                  widget.notes,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Divider(indent: 10, endIndent: 10, thickness: 3),
+
+                      const Center(
+                        child: Text(
+                          "No Data yet",
+                          style: TextStyle(fontSize: 50),
+                        ),
+                      )
+                    ]);
               }
 
               //Conver object to list

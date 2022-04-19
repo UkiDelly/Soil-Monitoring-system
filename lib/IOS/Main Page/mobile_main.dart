@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/Main/loading.dart';
-import 'package:thesis/Main/login.dart';
 
 import '../../Main/provider.dart';
 import '../New Garden Page/new_garden_page.dart';
@@ -31,10 +30,7 @@ class MobileHome extends StatelessWidget {
                 "Log out",
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: () => Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      child: const Login(), type: PageTransitionType.fade)),
+              onPressed: () => Navigator.pop(context),
               style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
             )
           ],
