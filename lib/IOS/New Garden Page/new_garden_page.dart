@@ -30,8 +30,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   createGarden() async {
     final _token = ref.watch(tokenProvider);
     var _gardenId;
-    const _url = "https://soilanalysis.loca.lt/v1/garden/create";
-    // const _url = "http://localhost:3000/v1/garden/create";
+    // const _url = "https://soilanalysis.loca.lt/v1/garden/create";
+    const _url = "http://localhost:3000/v1/garden/create";
     var _response = await http.post(Uri.parse(_url),
         body: {"name": nameControl.text, "notes": noteControl.text},
         headers: {'Authorization': "Bearer $_token"});
@@ -41,8 +41,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       var _item = jsonDecode(_response.body);
       _gardenId = _item['data']['insertedId'];
     }
-    const _sensorUrl = 'https://soilanalysis.loca.lt/v1/sensor/create';
-    // const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
+    // const _sensorUrl = 'https://soilanalysis.loca.lt/v1/sensor/create';
+    const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
     _response = await http.post(Uri.parse(_sensorUrl),
         body: {"name": nameControl.text, "gardenId": _gardenId},
         headers: {'Authorization': "Bearer $_token"});

@@ -38,9 +38,9 @@ class _GardenPageState extends State<GardenPage> {
 
   getSensorData() async {
     final url =
-        "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
+        // "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
         // final url =
-        // "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
+        "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
 
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
