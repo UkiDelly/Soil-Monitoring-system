@@ -82,6 +82,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             brightness: Brightness.dark),
         debugShowCheckedModeBanner: false,
         title: "Soil Monitoring System",
-        home: successLogin == true ? const MobileHome() : const Login());
+        home:
+            // const TestPage()
+            successLogin == true ? const MobileHome() : const Login());
   }
 }

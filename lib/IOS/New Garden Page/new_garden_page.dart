@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
 import 'package:thesis/IOS/New%20Garden%20Page/plants.dart';
 import 'package:thesis/main.dart';
 
 import '../../Main/provider.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
-  const AddNewGarden({Key? key}) : super(key: key);
+  Function() callback;
+  AddNewGarden({Key? key, required this.callback}) : super(key: key);
 
   @override
   ConsumerState<AddNewGarden> createState() => _AddNewGardenState();
@@ -44,18 +43,38 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       _gardenId = _item['data']['insertedId'];
       // const _sensorUrl = 'https://soilanalysis.loca.lt/v1/sensor/create';
       const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
-      _response = await http.post(Uri.parse(_sensorUrl),
-          body: {"name": nameControl.text, "gardenId": _gardenId},
-          headers: {'Authorization': "Bearer $_token"});
+      _response = await http.post(Uri.parse(_sensorUrl), body: {
+        "name": nameControl.text,
+        "gardenId": _gardenId,
+        'plant': selectedPlants
+      }, headers: {
+        'Authorization': "Bearer $_token"
+      });
       if (_response.statusCode == 200) {
         _item = jsonDecode(_response.body);
-        //TODO: ask nong to send the sensor id when it created
-        //get the sensor id from the response and create a empty sensorData
-        String _sensorId = "";
-        final _addSensorDataUrl =
-            'http://localhost:3000/v1/sensor/addSensorData/$_sensorId';
-            
 
+        //get the sensor id from the response and create a empty sensorData
+        var _sensorId = _item['data']['id'];
+        Map<String, num> initialData = {
+          "nitrogen": 0,
+          "phosphorous": 0,
+          "potassium": 0,
+          "pH": 0,
+          "temperature": 0,
+          "moisture": 0,
+          "humidity": 0
+        };
+
+        final _sensorDataUrl =
+            'http://localhost:3000/v1/sensor/addSensorData/$_sensorId';
+        _response = await http.put(Uri.parse(_sensorDataUrl),
+            headers: {
+              'Authorization': "Bearer $_token",
+              'Content-Type': 'application/json'
+            },
+            body: json.encode(initialData));
+
+        print(_response.statusCode);
       }
     }
   }
@@ -114,15 +133,11 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                       return;
                     }
                     createGarden();
-
                     _showToast(context, "Successfully created a new Garden!");
-
-                    Future.delayed(const Duration(seconds: 1), () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const MobileHome(),
-                              type: PageTransitionType.leftToRight));
+                    //set state the main page
+                    widget.callback;
+                    Future.delayed(const Duration(seconds: 500), () {
+                      Navigator.of(context).pop();
                     });
                   }
                 },

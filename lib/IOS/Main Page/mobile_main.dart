@@ -39,80 +39,15 @@ class MobileHome extends StatelessWidget {
         body: SafeArea(
           bottom: false,
           child: SizedBox(
-            child: Column(
-              children: [
-                aboveGardenList(context),
-
-                const SizedBox(
-                  height: 10,
-                ),
-                //* Garden List
-                Consumer(
-                  builder: (ctx, ref, child) {
-                    //* get the token from the provider
-                    final token = ref.watch(tokenProvider);
-                    return GardenList(token: token);
-                  },
-                ),
-              ],
+            child: Consumer(
+              builder: (ctx, ref, child) {
+                //* get the token from the provider
+                final token = ref.watch(tokenProvider);
+                return GardenList(token: token);
+              },
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget aboveGardenList(context) {
-    return SizedBox(
-      child: Column(
-        children: [
-          //* Logo
-          Hero(
-              tag: 'logo',
-              child: Image.asset(
-                'assets/Logo/Logo.png',
-                width: 60,
-              )),
-          const SizedBox(
-            height: 10,
-          ),
-
-          //* My gardens
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    "My Gardens",
-                    style:
-                        (TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                IconButton(
-                    splashColor: Colors.white.withOpacity(0),
-                    highlightColor: Colors.white.withOpacity(0),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const AddNewGarden(),
-                              type: PageTransitionType.rightToLeft));
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                      size: 40,
-                    ))
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -176,24 +111,88 @@ class _GardenListState extends ConsumerState<GardenList> {
   }
 
   @override
+  void didChangeDependencies() {
+    getGardenList();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //! if the app is getting the gardenList from the api show loading widget
     return isLoading
         ? const Center(child: LoadingPage())
 
         //? Show the garden List
-        : Expanded(
-            child: ListView.builder(
-                itemCount: gardenList.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (BuildContext context, int index) {
-                  return GardenCard(
-                    index: index + 1,
-                    gardenId: gardenList[index]['_id'],
-                    gardenName: gardenList[index]['name'],
-                    notes: gardenList[index]['notes'],
-                  );
-                }),
+        : Column(
+            children: [
+              SizedBox(
+                child: Column(
+                  children: [
+                    //* Logo
+                    Hero(
+                        tag: 'logo',
+                        child: Image.asset(
+                          'assets/Logo/Logo.png',
+                          width: 60,
+                        )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    //* My gardens
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              "My Gardens",
+                              style: (TextStyle(
+                                  fontSize: 40, fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                          IconButton(
+                              splashColor: Colors.white.withOpacity(0),
+                              highlightColor: Colors.white.withOpacity(0),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        child: AddNewGarden(
+                                          callback: didChangeDependencies,
+                                        ),
+                                        type: PageTransitionType.rightToLeft));
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                size: 40,
+                              ))
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: gardenList.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GardenCard(
+                        index: index + 1,
+                        gardenId: gardenList[index]['_id'],
+                        gardenName: gardenList[index]['name'],
+                        notes: gardenList[index]['notes'],
+                      );
+                    }),
+              ),
+            ],
           );
   }
 }
