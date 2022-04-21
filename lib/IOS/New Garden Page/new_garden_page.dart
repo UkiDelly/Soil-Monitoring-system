@@ -66,6 +66,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
         };
 
         final _sensorDataUrl =
+            //'https://soilanalysis.loca.lt/v1/sensor/addSensorData/$_sensorId';
             'http://localhost:3000/v1/sensor/addSensorData/$_sensorId';
         _response = await http.put(Uri.parse(_sensorDataUrl),
             headers: {
