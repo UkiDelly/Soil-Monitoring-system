@@ -38,22 +38,56 @@ class _GardenPageState extends State<GardenPage> {
 
   getSensorData() async {
     final url =
-        "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
+        // "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
         // final url =
-        // "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
+        "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
 
     var response = await http.get(Uri.parse(url),
         headers: {'Authorization': 'Bearer ${widget.token}'});
 
     var item = {};
-    List _sensorList = [];
+    List _sensorList = [
+      [
+        {
+          "nitrogen": 0,
+          "phosphorous": 0,
+          "potassium": 0,
+          'pH': 0,
+          "temperature": 0,
+          "moisture": 0,
+          "humidity": 0
+        }
+      ],
+      [
+        {
+          "nitrogen": 0,
+          "phosphorous": 0,
+          "potassium": 0,
+          'pH': 0,
+          "temperature": 0,
+          "moisture": 0,
+          "humidity": 0
+        }
+      ],
+      [
+        {
+          "nitrogen": 0,
+          "phosphorous": 0,
+          "potassium": 0,
+          'pH': 0,
+          "temperature": 0,
+          "moisture": 0,
+          "humidity": 0
+        }
+      ]
+    ];
+
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
-      for (int i = 0; i < item['data'].length; i++) {
-        _sensorList.add(item['data'][i]);
-      }
-      pages = item['data'].length;
+
+      _sensorList.clear();
       for (int i = 0; i < pages; i++) {
+        _sensorList.add(item['data'][i]);
         history.add(HistoryOfSensorData(_sensorList[i]));
         history[i].createHistory();
       }
@@ -124,11 +158,12 @@ class _GardenPageState extends State<GardenPage> {
             future: getData,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
+                print(snapshot.data);
                 return const Center(
                   child: LoadingPage(),
                 );
-              } else if (!snapshot.hasData || snapshot.hasError) {
-                return Text("${snapshot.error}");
+              } else if (snapshot.hasError) {
+                return SizedBox();
               }
 
               //Conver object to list
