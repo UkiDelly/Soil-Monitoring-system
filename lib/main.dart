@@ -32,7 +32,8 @@ class _MyAppState extends ConsumerState<MyApp> {
   autoLogin() async {
     if (LoginPreferences.getToken() != null) {
       final token = LoginPreferences.getToken();
-      const url = "https://soilanalysis.loca.lt/v1/user/list";
+      // const url = "https://soilanalysis.loca.lt/v1/user/list";
+      const url = "http://localhost:3000/v1/user/list";
       var response = await http
           .get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 
@@ -81,6 +82,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             brightness: Brightness.dark),
         debugShowCheckedModeBanner: false,
         title: "Soil Monitoring System",
-        home: successLogin == true ? const MobileHome() : const Login());
+        home:
+            // const TestPage()
+            successLogin == true ? const MobileHome() : const Login());
   }
 }

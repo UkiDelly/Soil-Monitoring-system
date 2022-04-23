@@ -17,13 +17,14 @@ import 'package:thesis/main.dart';
 import '../History Page/history_page.dart';
 
 class GardenPage extends StatefulWidget {
-  String gardenId, gardenName, token, notes;
+  String gardenId, gardenName, token, notes, plant;
   GardenPage(
       {Key? key,
       required this.gardenId,
       required this.gardenName,
       required this.token,
-      required this.notes})
+      required this.notes,
+      required this.plant})
       : super(key: key);
 
   @override
@@ -35,11 +36,12 @@ class _GardenPageState extends State<GardenPage> {
   int pages = 1;
   var getData;
   List<HistoryOfSensorData> history = [];
+  var path = '';
 
   getSensorData() async {
-    // final url =
-    //     "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
     final url =
+        // "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
+        // final url =
         "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
 
     var response = await http.get(Uri.parse(url),
@@ -47,21 +49,35 @@ class _GardenPageState extends State<GardenPage> {
 
     var item = {};
     List _sensorList = [];
+
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
-      for (int i = 0; i < item['data'].length; i++) {
-        _sensorList.add(item['data'][i]);
-      }
-      pages = item['data'].length;
+
+      _sensorList.clear();
       for (int i = 0; i < pages; i++) {
+        _sensorList.add(item['data'][i]);
         history.add(HistoryOfSensorData(_sensorList[i]));
         history[i].createHistory();
       }
+    }
+    print(widget.plant);
+
+    switch (widget.plant) {
+      case 'Rice':
+        path = "assets/plants/rice.png";
+        break;
+      case 'Corn':
+        path = "assets/plants/corn.png";
+        break;
+      case 'Cassava':
+        path = "assets/plants/cassava.png";
+        break;
     }
 
     setState(() {
       history;
       pages;
+      path;
     });
     return _sensorList;
   }
@@ -120,6 +136,7 @@ class _GardenPageState extends State<GardenPage> {
       //
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: FutureBuilder(
             future: getData,
             builder: (context, snapshot) {
@@ -127,101 +144,47 @@ class _GardenPageState extends State<GardenPage> {
                 return const Center(
                   child: LoadingPage(),
                 );
-              } else if (!snapshot.hasData || snapshot.hasError) {
-                return Text("${snapshot.error}");
+              } else if (snapshot.hasError) {
+                return const SizedBox();
               }
 
               //Conver object to list
               var _sensorList = snapshot.data as List;
 
+              //get the average
+              double nAverage = 0, pAverage = 0, kAverage = 0, phAverage = 0;
+
+              for (int i = 0; i < pages; i++) {
+                // add all last sensor data
+                nAverage += _sensorList[i].last['nitrogen'];
+                pAverage += _sensorList[i].last['phosphorous'];
+                kAverage += _sensorList[i].last['potassium'];
+                phAverage += _sensorList[i].last['pH'];
+              }
+
+              //division to get the average
+              nAverage /= pages;
+              pAverage /= pages;
+              kAverage /= pages;
+              phAverage /= pages;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                      child: Text(
-                    widget.gardenName,
-                    style: const TextStyle(
-                        fontSize: 33, fontWeight: FontWeight.bold),
-                  )),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  //Garden Name, notes
+                  gardenInfo(isDarkMode),
 
-                  //Notes
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      decoration: BoxDecoration(
-                          color: isDarkMode
-                              ? const Color(0xff424242)
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(12.5)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Text(
-                                "notes",
-                                style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontSize: 17),
-                              ),
-                            ),
-                            Divider(
-                              color: isDarkMode ? Colors.white : Colors.black,
-                              indent: 5,
-                              endIndent: 5,
-                              thickness: 2,
-                            ),
-                            Text(
-                              widget.notes,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color:
-                                      isDarkMode ? Colors.white : Colors.black,
-                                  fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                   const Divider(indent: 10, endIndent: 10, thickness: 3),
 
                   //Pages
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 550),
-                    child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: pages,
-                        itemBuilder: ((context, index) {
-                          //create history
-
-                          var _lastData = _sensorList[index].last;
-                          return _sensor(_lastData, context);
-                        })),
-                  ),
-
-                  // Page indicator
-                  Center(
-                    child: SmoothPageIndicator(
-                      controller: _pageController,
-                      count: pages,
-                      effect: const ExpandingDotsEffect(
-                          dotHeight: 10,
-                          dotWidth: 10,
-                          activeDotColor: Colors.white,
-                          dotColor: Colors.grey),
-                    ),
-                  ),
+                  _showSensor(_sensorList),
 
                   const SizedBox(
                     height: 10,
                   ),
+
+                  //Plant selected
+                  plant(),
 
                   const Divider(
                     indent: 15,
@@ -242,13 +205,105 @@ class _GardenPageState extends State<GardenPage> {
                   ),
 
                   //Fertilizer
-                  const FertilizerCards()
+                  FertilizerCards(
+                    nAverage: nAverage,
+                    pAverage: pAverage,
+                    kAverage: kAverage,
+                    phAverage: phAverage,
+                    plant: widget.plant,
+                  )
                 ],
               );
             },
           ),
         ),
       ),
+    );
+  }
+
+  Widget gardenInfo(isDarkMode) {
+    return Column(
+      children: [
+        Center(
+            child: Text(
+          widget.gardenName,
+          style: const TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
+        )),
+        const SizedBox(
+          height: 10,
+        ),
+
+        //Notes
+        Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            decoration: BoxDecoration(
+                color: isDarkMode ? const Color(0xff424242) : Colors.white,
+                borderRadius: BorderRadius.circular(12.5)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      "notes",
+                      style: TextStyle(
+                          color: isDarkMode ? Colors.white : Colors.black,
+                          fontSize: 17),
+                    ),
+                  ),
+                  Divider(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    indent: 5,
+                    endIndent: 5,
+                    thickness: 2,
+                  ),
+                  Text(
+                    widget.notes,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                        fontSize: 20),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _showSensor(_sensorList) {
+    return Column(
+      children: [
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 550),
+          child: PageView.builder(
+              controller: _pageController,
+              itemCount: pages,
+              itemBuilder: ((context, index) {
+                //create history
+
+                var _lastData = _sensorList[index].last;
+                return _sensor(_lastData, context);
+              })),
+        ),
+
+        // Page indicator
+        Center(
+          child: SmoothPageIndicator(
+            controller: _pageController,
+            count: pages,
+            effect: const ExpandingDotsEffect(
+                dotHeight: 10,
+                dotWidth: 10,
+                activeDotColor: Colors.white,
+                dotColor: Colors.grey),
+          ),
+        ),
+      ],
     );
   }
 
@@ -318,6 +373,24 @@ class _GardenPageState extends State<GardenPage> {
           ],
         )
       ],
+    );
+  }
+
+  Widget plant() {
+    return Center(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        elevation: 5,
+        child: SizedBox(
+          child: Column(children: [
+            SizedBox(width: 250, child: Image.asset(path)),
+            Text(
+              widget.plant,
+              style: const TextStyle(fontSize: 50),
+            )
+          ]),
+        ),
+      ),
     );
   }
 }
