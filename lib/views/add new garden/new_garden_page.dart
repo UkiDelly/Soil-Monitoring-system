@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:thesis/IOS/New%20Garden%20Page/plants.dart';
 import 'package:thesis/main.dart';
+import 'package:thesis/views/add%20new%20garden/plants.dart';
 
-import '../../Main/provider.dart';
+import '../../settings/provider.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
   Function() callback;

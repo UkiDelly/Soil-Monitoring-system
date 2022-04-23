@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/main.dart';
-import '../../History page Widgets/humidity_history.dart';
-import '../../History page Widgets/moisture_history.dart';
-import '../../History page Widgets/npk_history.dart';
-import '../../History page Widgets/ph_history.dart';
-import '../../History page Widgets/temperature.dart';
+
+import 'History page Widgets/humidity_history.dart';
+import 'History page Widgets/moisture_history.dart';
+import 'History page Widgets/npk_history.dart';
+import 'History page Widgets/ph_history.dart';
+import 'History page Widgets/temperature.dart';
 
 class HistoryPage extends StatelessWidget {
   var historyData;

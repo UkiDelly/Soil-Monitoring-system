@@ -1,20 +1,20 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:thesis/IOS/Gardens%20Page/fertilizer.dart';
 import 'package:http/http.dart' as http;
-import 'package:thesis/Main/loading.dart';
-import 'package:thesis/Status%20widgets/humidity.dart';
-import 'package:thesis/Status%20widgets/moisture.dart';
-import 'package:thesis/Status%20widgets/npk_status.dart';
-import 'package:thesis/Status%20widgets/ph_level.dart';
-import 'package:thesis/Status%20widgets/tempurature.dart';
-import 'package:thesis/data_classes.dart';
 import 'package:thesis/main.dart';
 
-import '../History Page/history_page.dart';
+import '../../loading.dart';
+import '../../models/create_history.dart';
+import '../../models/fertilizer.dart';
+import '../../models/single_sensor.dart';
+import 'Status widgets/humidity.dart';
+import 'Status widgets/moisture.dart';
+import 'Status widgets/npk_status.dart';
+import 'Status widgets/ph_level.dart';
+import 'Status widgets/tempurature.dart';
+import 'history/history_page.dart';
 
 class GardenPage extends StatefulWidget {
   String gardenId, gardenName, token, notes, plant;

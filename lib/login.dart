@@ -6,12 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-import 'package:thesis/Main/loading.dart';
-import 'package:thesis/Main/preferences.dart';
-import 'package:thesis/Main/provider.dart';
 
-import 'new_user.dart';
+import 'loading.dart';
+import 'settings/preferences.dart';
+import 'settings/provider.dart';
+import 'views/add new user/new_user.dart';
+import 'views/mobile_main.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);

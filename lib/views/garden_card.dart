@@ -3,10 +3,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/Main/provider.dart';
+
 import 'package:thesis/main.dart';
 
-import '../Gardens Page/garden_page.dart';
+import '../settings/provider.dart';
+import 'garden details/garden_page.dart';
 
 class GardenCard extends StatefulWidget {
   String gardenId, gardenName, notes, plant;

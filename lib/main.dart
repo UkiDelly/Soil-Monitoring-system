@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-import 'package:thesis/Main/login.dart';
-import 'package:thesis/Main/preferences.dart';
-import 'package:thesis/Main/provider.dart';
+
+import 'login.dart';
+import 'settings/preferences.dart';
+import 'settings/provider.dart';
+import 'views/mobile_main.dart';
 
 void main() async {
   //? disable rotate
