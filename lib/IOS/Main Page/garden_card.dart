@@ -9,17 +9,16 @@ import 'package:thesis/main.dart';
 import '../Gardens Page/garden_page.dart';
 
 class GardenCard extends StatefulWidget {
-  String gardenId;
-  String gardenName;
+  String gardenId, gardenName, notes, plant;
   int index;
-  String notes;
 
   GardenCard(
       {Key? key,
       required this.index,
       required this.gardenId,
       required this.gardenName,
-      required this.notes})
+      required this.notes,
+      required this.plant})
       : super(key: key);
 
   @override
@@ -54,10 +53,12 @@ class _GardenCardState extends State<GardenCard> {
                 builder: (ctx, ref, child) {
                   final token = ref.watch(tokenProvider);
                   return GardenPage(
-                      gardenId: widget.gardenId,
-                      gardenName: widget.gardenName,
-                      notes: widget.notes,
-                      token: token);
+                    token: token,
+                    gardenId: widget.gardenId,
+                    gardenName: widget.gardenName,
+                    notes: widget.notes,
+                    plant: widget.plant,
+                  );
                 },
               );
             }));

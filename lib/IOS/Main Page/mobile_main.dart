@@ -189,6 +189,7 @@ class _GardenListState extends ConsumerState<GardenList> {
                         gardenId: gardenList[index]['_id'],
                         gardenName: gardenList[index]['name'],
                         notes: gardenList[index]['notes'],
+                        plant: gardenList[index]['plant'],
                       );
                     }),
               ),
