@@ -195,15 +195,22 @@ class __LoginState extends State<_Login> {
                   User user = User(
                       username: usernameController.text,
                       password: passwordController.text);
+
+                  await user.login(context: context);
+
+                  //save to the provider
+                  widget.token = user.token;
+                  widget.userId = user.userId;
                   // if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
-                    if (User.token != false) {
+                    if (user.token != false) {
                       Navigator.pushReplacement(
                           context,
                           PageTransition(
-                              child: const MobileHome(),
+                              child: MobileHome(
+                                  token: user.token, userId: user.userId),
                               type: PageTransitionType.fade));
-                    } else if (User.token == false) {
+                    } else if (user.token == false) {
                       setState(() {
                         successLogin == false;
                       });

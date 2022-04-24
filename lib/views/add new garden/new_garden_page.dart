@@ -1,9 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/main.dart';
 import 'package:thesis/views/add%20new%20garden/plants.dart';
-
 import '../../models/garden.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
@@ -69,7 +70,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     if (selectedPlants == '') {
                       _showToast(context, "Please select a plant.");
@@ -77,13 +78,12 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                     }
 
                     // create new Garden
-                    garden.createGarden(
+                    await garden.createGarden(
                         name: nameControl.text,
                         notes: noteControl.text,
                         plant: selectedPlants);
                     _showToast(context, "Successfully created a new Garden!");
                     //set state the main page
-                    widget.callback;
                     Future.delayed(const Duration(seconds: 500), () {
                       Navigator.of(context).pop();
                     });

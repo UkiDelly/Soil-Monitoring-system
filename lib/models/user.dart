@@ -1,19 +1,22 @@
 import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ndialog/ndialog.dart';
+
 import '../loading.dart';
 import '../settings/preferences.dart';
 
 class User {
-  final username, password;
-  final name;
-  static String userId = "";
-  static dynamic token = "";
-  User({required this.username, required this.password, this.name});
+  String username, password;
+  String? name;
 
-  login(context) async {
+  var token;
+  String userId = '';
+  User({required this.password, required this.username, this.name});
+
+  login({context}) async {
     //show dialog
     CustomProgressDialog loadingDialog = CustomProgressDialog(
       context,
@@ -27,6 +30,7 @@ class User {
     var response = await http.post(Uri.parse(url),
         body: {'username': username, 'password': password});
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       var item = jsonDecode(response.body);
       LoginPreferences.saveToken(item['data']['authToken']);
@@ -39,6 +43,7 @@ class User {
 
       //save the token into the class
       token = item['data']['authToken'];
+
       // No user exist
     } else if (response.statusCode == 401) {
       loadingDialog.dismiss();
@@ -56,7 +61,7 @@ class User {
     if (response.statusCode == 200) {
       return true;
     }
-    print(jsonDecode(response.body));
+
     return false;
   }
 }

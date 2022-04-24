@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
+
 import 'package:thesis/loading.dart';
 
 import '../models/garden.dart';
 import 'add new garden/new_garden_page.dart';
 import 'garden_card.dart';
 
+// ignore: must_be_immutable
 class MobileHome extends StatelessWidget {
-  const MobileHome({
-    Key? key,
-  }) : super(key: key);
+  String token, userId;
+  MobileHome({Key? key, required this.userId, required this.token})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,9 @@ class MobileHome extends StatelessWidget {
           ],
         ),
         extendBodyBehindAppBar: true,
-        body: const SafeArea(
+        body: SafeArea(
           bottom: false,
-          child: SizedBox(child: GardenList()),
+          child: SizedBox(child: GardenList(userId: userId, token: token)),
         ),
       ),
     );
@@ -46,7 +48,10 @@ class MobileHome extends StatelessWidget {
 
 // ignore: must_be_immutable
 class GardenList extends StatefulWidget {
-  const GardenList({
+  String token, userId;
+  GardenList({
+    required this.userId,
+    required this.token,
     Key? key,
   }) : super(key: key);
 
@@ -56,16 +61,18 @@ class GardenList extends StatefulWidget {
 
 class _GardenListState extends State<GardenList> {
   //
-  Garden garden = Garden();
+  late Garden garden;
 
   @override
   void initState() {
     super.initState();
+    garden = Garden(userId: widget.userId, token: widget.token);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    garden = Garden(userId: widget.userId, token: widget.token);
   }
 
   @override
@@ -76,6 +83,7 @@ class _GardenListState extends State<GardenList> {
       future: garden.getGardenList(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         // if succesfully get data
+
         if (snapshot.hasData) {
           List gardenList = snapshot.data as List;
           return Column(
@@ -116,13 +124,15 @@ class _GardenListState extends State<GardenList> {
                               splashColor: Colors.white.withOpacity(0),
                               highlightColor: Colors.white.withOpacity(0),
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
+                                Navigator.of(context)
+                                    .push(PageTransition(
                                         child: AddNewGarden(
                                           callback: didChangeDependencies,
                                         ),
-                                        type: PageTransitionType.rightToLeft));
+                                        type: PageTransitionType.rightToLeft))
+                                    .then((value) {
+                                  didChangeDependencies();
+                                });
                               },
                               icon: const Icon(
                                 Icons.add,
@@ -155,7 +165,7 @@ class _GardenListState extends State<GardenList> {
         }
 
         // else, display loading
-        return const LoadingPage();
+        return const Center(child: LoadingPage());
       },
     );
   }

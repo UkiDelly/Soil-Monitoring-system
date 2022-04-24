@@ -9,6 +9,8 @@ import 'package:thesis/main.dart';
 import '../settings/provider.dart';
 import 'garden details/garden_page.dart';
 
+
+
 class GardenCard extends StatefulWidget {
   String gardenId, gardenName, notes, plant;
   int index;

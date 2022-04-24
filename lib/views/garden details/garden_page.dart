@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:http/http.dart' as http;
 import 'package:thesis/main.dart';
 
 import '../../loading.dart';
@@ -36,56 +34,14 @@ class _GardenPageState extends State<GardenPage> {
   int pages = 1;
   var getData;
   List<HistoryOfSensorData> history = [];
-  var path = '';
-
-  getSensorData() async {
-    final url =
-        // "https://soilanalysis.loca.lt/v1/sensor/getGardenSensorData/${widget.gardenId}";
-        // final url =
-        "http://localhost:3000/v1/sensor/getGardenSensorData/${widget.gardenId}";
-
-    var response = await http.get(Uri.parse(url),
-        headers: {'Authorization': 'Bearer ${widget.token}'});
-
-    var item = {};
-    List _sensorList = [];
-
-    if (response.statusCode == 200) {
-      item = jsonDecode(response.body);
-
-      _sensorList.clear();
-      for (int i = 0; i < pages; i++) {
-        _sensorList.add(item['data'][i]);
-        history.add(HistoryOfSensorData(_sensorList[i]));
-        history[i].createHistory();
-      }
-    }
-    print(widget.plant);
-
-    switch (widget.plant) {
-      case 'Rice':
-        path = "assets/plants/rice.png";
-        break;
-      case 'Corn':
-        path = "assets/plants/corn.png";
-        break;
-      case 'Cassava':
-        path = "assets/plants/cassava.png";
-        break;
-    }
-
-    setState(() {
-      history;
-      pages;
-      path;
-    });
-    return _sensorList;
-  }
+  late Sensor sensorData;
 
   @override
   void initState() {
     super.initState();
-    getData = getSensorData();
+    sensorData = Sensor(gardenId: widget.gardenId, token: widget.token);
+    getData = sensorData.getSensorData(widget.plant);
+    history = sensorData.histrory;
   }
 
   @override
@@ -383,7 +339,7 @@ class _GardenPageState extends State<GardenPage> {
         elevation: 5,
         child: SizedBox(
           child: Column(children: [
-            SizedBox(width: 250, child: Image.asset(path)),
+            SizedBox(width: 250, child: Image.asset(sensorData.path)),
             Text(
               widget.plant,
               style: const TextStyle(fontSize: 50),
