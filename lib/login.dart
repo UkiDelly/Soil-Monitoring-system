@@ -1,14 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'loading.dart';
-import 'settings/preferences.dart';
+import 'models/user.dart';
 import 'settings/provider.dart';
 import 'views/add new user/new_user.dart';
 import 'views/mobile_main.dart';
@@ -108,62 +102,6 @@ class __LoginState extends State<_Login> {
   TextEditingController usernameController = TextEditingController(),
       passwordController = TextEditingController();
   bool? successLogin;
-  //Dialon
-  late CustomProgressDialog loadingDialog;
-  //
-
-  //* Login
-  login(_) async {
-    //show dialog
-    loadingDialog = CustomProgressDialog(
-      context,
-      blur: 10,
-      dismissable: false,
-      loadingWidget: const Center(child: LoadingPage()),
-    );
-
-    loadingDialog.show();
-    // const url = "https://soilanalysis.loca.lt/v1/user/login";
-    const url = "http://localhost:3000/v1/user/login";
-    final response = await http.post(Uri.parse(url), body: {
-      'username': usernameController.text,
-      'password': passwordController.text
-    });
-
-    var _item = {};
-
-    // Login success
-    if (response.statusCode == 200) {
-      successLogin = true;
-      _item = jsonDecode(response.body);
-
-      //Save the token
-      widget.token.state = _item['data']['authToken'];
-      LoginPreferences.saveToken(_item['data']['authToken']);
-
-      var tokenDecode = Jwt.parseJwt(_item['data']['authToken']);
-
-      //Save the user id
-      widget.userId.state = tokenDecode['_id'];
-      LoginPreferences.saveUserId(tokenDecode['_id']);
-
-      // No user exist
-    } else if (response.statusCode == 401) {
-      successLogin = false;
-      loadingDialog.dismiss();
-      // Server is offline
-    } else {
-      successLogin = false;
-      loadingDialog.dismiss();
-      showAlertDialog(context);
-    }
-
-    setState(() {
-      successLogin;
-      usernameController.text = "";
-      passwordController.text = "";
-    });
-  }
 
   @override
   void initState() {
@@ -242,30 +180,37 @@ class __LoginState extends State<_Login> {
           const SizedBox(
             height: 30,
           ),
-          SizedBox(
-            width: 200,
-            child: ElevatedButton(
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Login",
-                  style: TextStyle(fontSize: 30),
+          Consumer(
+            builder: (context, ref, child) => SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(fontSize: 30),
+                  ),
                 ),
-              ),
-              onPressed: () async {
-                // if the text of the field is validate
-                if (_formKey.currentState!.validate()) {
-                  await login(context);
-
-                  if (successLogin == true) {
-                    Navigator.pushReplacement(
-                        context,
-                        PageTransition(
-                            child: const MobileHome(),
-                            type: PageTransitionType.fade));
+                onPressed: () async {
+                  User user = User(
+                      username: usernameController.text,
+                      password: passwordController.text);
+                  // if the text of the field is validate
+                  if (_formKey.currentState!.validate()) {
+                    if (User.token != false) {
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: const MobileHome(),
+                              type: PageTransitionType.fade));
+                    } else if (User.token == false) {
+                      setState(() {
+                        successLogin == false;
+                      });
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
           const SizedBox(

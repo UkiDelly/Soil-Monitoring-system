@@ -1,17 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:thesis/main.dart';
 import 'package:thesis/views/add%20new%20garden/plants.dart';
 
-import '../../settings/provider.dart';
+import '../../models/garden.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
   Function() callback;
-  AddNewGarden({Key? key, required this.callback}) : super(key: key);
+  AddNewGarden({required this.callback, Key? key}) : super(key: key);
 
   @override
   ConsumerState<AddNewGarden> createState() => _AddNewGardenState();
@@ -23,62 +20,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       noteControl = TextEditingController();
   String selectedPlants = '';
   late bool isDarkMode;
-
-  createGarden() async {
-    final _token = ref.watch(tokenProvider);
-    var _gardenId;
-    // const _url = "https://soilanalysis.loca.lt/v1/garden/create";
-    const _url = "http://localhost:3000/v1/garden/create";
-    var _response = await http.post(Uri.parse(_url), body: {
-      "name": nameControl.text,
-      "notes": noteControl.text,
-      "plant": selectedPlants
-    }, headers: {
-      'Authorization': "Bearer $_token"
-    });
-
-    //? get the gardenId from the response
-    if (_response.statusCode == 200) {
-      var _item = jsonDecode(_response.body);
-      _gardenId = _item['data']['insertedId'];
-      // const _sensorUrl = 'https://soilanalysis.loca.lt/v1/sensor/create';
-      const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
-      _response = await http.post(Uri.parse(_sensorUrl), body: {
-        "name": nameControl.text,
-        "gardenId": _gardenId,
-        'plant': selectedPlants
-      }, headers: {
-        'Authorization': "Bearer $_token"
-      });
-      if (_response.statusCode == 200) {
-        _item = jsonDecode(_response.body);
-
-        //get the sensor id from the response and create a empty sensorData
-        var _sensorId = _item['data']['id'];
-        Map<String, num> initialData = {
-          "nitrogen": 0,
-          "phosphorous": 0,
-          "potassium": 0,
-          "pH": 0,
-          "temperature": 0,
-          "moisture": 0,
-          "humidity": 0
-        };
-
-        final _sensorDataUrl =
-            //'https://soilanalysis.loca.lt/v1/sensor/addSensorData/$_sensorId';
-            'http://localhost:3000/v1/sensor/addSensorData/$_sensorId';
-        _response = await http.put(Uri.parse(_sensorDataUrl),
-            headers: {
-              'Authorization': "Bearer $_token",
-              'Content-Type': 'application/json'
-            },
-            body: json.encode(initialData));
-
-        print(_response.statusCode);
-      }
-    }
-  }
+  Garden garden = Garden();
 
   getPlantName(plantName) {
     setState(() {
@@ -133,7 +75,12 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                       _showToast(context, "Please select a plant.");
                       return;
                     }
-                    createGarden();
+
+                    // create new Garden
+                    garden.createGarden(
+                        name: nameControl.text,
+                        notes: noteControl.text,
+                        plant: selectedPlants);
                     _showToast(context, "Successfully created a new Garden!");
                     //set state the main page
                     widget.callback;

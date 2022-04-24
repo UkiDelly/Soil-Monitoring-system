@@ -1,17 +1,16 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/loading.dart';
 
-import '../loading.dart';
-import '../settings/provider.dart';
+import '../models/garden.dart';
 import 'add new garden/new_garden_page.dart';
 import 'garden_card.dart';
-import 'package:http/http.dart' as http;
 
 class MobileHome extends StatelessWidget {
-  const MobileHome({Key? key}) : super(key: key);
+  const MobileHome({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +35,9 @@ class MobileHome extends StatelessWidget {
           ],
         ),
         extendBodyBehindAppBar: true,
-        body: SafeArea(
+        body: const SafeArea(
           bottom: false,
-          child: SizedBox(
-            child: Consumer(
-              builder: (ctx, ref, child) {
-                //* get the token from the provider
-                final token = ref.watch(tokenProvider);
-                return GardenList(token: token);
-              },
-            ),
-          ),
+          child: SizedBox(child: GardenList()),
         ),
       ),
     );
@@ -54,76 +45,40 @@ class MobileHome extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class GardenList extends ConsumerStatefulWidget {
-  var token = "";
-  GardenList({
+class GardenList extends StatefulWidget {
+  const GardenList({
     Key? key,
-    required this.token,
   }) : super(key: key);
 
   @override
-  ConsumerState<GardenList> createState() => _GardenListState();
+  State<GardenList> createState() => _GardenListState();
 }
 
-class _GardenListState extends ConsumerState<GardenList> {
+class _GardenListState extends State<GardenList> {
   //
-  List gardenList = [];
-  bool isLoading = false;
+  Garden garden = Garden();
 
   @override
   void initState() {
     super.initState();
-    getGardenList();
-  }
-
-  //? get the garden list
-  getGardenList() async {
-    setState(() {
-      isLoading = true;
-    });
-    // get the garden list
-    // const url = "https://soilanalysis.loca.lt/v1/garden/list";
-    const url = "http://localhost:3000/v1/garden/list";
-
-    var _response = await http.get(Uri.parse(url));
-    var _item = jsonDecode(_response.body);
-
-    List _temp = _item['data'];
-    List _gardenList = [];
-
-    //get the userId for the provider
-    final _userId = ref.watch(userIDProvider);
-
-    //find the garden of the user
-    for (var item in _temp) {
-      if (item['createdBy'] == _userId) {
-        _gardenList.add(item);
-      }
-    }
-
-    //save the garden list into the provider
-    ref.watch(gardenIdListProvider.notifier).state = _gardenList;
-
-    setState(() {
-      gardenList = _gardenList;
-      isLoading = false;
-    });
   }
 
   @override
   void didChangeDependencies() {
-    getGardenList();
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     //! if the app is getting the gardenList from the api show loading widget
-    return isLoading
-        ? const Center(child: LoadingPage())
-
-        //? Show the garden List
-        : Column(
+    return FutureBuilder(
+      //get the garden list
+      future: garden.getGardenList(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        // if succesfully get data
+        if (snapshot.hasData) {
+          List gardenList = snapshot.data as List;
+          return Column(
             children: [
               SizedBox(
                 child: Column(
@@ -179,6 +134,8 @@ class _GardenListState extends ConsumerState<GardenList> {
                   ],
                 ),
               ),
+
+              // garden display
               Expanded(
                 child: ListView.builder(
                     itemCount: gardenList.length,
@@ -195,5 +152,11 @@ class _GardenListState extends ConsumerState<GardenList> {
               ),
             ],
           );
+        }
+
+        // else, display loading
+        return const LoadingPage();
+      },
+    );
   }
 }
