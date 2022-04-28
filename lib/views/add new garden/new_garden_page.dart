@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,13 @@ import '../../models/garden.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
   Function() callback;
-  AddNewGarden({required this.callback, Key? key}) : super(key: key);
+  String token, userId;
+  AddNewGarden(
+      {required this.callback,
+      required this.userId,
+      required this.token,
+      Key? key})
+      : super(key: key);
 
   @override
   ConsumerState<AddNewGarden> createState() => _AddNewGardenState();
@@ -17,11 +22,11 @@ class AddNewGarden extends ConsumerStatefulWidget {
 
 class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   //text controller
-  var nameControl = TextEditingController(),
-      noteControl = TextEditingController();
+  var nameController = TextEditingController(),
+      noteController = TextEditingController();
   String selectedPlants = '';
   late bool isDarkMode;
-  Garden garden = Garden();
+  late Garden garden;
 
   getPlantName(plantName) {
     setState(() {
@@ -34,6 +39,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
     super.initState();
     var brightness = SchedulerBinding.instance!.window.platformBrightness;
     isDarkMode = brightness == Brightness.dark;
+    garden = Garden(token: widget.token, userId: widget.userId);
   }
 
   @override
@@ -79,10 +85,11 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
 
                     // create new Garden
                     await garden.createGarden(
-                        name: nameControl.text,
-                        notes: noteControl.text,
+                        context: context,
+                        name: nameController.text,
+                        notes: noteController.text,
                         plant: selectedPlants);
-                    _showToast(context, "Successfully created a new Garden!");
+
                     //set state the main page
                     Future.delayed(const Duration(seconds: 500), () {
                       Navigator.of(context).pop();
@@ -165,7 +172,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 child: TextFormField(
                   style: TextStyle(
                       color: isDarkMode ? Colors.black : Colors.white),
-                  controller: nameControl,
+                  controller: nameController,
                   decoration: const InputDecoration(
                     hintText: "Enter a name",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -208,7 +215,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
             Center(
               child: TextFormField(
                 style: const TextStyle(color: Colors.black),
-                controller: noteControl,
+                controller: noteController,
                 maxLines: null,
                 decoration: InputDecoration(
                   hintText: "Enter a note",

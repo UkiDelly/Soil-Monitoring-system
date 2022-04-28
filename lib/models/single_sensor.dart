@@ -30,7 +30,8 @@ class Sensor {
 
   getSensorData(plant) async {
     final url =
-        "https://soil-analysis-system.herokuapp.com/v1/sensor/getGardneSensorData/$gardenId";
+        "https://soil-analysis-usls.herokuapp.com/v1/sensor/getGardenSensorData/$gardenId";
+    // "http://localhost:3000/sensor/getGardenSensorData/$gardenId";
 
     var response = await http
         .get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});

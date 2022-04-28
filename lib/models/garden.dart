@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Garden {
@@ -11,7 +12,8 @@ class Garden {
   });
 
   getGardenList() async {
-    const url = "https://soil-analysis-system.herokuapp.com/v1/garden/list";
+    const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/list";
+    // "http://localhost:3000/v1/garden/list";
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -22,7 +24,7 @@ class Garden {
 
       //find the garden made by the login user
       for (var item in _temp) {
-        if (item['createBy'] == userId) {
+        if (item['createdBy'] == userId) {
           gardenList.add(item);
         }
       }
@@ -32,26 +34,30 @@ class Garden {
   }
 
   createGarden(
-      {required String name, String? notes, required String plant}) async {
-    const url = "https://soil-analysis-system.herokuapp.com/v1/garden/create";
-    var response = await http.post(Uri.parse(url), body: {
+      {required BuildContext context,
+      required String name,
+      String? notes,
+      required String plant}) async {
+    var body = {
       "name": name,
-      "notes": notes,
+      "notes": notes!,
       "plant": plant,
-    }, headers: {
-      'Authorization': 'Bearer $token'
-    });
+    };
 
-    print(response.statusCode);
+    const _url = "https://soil-analysis-usls.herokuapp.com/v1/garden/create";
+    // "http://localhost:3000/v1/garden/create";
+    var response = await http.post(Uri.parse(_url),
+        body: body, headers: {'Authorization': 'Bearer $token'});
 
+    print("create garden: ${response.statusCode}");
     // get the gardenId from the response
     if (response.statusCode == 200) {
       var item = jsonDecode(response.body);
       String _gardenId = item['data']['insertedId'];
 
       // create sensor
-      const _url =
-          "https://soil-analysis-system.herokuapp.com/v1/sensor/create";
+      const _url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
+      // "http://localhost:3000/v1/sensor/create";
       response = await http.post(Uri.parse(_url), body: {
         "name": name,
         "notes": notes,
@@ -61,13 +67,16 @@ class Garden {
         'Authorization': 'Bearer $token'
       });
 
+      print(jsonDecode(response.body));
+
+      print("create sensor: ${response.statusCode}");
       // create inital sensor data
       if (response.statusCode == 200) {
         item = jsonDecode(response.body);
 
         // get the sensorId
         String sensorId = item['data']['id'];
-        Map<String, num> initialData = {
+        Map<String, int> initialData = {
           "nitrogen": 0,
           "phosphorous": 0,
           "potassium": 0,
@@ -78,14 +87,29 @@ class Garden {
         };
 
         final _url =
-            "https://soil-analysis-system.herokuapp.com/v1/addSensorData/$sensorId";
+            "https://soil-analysis-usls.herokuapp.com/v1/addSensorData/$sensorId";
         response = await http.put(Uri.parse(_url),
             headers: {
               'Authorization': "Bearer $token",
               'Content-Type': 'application/json'
             },
-            body: json.encode(initialData));
+            body: jsonEncode(initialData));
+
+        //TODO: Fix this shit
+        print("create sensor data: ${response.statusCode}");
+
+        _showToast(context, "Successfully created a new Garden!");
       }
     }
   }
+}
+
+void _showToast(BuildContext context, String text) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      content: Text(text),
+    ),
+  );
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
-
 import 'package:thesis/loading.dart';
-
 import '../models/garden.dart';
 import 'add new garden/new_garden_page.dart';
 import 'garden_card.dart';
@@ -127,6 +125,8 @@ class _GardenListState extends State<GardenList> {
                                 Navigator.of(context)
                                     .push(PageTransition(
                                         child: AddNewGarden(
+                                          token: widget.token,
+                                          userId: widget.userId,
                                           callback: didChangeDependencies,
                                         ),
                                         type: PageTransitionType.rightToLeft))
@@ -152,6 +152,7 @@ class _GardenListState extends State<GardenList> {
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
                       return GardenCard(
+                        token: widget.token,
                         index: index + 1,
                         gardenId: gardenList[index]['_id'],
                         gardenName: gardenList[index]['name'],

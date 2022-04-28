@@ -140,9 +140,7 @@ class _RegisterInputState extends State<RegisterInput> {
                             timeInSecForIosWeb: 1,
                             backgroundColor: mainColor,
                             fontSize: 20.0);
-                      } else {
-                        print(register);
-                      }
+                      } else {}
                     }
                   },
                   child: const Padding(

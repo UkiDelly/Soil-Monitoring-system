@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'models/user.dart';
-import 'settings/provider.dart';
 import 'views/add new user/new_user.dart';
 import 'views/mobile_main.dart';
 
@@ -36,16 +35,7 @@ class Login extends StatelessWidget {
           ),
 
           // Login
-          Consumer(
-            builder: (context, ref, child) {
-              var token = ref.watch(tokenProvider.notifier);
-              var userId = ref.watch(userIDProvider.notifier);
-              return _Login(
-                token: token,
-                userId: userId,
-              );
-            },
-          ),
+          const _Login(),
 
           // Register
           _register(context),
@@ -89,9 +79,9 @@ class Login extends StatelessWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _Login extends StatefulWidget {
-  var token, userId;
-  _Login({Key? key, required this.token, required this.userId})
-      : super(key: key);
+  const _Login({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_Login> createState() => __LoginState();
@@ -198,9 +188,6 @@ class __LoginState extends State<_Login> {
 
                   await user.login(context: context);
 
-                  //save to the provider
-                  widget.token = user.token;
-                  widget.userId = user.userId;
                   // if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
                     if (user.token != false) {

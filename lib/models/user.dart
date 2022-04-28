@@ -26,7 +26,8 @@ class User {
     );
     loadingDialog.show();
 
-    const url = "https://soil-analysis-system.herokuapp.com/v1/user/login";
+    const url = "https://soil-analysis-usls.herokuapp.com/v1/user/login";
+    // "http://localhost:3000/v1/user/login";
     var response = await http.post(Uri.parse(url),
         body: {'username': username, 'password': password});
 
@@ -55,7 +56,8 @@ class User {
 
   //TODO: fix this
   register() async {
-    const url = "https://soil-analysis-system.herokuapp.com/v1/user/create";
+    const url = "https://soil-analysis-usls.herokuapp.com/v1/user/create";
+    // "http://localhost:3000/v1/user/create";
     var response = await http.post(Uri.parse(url),
         body: {'name': name, 'username': username, 'password': password});
     if (response.statusCode == 200) {
