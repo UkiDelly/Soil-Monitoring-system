@@ -4,7 +4,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/main.dart';
 
 import '../../loading.dart';
-import '../../models/create_history.dart';
+import '../../models/history.dart';
 import '../../models/fertilizer.dart';
 import '../../models/single_sensor.dart';
 import 'Status widgets/humidity.dart';
@@ -41,7 +41,6 @@ class _GardenPageState extends State<GardenPage> {
     super.initState();
     sensorData = Sensor(gardenId: widget.gardenId, token: widget.token);
     getData = sensorData.getSensorData(widget.plant);
-    history = sensorData.histrory;
   }
 
   @override
@@ -59,12 +58,12 @@ class _GardenPageState extends State<GardenPage> {
         actions: [
           const Spacer(),
           // Add sensor button
-          const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.add, size: 30),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
+          // const IconButton(
+          //   onPressed: null,
+          //   icon: Icon(Icons.add, size: 30),
+          //   splashColor: Colors.transparent,
+          //   highlightColor: Colors.transparent,
+          // ),
 
           //History button
           IconButton(
@@ -102,74 +101,86 @@ class _GardenPageState extends State<GardenPage> {
                 );
               } else if (snapshot.hasError) {
                 return const SizedBox();
+              } else if (snapshot.hasData) {
+                //Conver object to list
+                var _sensorList = snapshot.data as List;
+
+                for (int i = 0; i < pages; i++) {
+                  history.add(HistoryOfSensorData(sensorList: _sensorList[i]));
+                  history[i].createHistory();
+                }
+
+                //get the average
+                double nAverage = 0, pAverage = 0, kAverage = 0, phAverage = 0;
+
+                for (int i = 0; i < pages; i++) {
+                  // add all last sensor data
+                  nAverage += _sensorList[i].last['nitrogen'];
+                  pAverage += _sensorList[i].last['phosphorous'];
+                  kAverage += _sensorList[i].last['potassium'];
+                  phAverage += _sensorList[i].last['pH'];
+                }
+
+                //division to get the average
+                nAverage /= pages;
+                pAverage /= pages;
+                kAverage /= pages;
+                phAverage /= pages;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Garden Name, notes
+                    gardenInfo(isDarkMode),
+
+                    const Divider(indent: 10, endIndent: 10, thickness: 3),
+
+                    //Pages
+                    _showSensor(_sensorList),
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    //Plant selected
+                    plant(),
+
+                    const Divider(
+                      indent: 15,
+                      endIndent: 15,
+                      thickness: 3,
+                    ),
+
+                    //Fertilizer recommendation
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                      child: Text("Fertilizer recommend",
+                          style: TextStyle(
+                              fontSize: 33, fontWeight: FontWeight.w500)),
+                    ),
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    //Fertilizer
+                    FertilizerCards(
+                      nAverage: nAverage,
+                      pAverage: pAverage,
+                      kAverage: kAverage,
+                      phAverage: phAverage,
+                      plant: widget.plant,
+                    )
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    "No data",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                );
               }
-
-              //Conver object to list
-              var _sensorList = snapshot.data as List;
-
-              //get the average
-              double nAverage = 0, pAverage = 0, kAverage = 0, phAverage = 0;
-
-              for (int i = 0; i < pages; i++) {
-                // add all last sensor data
-                nAverage += _sensorList[i].last['nitrogen'];
-                pAverage += _sensorList[i].last['phosphorous'];
-                kAverage += _sensorList[i].last['potassium'];
-                phAverage += _sensorList[i].last['pH'];
-              }
-
-              //division to get the average
-              nAverage /= pages;
-              pAverage /= pages;
-              kAverage /= pages;
-              phAverage /= pages;
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Garden Name, notes
-                  gardenInfo(isDarkMode),
-
-                  const Divider(indent: 10, endIndent: 10, thickness: 3),
-
-                  //Pages
-                  _showSensor(_sensorList),
-
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  //Plant selected
-                  plant(),
-
-                  const Divider(
-                    indent: 15,
-                    endIndent: 15,
-                    thickness: 3,
-                  ),
-
-                  //Fertilizer recommendation
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: Text("Fertilizer recommend",
-                        style: TextStyle(
-                            fontSize: 33, fontWeight: FontWeight.w500)),
-                  ),
-
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  //Fertilizer
-                  FertilizerCards(
-                    nAverage: nAverage,
-                    pAverage: pAverage,
-                    kAverage: kAverage,
-                    phAverage: phAverage,
-                    plant: widget.plant,
-                  )
-                ],
-              );
             },
           ),
         ),
