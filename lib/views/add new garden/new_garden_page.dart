@@ -65,7 +65,11 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
-              onPressed: () => Navigator.pop(context)),
+              onPressed: () {
+                widget.callback();
+                Navigator.of(context).pop();
+              }),
+
           leadingWidth: 90,
 
           elevation: 0,
@@ -104,9 +108,8 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
 
                     if (created) {
                       _showToast(context, "Successfully created a new Garden!");
-                      Future.delayed(const Duration(seconds: 500), () {
-                        Navigator.of(context).pop();
-                      });
+                      widget.callback();
+                      Navigator.of(context).pop();
                     }
                   }
                 },

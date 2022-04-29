@@ -127,7 +127,11 @@ class _GardenListState extends State<GardenList> {
                                         child: AddNewGarden(
                                           token: widget.token,
                                           userId: widget.userId,
-                                          callback: didChangeDependencies,
+                                          callback: () {
+                                            setState(() {
+                                              garden.getGardenList();
+                                            });
+                                          },
                                         ),
                                         type: PageTransitionType.rightToLeft))
                                     .then((value) {
