@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:thesis/main.dart';
 import 'package:thesis/views/add%20new%20garden/plants.dart';
+import '../../loading.dart';
 import '../../models/garden.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
@@ -26,7 +28,6 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
       noteController = TextEditingController();
   String selectedPlants = '';
   late bool isDarkMode;
-  late Garden garden;
 
   getPlantName(plantName) {
     setState(() {
@@ -39,7 +40,6 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
     super.initState();
     var brightness = SchedulerBinding.instance!.window.platformBrightness;
     isDarkMode = brightness == Brightness.dark;
-    garden = Garden(token: widget.token, userId: widget.userId);
   }
 
   @override
@@ -78,22 +78,36 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+                    // show load
+                    CustomProgressDialog loadingDialog = CustomProgressDialog(
+                      context,
+                      blur: 10,
+                      dismissable: false,
+                      loadingWidget: const Center(child: LoadingPage()),
+                    );
+                    loadingDialog.show();
+
                     if (selectedPlants == '') {
                       _showToast(context, "Please select a plant.");
                       return;
                     }
+                    Garden garden =
+                        Garden(token: widget.token, userId: widget.userId);
 
                     // create new Garden
-                    await garden.createGarden(
-                        context: context,
+                    bool created = await garden.createGarden(
                         name: nameController.text,
                         notes: noteController.text,
                         plant: selectedPlants);
 
-                    //set state the main page
-                    Future.delayed(const Duration(seconds: 500), () {
-                      Navigator.of(context).pop();
-                    });
+                    loadingDialog.dismiss();
+
+                    if (created) {
+                      _showToast(context, "Successfully created a new Garden!");
+                      Future.delayed(const Duration(seconds: 500), () {
+                        Navigator.of(context).pop();
+                      });
+                    }
                   }
                 },
                 child: const Text(

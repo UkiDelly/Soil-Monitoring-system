@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:thesis/models/create_history.dart';
 
 class SingleSensorData {
   final Map<String, double> npk;
@@ -24,7 +23,6 @@ class Sensor {
   String path = '';
   int pages = 1;
   List sensorList = [];
-  List<HistoryOfSensorData> histrory = [];
 
   Sensor({required this.token, required this.gardenId});
 
@@ -39,12 +37,12 @@ class Sensor {
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
 
-      pages = item['data'].length;
+      if (item['data'][0].isEmpty) {
+        return null;
+      }
 
       for (int i = 0; i < pages; i++) {
         sensorList.add(item['data'][i]);
-        histrory.add(HistoryOfSensorData(token: token, gardenId: gardenId));
-        histrory[i].createHistory();
       }
 
       switch (plant) {

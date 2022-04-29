@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Garden {
@@ -34,10 +33,8 @@ class Garden {
   }
 
   createGarden(
-      {required BuildContext context,
-      required String name,
-      String? notes,
-      required String plant}) async {
+      {required String name, String? notes, required String plant}) async {
+    //
     var body = {
       "name": name,
       "notes": notes!,
@@ -76,40 +73,42 @@ class Garden {
 
         // get the sensorId
         String sensorId = item['data']['id'];
-        Map<String, int> initialData = {
-          "nitrogen": 0,
-          "phosphorous": 0,
-          "potassium": 0,
-          "pH": 0,
-          "temperature": 0,
-          "moisture": 0,
-          "humidity": 0
-        };
+        // Map<String, int> initialData = {
+        //   "nitrogen": 0,
+        //   "phosphorous": 0,
+        //   "potassium": 0,
+        //   "pH": 0,
+        //   "temperature": 0,
+        //   "moisture": 0,
+        //   "humidity": 0
+        // };
 
         final _url =
-            "https://soil-analysis-usls.herokuapp.com/v1/addSensorData/$sensorId";
+            "https://soil-analysis-usls.herokuapp.com/v1/sensor/addSensorData/$sensorId";
         response = await http.put(Uri.parse(_url),
             headers: {
               'Authorization': "Bearer $token",
               'Content-Type': 'application/json'
             },
-            body: jsonEncode(initialData));
-
-        //TODO: Fix this shit
+            body: jsonEncode({
+              "nitrogen": 0,
+              "phosphorous": 0,
+              "potassium": 0,
+              "pH": 0,
+              "temperature": 0,
+              "moisture": 0,
+              "humidity": 0
+            }));
         print("create sensor data: ${response.statusCode}");
+        print(response.body);
+        if (response.statusCode == 200) {
+          return true;
+        }
 
-        _showToast(context, "Successfully created a new Garden!");
+        return false;
       }
+      return false;
     }
+    return false;
   }
-}
-
-void _showToast(BuildContext context, String text) {
-  final scaffold = ScaffoldMessenger.of(context);
-  scaffold.showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text(text),
-    ),
-  );
 }
