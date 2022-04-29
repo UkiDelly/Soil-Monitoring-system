@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 //make a call back
-typedef getPlant = void Function(String params);
+typedef GetPlant = void Function(String params);
 
 class PlantCard extends StatefulWidget {
-  final getPlant callback;
+  final GetPlant callback;
   const PlantCard({Key? key, required this.callback}) : super(key: key);
 
   @override

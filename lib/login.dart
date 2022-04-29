@@ -1,17 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/IOS/Main%20Page/mobile_main.dart';
-import 'package:thesis/Main/loading.dart';
-import 'package:thesis/Main/preferences.dart';
-import 'package:thesis/Main/provider.dart';
 
-import 'new_user.dart';
+import 'models/user.dart';
+import 'views/add new user/new_user.dart';
+import 'views/mobile_main.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -42,16 +35,7 @@ class Login extends StatelessWidget {
           ),
 
           // Login
-          Consumer(
-            builder: (context, ref, child) {
-              var token = ref.watch(tokenProvider.notifier);
-              var userId = ref.watch(userIDProvider.notifier);
-              return _Login(
-                token: token,
-                userId: userId,
-              );
-            },
-          ),
+          const _Login(),
 
           // Register
           _register(context),
@@ -95,9 +79,9 @@ class Login extends StatelessWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _Login extends StatefulWidget {
-  var token, userId;
-  _Login({Key? key, required this.token, required this.userId})
-      : super(key: key);
+  const _Login({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_Login> createState() => __LoginState();
@@ -108,62 +92,6 @@ class __LoginState extends State<_Login> {
   TextEditingController usernameController = TextEditingController(),
       passwordController = TextEditingController();
   bool? successLogin;
-  //Dialon
-  late CustomProgressDialog loadingDialog;
-  //
-
-  //* Login
-  login(_) async {
-    //show dialog
-    loadingDialog = CustomProgressDialog(
-      context,
-      blur: 10,
-      dismissable: false,
-      loadingWidget: const Center(child: LoadingPage()),
-    );
-
-    loadingDialog.show();
-    // const url = "https://soilanalysis.loca.lt/v1/user/login";
-    const url = "http://localhost:3000/v1/user/login";
-    final response = await http.post(Uri.parse(url), body: {
-      'username': usernameController.text,
-      'password': passwordController.text
-    });
-
-    var _item = {};
-
-    // Login success
-    if (response.statusCode == 200) {
-      successLogin = true;
-      _item = jsonDecode(response.body);
-
-      //Save the token
-      widget.token.state = _item['data']['authToken'];
-      LoginPreferences.saveToken(_item['data']['authToken']);
-
-      var tokenDecode = Jwt.parseJwt(_item['data']['authToken']);
-
-      //Save the user id
-      widget.userId.state = tokenDecode['_id'];
-      LoginPreferences.saveUserId(tokenDecode['_id']);
-
-      // No user exist
-    } else if (response.statusCode == 401) {
-      successLogin = false;
-      loadingDialog.dismiss();
-      // Server is offline
-    } else {
-      successLogin = false;
-      loadingDialog.dismiss();
-      showAlertDialog(context);
-    }
-
-    setState(() {
-      successLogin;
-      usernameController.text = "";
-      passwordController.text = "";
-    });
-  }
 
   @override
   void initState() {
@@ -242,30 +170,41 @@ class __LoginState extends State<_Login> {
           const SizedBox(
             height: 30,
           ),
-          SizedBox(
-            width: 200,
-            child: ElevatedButton(
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Login",
-                  style: TextStyle(fontSize: 30),
+          Consumer(
+            builder: (context, ref, child) => SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(fontSize: 30),
+                  ),
                 ),
-              ),
-              onPressed: () async {
-                // if the text of the field is validate
-                if (_formKey.currentState!.validate()) {
-                  await login(context);
+                onPressed: () async {
+                  User user = User(
+                      username: usernameController.text,
+                      password: passwordController.text);
 
-                  if (successLogin == true) {
-                    Navigator.pushReplacement(
-                        context,
-                        PageTransition(
-                            child: const MobileHome(),
-                            type: PageTransitionType.fade));
+                  await user.login(context: context);
+
+                  // if the text of the field is validate
+                  if (_formKey.currentState!.validate()) {
+                    if (user.token != false) {
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: MobileHome(
+                                  token: user.token, userId: user.userId),
+                              type: PageTransitionType.fade));
+                    } else if (user.token == false) {
+                      setState(() {
+                        successLogin == false;
+                      });
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
           const SizedBox(

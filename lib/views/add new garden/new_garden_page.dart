@@ -1,17 +1,22 @@
-import 'dart:convert';
-
+// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:thesis/IOS/New%20Garden%20Page/plants.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:thesis/main.dart';
-
-import '../../Main/provider.dart';
+import 'package:thesis/views/add%20new%20garden/plants.dart';
+import '../../loading.dart';
+import '../../models/garden.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
   Function() callback;
-  AddNewGarden({Key? key, required this.callback}) : super(key: key);
+  String token, userId;
+  AddNewGarden(
+      {required this.callback,
+      required this.userId,
+      required this.token,
+      Key? key})
+      : super(key: key);
 
   @override
   ConsumerState<AddNewGarden> createState() => _AddNewGardenState();
@@ -19,66 +24,10 @@ class AddNewGarden extends ConsumerStatefulWidget {
 
 class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   //text controller
-  var nameControl = TextEditingController(),
-      noteControl = TextEditingController();
+  var nameController = TextEditingController(),
+      noteController = TextEditingController();
   String selectedPlants = '';
   late bool isDarkMode;
-
-  createGarden() async {
-    final _token = ref.watch(tokenProvider);
-    var _gardenId;
-    // const _url = "https://soilanalysis.loca.lt/v1/garden/create";
-    const _url = "http://localhost:3000/v1/garden/create";
-    var _response = await http.post(Uri.parse(_url), body: {
-      "name": nameControl.text,
-      "notes": noteControl.text,
-      "plant": selectedPlants
-    }, headers: {
-      'Authorization': "Bearer $_token"
-    });
-
-    //? get the gardenId from the response
-    if (_response.statusCode == 200) {
-      var _item = jsonDecode(_response.body);
-      _gardenId = _item['data']['insertedId'];
-      // const _sensorUrl = 'https://soilanalysis.loca.lt/v1/sensor/create';
-      const _sensorUrl = 'http://localhost:3000/v1/sensor/create';
-      _response = await http.post(Uri.parse(_sensorUrl), body: {
-        "name": nameControl.text,
-        "gardenId": _gardenId,
-        'plant': selectedPlants
-      }, headers: {
-        'Authorization': "Bearer $_token"
-      });
-      if (_response.statusCode == 200) {
-        _item = jsonDecode(_response.body);
-
-        //get the sensor id from the response and create a empty sensorData
-        var _sensorId = _item['data']['id'];
-        Map<String, num> initialData = {
-          "nitrogen": 0,
-          "phosphorous": 0,
-          "potassium": 0,
-          "pH": 0,
-          "temperature": 0,
-          "moisture": 0,
-          "humidity": 0
-        };
-
-        final _sensorDataUrl =
-            //'https://soilanalysis.loca.lt/v1/sensor/addSensorData/$_sensorId';
-            'http://localhost:3000/v1/sensor/addSensorData/$_sensorId';
-        _response = await http.put(Uri.parse(_sensorDataUrl),
-            headers: {
-              'Authorization': "Bearer $_token",
-              'Content-Type': 'application/json'
-            },
-            body: json.encode(initialData));
-
-        print(_response.statusCode);
-      }
-    }
-  }
 
   getPlantName(plantName) {
     setState(() {
@@ -127,19 +76,38 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+                    // show load
+                    CustomProgressDialog loadingDialog = CustomProgressDialog(
+                      context,
+                      blur: 10,
+                      dismissable: false,
+                      loadingWidget: const Center(child: LoadingPage()),
+                    );
+                    loadingDialog.show();
+
                     if (selectedPlants == '') {
                       _showToast(context, "Please select a plant.");
                       return;
                     }
-                    createGarden();
-                    _showToast(context, "Successfully created a new Garden!");
-                    //set state the main page
-                    widget.callback;
-                    Future.delayed(const Duration(seconds: 500), () {
-                      Navigator.of(context).pop();
-                    });
+                    Garden garden =
+                        Garden(token: widget.token, userId: widget.userId);
+
+                    // create new Garden
+                    bool created = await garden.createGarden(
+                        name: nameController.text,
+                        notes: noteController.text,
+                        plant: selectedPlants);
+
+                    loadingDialog.dismiss();
+
+                    if (created) {
+                      _showToast(context, "Successfully created a new Garden!");
+                      Future.delayed(const Duration(seconds: 500), () {
+                        Navigator.of(context).pop();
+                      });
+                    }
                   }
                 },
                 child: const Text(
@@ -218,7 +186,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 child: TextFormField(
                   style: TextStyle(
                       color: isDarkMode ? Colors.black : Colors.white),
-                  controller: nameControl,
+                  controller: nameController,
                   decoration: const InputDecoration(
                     hintText: "Enter a name",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -261,7 +229,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
             Center(
               child: TextFormField(
                 style: const TextStyle(color: Colors.black),
-                controller: noteControl,
+                controller: noteController,
                 maxLines: null,
                 decoration: InputDecoration(
                   hintText: "Enter a note",

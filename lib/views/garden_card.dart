@@ -3,13 +3,13 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/Main/provider.dart';
+
 import 'package:thesis/main.dart';
 
-import '../Gardens Page/garden_page.dart';
+import 'garden details/garden_page.dart';
 
 class GardenCard extends StatefulWidget {
-  String gardenId, gardenName, notes, plant;
+  String gardenId, gardenName, notes, plant, token;
   int index;
 
   GardenCard(
@@ -18,7 +18,8 @@ class GardenCard extends StatefulWidget {
       required this.gardenId,
       required this.gardenName,
       required this.notes,
-      required this.plant})
+      required this.plant,
+      required this.token})
       : super(key: key);
 
   @override
@@ -51,9 +52,8 @@ class _GardenCardState extends State<GardenCard> {
             openBuilder: (_, closeContainer) {
               return Consumer(
                 builder: (ctx, ref, child) {
-                  final token = ref.watch(tokenProvider);
                   return GardenPage(
-                    token: token,
+                    token: widget.token,
                     gardenId: widget.gardenId,
                     gardenName: widget.gardenName,
                     notes: widget.notes,

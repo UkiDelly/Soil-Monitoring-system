@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:thesis/Plants/cassave.dart';
-import 'package:thesis/Plants/rice.dart';
 
-import '../../Plants/corn.dart';
+import 'Plants/cassave.dart';
+import 'Plants/corn.dart';
+import 'Plants/rice.dart';
 
 // ignore: must_be_immutable
 class FertilizerCards extends StatefulWidget {

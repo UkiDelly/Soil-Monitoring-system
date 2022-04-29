@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesis/main.dart';
-import 'package:http/http.dart' as http;
+
+import '../../models/user.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -37,18 +38,6 @@ class _RegisterInputState extends State<RegisterInput> {
       usernameController = TextEditingController(),
       passwordController = TextEditingController();
   bool showPassword = false;
-
-  // Register
-  register() async {
-    const url = "http://localhost:3000/v1/user/create";
-    // const url = "https://soilanalysis.loca.lt/v1/user/create";
-
-    var response = await http.post(Uri.parse(url), body: {
-      'name': nameController.text,
-      'username': usernameController.text,
-      'password': passwordController.text
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,15 +126,21 @@ class _RegisterInputState extends State<RegisterInput> {
               //Register button
               ElevatedButton(
                   onPressed: () async {
-                    await register();
+                    User user = User(
+                        name: nameController.text,
+                        username: usernameController.text,
+                        password: passwordController.text);
+                    bool register = await user.register();
                     if (_formKey.currentState!.validate()) {
-                      await Fluttertoast.showToast(
-                          msg: "Successfully Register!",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: mainColor,
-                          fontSize: 20.0);
+                      if (register) {
+                        await Fluttertoast.showToast(
+                            msg: "Successfully Register!",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: mainColor,
+                            fontSize: 20.0);
+                      } else {}
                     }
                   },
                   child: const Padding(
