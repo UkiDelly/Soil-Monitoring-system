@@ -33,6 +33,8 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      //* Theme settings of the app
         theme: ThemeData(
             backgroundColor: const Color.fromARGB(255, 246, 245, 245),
             fontFamily: "ReadexPro",

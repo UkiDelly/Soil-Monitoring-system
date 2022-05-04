@@ -40,7 +40,10 @@ class _PlantCardState extends State<PlantCard> {
                     ? Border.all(
                         color: isDarkMode ? Colors.white : Colors.black,
                         width: 5)
-                    : null,
+                    : Border.all(
+                        color:
+                            isDarkMode ? const Color(0xff424242) : Colors.white,
+                        width: 5),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +82,10 @@ class _PlantCardState extends State<PlantCard> {
                     ? Border.all(
                         color: isDarkMode ? Colors.white : Colors.black,
                         width: 5)
-                    : null,
+                    : Border.all(
+                        color:
+                            isDarkMode ? const Color(0xff424242) : Colors.white,
+                        width: 5),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +121,10 @@ class _PlantCardState extends State<PlantCard> {
                     ? Border.all(
                         color: isDarkMode ? Colors.white : Colors.black,
                         width: 5)
-                    : null,
+                    : Border.all(
+                        color:
+                            isDarkMode ? const Color(0xff424242) : Colors.white,
+                        width: 5),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

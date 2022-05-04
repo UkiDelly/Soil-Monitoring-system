@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/loading.dart';
 
 import 'models/user.dart';
 import 'views/add new user/new_user.dart';
@@ -56,7 +58,7 @@ class Login extends StatelessWidget {
               style: TextStyle(fontSize: 25)),
           TextButton(
             onPressed: () {
-//? Register Page
+              //? Move to register Page
               Navigator.push(
                   _,
                   PageTransition(
@@ -76,6 +78,7 @@ class Login extends StatelessWidget {
   }
 }
 
+// key for the validation
 final _formKey = GlobalKey<FormState>();
 
 class _Login extends StatefulWidget {
@@ -124,11 +127,14 @@ class __LoginState extends State<_Login> {
                             errorBorder: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.red, width: 3)),
+
+                            //* If fail to login
                             errorText: successLogin == false
-                                ? "No user exist!"
+                                ? "No user exist or wrong info!"
                                 : null),
                         validator: (username) {
                           if (username == "") {
+                            //* if the field is empty
                             return "Please enter a username";
                           }
                           return null;
@@ -159,6 +165,7 @@ class __LoginState extends State<_Login> {
                                   BorderSide(color: Colors.red, width: 3))),
                       validator: (password) {
                         if (password == "") {
+                          //* if the field is empty
                           return "Please enter a password";
                         }
                         return null;
@@ -173,6 +180,8 @@ class __LoginState extends State<_Login> {
           Consumer(
             builder: (context, ref, child) => SizedBox(
               width: 200,
+
+              //* Login button
               child: ElevatedButton(
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),
@@ -182,23 +191,42 @@ class __LoginState extends State<_Login> {
                   ),
                 ),
                 onPressed: () async {
+                  //* show loading dialog
+                  CustomProgressDialog loadingDialog = CustomProgressDialog(
+                    context,
+                    blur: 10,
+                    dismissable: false,
+                    loadingWidget: const Center(child: LoadingPage()),
+                  );
+
+                  loadingDialog.show();
+
+                  //* Create a user class
                   User user = User(
                       username: usernameController.text,
                       password: passwordController.text);
 
-                  await user.login(context: context);
+                  //* Call the login function of the User class
+                  await user.login();
 
-                  // if the text of the field is validate
+                  //* if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
+                    //* if the token is given
                     if (user.token != false) {
+                      //* move to the main page
                       Navigator.pushReplacement(
                           context,
                           PageTransition(
                               child: MobileHome(
                                   token: user.token, userId: user.userId),
                               type: PageTransitionType.fade));
+
+                      //* if failed to login
                     } else if (user.token == false) {
+                      //* close the loading page
+                      loadingDialog.dismiss();
                       setState(() {
+                        //* Login is fail
                         successLogin == false;
                       });
                     }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+//* Model of a single sensor data
 class SingleSensorData {
   final Map<String, double> npk;
 
@@ -16,6 +17,7 @@ class SingleSensorData {
   });
 }
 
+//* Model for the sensors of a garden
 class Sensor {
   final token;
   final gardenId;
@@ -26,6 +28,7 @@ class Sensor {
 
   Sensor({required this.token, required this.gardenId});
 
+  //* Get all the sensor and sensor data of a garden
   getSensorData(plant) async {
     final url =
         "https://soil-analysis-usls.herokuapp.com/v1/sensor/getGardenSensorData/$gardenId";
@@ -37,6 +40,7 @@ class Sensor {
     if (response.statusCode == 200) {
       item = jsonDecode(response.body);
 
+      // If the data is empty return null
       if (item['data'][0].isEmpty) {
         return null;
       }
@@ -45,6 +49,7 @@ class Sensor {
         sensorList.add(item['data'][i]);
       }
 
+      // choose what image for the plant
       switch (plant) {
         case 'Rice':
           path = "assets/plants/rice.png";

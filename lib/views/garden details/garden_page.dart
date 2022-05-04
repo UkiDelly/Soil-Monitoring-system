@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/main.dart';
-
 import '../../loading.dart';
 import '../../models/history.dart';
 import '../../models/fertilizer.dart';
@@ -154,7 +153,7 @@ class _GardenPageState extends State<GardenPage> {
                     //Fertilizer recommendation
                     const Padding(
                       padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                      child: Text("Fertilizer recommend",
+                      child: Text("Fertilizer recommended",
                           style: TextStyle(
                               fontSize: 33, fontWeight: FontWeight.w500)),
                     ),
@@ -170,7 +169,8 @@ class _GardenPageState extends State<GardenPage> {
                       kAverage: kAverage,
                       phAverage: phAverage,
                       plant: widget.plant,
-                    )
+                    ),
+                    const SizedBox(height: 10)
                   ],
                 );
               } else {
@@ -348,7 +348,8 @@ class _GardenPageState extends State<GardenPage> {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         elevation: 5,
-        child: SizedBox(
+        child: Container(
+          margin: const EdgeInsets.all(10),
           child: Column(children: [
             SizedBox(width: 250, child: Image.asset(sensorData.path)),
             Text(

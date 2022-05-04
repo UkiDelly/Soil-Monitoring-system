@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:thesis/main.dart';
 
+import '../../loading.dart';
 import '../../models/user.dart';
 
 class SignInPage extends StatelessWidget {
@@ -96,7 +98,7 @@ class _RegisterInputState extends State<RegisterInput> {
                   obscureText: showPassword ? false : true,
                   decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: "Enter your full name",
+                      hintText: "Enter password",
                       filled: true,
                       suffixIcon: showPassword
                           ? IconButton(
@@ -126,6 +128,15 @@ class _RegisterInputState extends State<RegisterInput> {
               //Register button
               ElevatedButton(
                   onPressed: () async {
+                    CustomProgressDialog loadingDialog = CustomProgressDialog(
+                      context,
+                      blur: 10,
+                      dismissable: false,
+                      loadingWidget: const Center(child: LoadingPage()),
+                    );
+
+                    loadingDialog.show();
+
                     User user = User(
                         name: nameController.text,
                         username: usernameController.text,
@@ -140,8 +151,10 @@ class _RegisterInputState extends State<RegisterInput> {
                             timeInSecForIosWeb: 1,
                             backgroundColor: mainColor,
                             fontSize: 20.0);
-                      } else {}
+                      }
                     }
+
+                    loadingDialog.dismiss();
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(10.0),

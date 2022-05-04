@@ -108,8 +108,10 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
 
                     if (created) {
                       _showToast(context, "Successfully created a new Garden!");
-                      widget.callback();
-                      Navigator.of(context).pop();
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        widget.callback();
+                        Navigator.of(context).pop();
+                      });
                     }
                   }
                 },

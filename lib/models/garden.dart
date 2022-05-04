@@ -10,6 +10,7 @@ class Garden {
     this.token,
   });
 
+  //* Get the garden list
   getGardenList() async {
     const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/list";
     // "http://localhost:3000/v1/garden/list";
@@ -21,6 +22,7 @@ class Garden {
       // get the garden list
       List _temp = item['data'];
 
+      gardenList.clear();
       //find the garden made by the login user
       for (var item in _temp) {
         if (item['createdBy'] == userId) {
@@ -32,6 +34,7 @@ class Garden {
     }
   }
 
+  //* create a new garden
   createGarden(
       {required String name, String? notes, required String plant}) async {
     //
@@ -46,13 +49,12 @@ class Garden {
     var response = await http.post(Uri.parse(_url),
         body: body, headers: {'Authorization': 'Bearer $token'});
 
-    print("create garden: ${response.statusCode}");
     // get the gardenId from the response
     if (response.statusCode == 200) {
       var item = jsonDecode(response.body);
       String _gardenId = item['data']['insertedId'];
 
-      // create sensor
+      //* create as new sensor
       const _url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
       // "http://localhost:3000/v1/sensor/create";
       response = await http.post(Uri.parse(_url), body: {
@@ -64,24 +66,12 @@ class Garden {
         'Authorization': 'Bearer $token'
       });
 
-      print(jsonDecode(response.body));
-
-      print("create sensor: ${response.statusCode}");
-      // create inital sensor data
+      //* create inital sensor data
       if (response.statusCode == 200) {
         item = jsonDecode(response.body);
 
-        // get the sensorId
+        //* get the sensorId
         String sensorId = item['data']['id'];
-        // Map<String, int> initialData = {
-        //   "nitrogen": 0,
-        //   "phosphorous": 0,
-        //   "potassium": 0,
-        //   "pH": 0,
-        //   "temperature": 0,
-        //   "moisture": 0,
-        //   "humidity": 0
-        // };
 
         final _url =
             "https://soil-analysis-usls.herokuapp.com/v1/sensor/addSensorData/$sensorId";
@@ -99,8 +89,6 @@ class Garden {
               "moisture": 0,
               "humidity": 0
             }));
-        print("create sensor data: ${response.statusCode}");
-        print(response.body);
         if (response.statusCode == 200) {
           return true;
         }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import 'Plants/cassave.dart';
 import 'Plants/corn.dart';
@@ -111,7 +112,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
               elevation: 5,
               child: SizedBox(
                 width: 300,
-                height: 300,
+                height: 400,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -131,8 +132,25 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text("Fertilizer: ${fertilizer[0]}",
-                        style: const TextStyle(fontSize: 25)),
+                    const Divider(
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    const Text("Amount recommended",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 30)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(" Wet season: ${fertilizer[0]['wet']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.blueAccent)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(" Dry season: ${fertilizer[0]['dry']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.orangeAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -153,7 +171,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 width: 300,
-                height: 300,
+                height: 400,
                 child: Column(
                   children: [
                     const SizedBox(
@@ -173,8 +191,25 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text("Fertilizer: ${fertilizer[1]}",
-                        style: const TextStyle(fontSize: 25)),
+                    const Divider(
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    const Text("Amount recommended",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 30)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(" Wet season: ${fertilizer[1]['wet']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.blueAccent)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(" Dry season: ${fertilizer[1]['dry']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.orangeAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -194,7 +229,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
               elevation: 5,
               child: SizedBox(
                 width: 300,
-                height: 300,
+                height: 400,
                 child: Column(
                   children: [
                     const SizedBox(
@@ -214,8 +249,25 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text("Fertilizer: ${fertilizer[0]}",
-                        style: const TextStyle(fontSize: 25)),
+                    const Divider(
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    const Text("Amount recommended",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 30)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(" Wet season: ${fertilizer[2]['wet']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.blueAccent)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(" Dry season: ${fertilizer[2]['dry']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.orangeAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -232,7 +284,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
               elevation: 5,
               child: SizedBox(
                 width: 300,
-                height: 300,
+                height: 400,
                 child: Column(
                   children: [
                     const SizedBox(
@@ -247,9 +299,19 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                           TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
-                    Text("Fertilizer: ${fertilizer[3]}",
+                    const Divider(
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    const Text("Amount recommended",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 25)),
+                        style: TextStyle(fontSize: 30)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GradientText("${fertilizer[3]}",
+                        style: const TextStyle(fontSize: 20),
+                        colors: const [Colors.blueAccent, Colors.orangeAccent]),
                     const Spacer(
                       flex: 2,
                     )
