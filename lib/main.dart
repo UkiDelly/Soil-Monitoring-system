@@ -34,16 +34,20 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-      //* Theme settings of the app
+        //* Theme settings of the app
         theme: ThemeData(
             backgroundColor: const Color.fromARGB(255, 246, 245, 245),
             fontFamily: "ReadexPro",
-            primarySwatch: Colors.green,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xff669D6B),
+            ),
             brightness: Brightness.light),
         darkTheme: ThemeData(
             backgroundColor: const Color(0xff303030),
             fontFamily: "ReadexPro",
-            primarySwatch: Colors.green,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xff669D6B),
+            ),
             brightness: Brightness.dark),
         debugShowCheckedModeBanner: false,
         title: "Soil Monitoring System",

@@ -45,6 +45,8 @@ class Sensor {
         return null;
       }
 
+      pages = item['data'].length;
+
       for (int i = 0; i < pages; i++) {
         sensorList.add(item['data'][i]);
       }
@@ -63,5 +65,10 @@ class Sensor {
       }
     }
     return sensorList;
+  }
+
+  addSennsor(){
+    const _url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
+    
   }
 }

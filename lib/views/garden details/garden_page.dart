@@ -30,7 +30,7 @@ class GardenPage extends StatefulWidget {
 
 class _GardenPageState extends State<GardenPage> {
   final PageController _pageController = PageController(initialPage: 0);
-  int pages = 1;
+
   var getData;
   List<HistoryOfSensorData> history = [];
   late Sensor sensorData;
@@ -39,6 +39,7 @@ class _GardenPageState extends State<GardenPage> {
   void initState() {
     super.initState();
     sensorData = Sensor(gardenId: widget.gardenId, token: widget.token);
+
     getData = sensorData.getSensorData(widget.plant);
   }
 
@@ -55,14 +56,10 @@ class _GardenPageState extends State<GardenPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          // Add sensor
+          // IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+
           const Spacer(),
-          // Add sensor button
-          // const IconButton(
-          //   onPressed: null,
-          //   icon: Icon(Icons.add, size: 30),
-          //   splashColor: Colors.transparent,
-          //   highlightColor: Colors.transparent,
-          // ),
 
           //History button
           IconButton(
@@ -103,6 +100,7 @@ class _GardenPageState extends State<GardenPage> {
               } else if (snapshot.hasData) {
                 //Conver object to list
                 var _sensorList = snapshot.data as List;
+                int pages = _sensorList.length;
 
                 for (int i = 0; i < pages; i++) {
                   history.add(HistoryOfSensorData(sensorList: _sensorList[i]));
@@ -249,7 +247,7 @@ class _GardenPageState extends State<GardenPage> {
           constraints: const BoxConstraints(maxHeight: 550),
           child: PageView.builder(
               controller: _pageController,
-              itemCount: pages,
+              itemCount: _sensorList.length,
               itemBuilder: ((context, index) {
                 //create history
 
@@ -262,7 +260,7 @@ class _GardenPageState extends State<GardenPage> {
         Center(
           child: SmoothPageIndicator(
             controller: _pageController,
-            count: pages,
+            count: _sensorList.length,
             effect: const ExpandingDotsEffect(
                 dotHeight: 10,
                 dotWidth: 10,

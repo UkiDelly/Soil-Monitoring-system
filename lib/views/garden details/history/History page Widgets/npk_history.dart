@@ -76,7 +76,7 @@ class NpkHistory extends StatelessWidget {
         //* Spots
         spots: nSpot ?? _nSpot,
         isCurved: true,
-        colors: [Colors.lightBlue],
+        color: Colors.lightBlue,
 
         //* bar width
         barWidth: 3,
@@ -90,7 +90,7 @@ class NpkHistory extends StatelessWidget {
         //* Spots
         spots: pSpot ?? _pSpot,
         isCurved: true,
-        colors: [Colors.redAccent],
+        color: Colors.redAccent,
 
         //* bar width
         barWidth: 3,
@@ -104,7 +104,7 @@ class NpkHistory extends StatelessWidget {
         //* Spots
         spots: kSpot ?? _kSpot,
         isCurved: true,
-        colors: [Colors.purpleAccent],
+        color: Colors.purpleAccent,
 
         //* bar width
         barWidth: 3,

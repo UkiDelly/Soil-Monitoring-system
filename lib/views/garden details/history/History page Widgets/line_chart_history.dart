@@ -24,7 +24,7 @@ class HistoryChart {
   bool? lineChartBarWidth = true;
 
   //* line color
-  late List<Color>? lineColor;
+  late Color? lineColor;
   //* Bellow bar area active
   bool? belowBarArea = false;
 
@@ -94,147 +94,193 @@ class HistoryChart {
       ),
     );
   }
-}
 
-LineChartData mainData(
-    List<LineChartBarData>? lineChartBarData,
-    double minX,
-    double maxX,
-    double minY,
-    double? leftSideInterval,
-    double maxY,
-    List<FlSpot>? spots,
-    bool showDot,
-    bool? lineChartBarGradient,
-    bool? barWidth,
-    List<Color>? lineColor,
-    bool? belowBarArea,
-    List<Color>? belowBarAreaColor) {
-  return LineChartData(
-    //* Grid
-    gridData: FlGridData(
-      show: true,
+  Widget bottomTileWidget(double value, TitleMeta meta) {
+    const style = TextStyle(
+        // color: Color(0xff68737d),
+        fontSize: 16,
+        fontWeight: FontWeight.bold);
+    String text = "";
+    if (value == maxX) {
+      text = "current";
+    }
 
-      //* show Vertical Line
-      drawVerticalLine: false,
-      //* show Horizontal Line
-      drawHorizontalLine: true,
+    return Text(text, style: style);
+  }
 
-      //* drawer of the vertical line
-      getDrawingVerticalLine: (value) {
-        return FlLine(color: Colors.grey, strokeWidth: 1);
-      },
-      //* drawer of the horizontal line
-      getDrawingHorizontalLine: (value) {
-        return FlLine(color: Colors.grey, strokeWidth: 1);
-      },
-    ),
+  Widget leftTileWidget(double value, TitleMeta meta) {
+    const style = TextStyle(
+      // color: Color(0xff67727d),
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+    );
 
-    //* Show the chart
-    titlesData: FlTitlesData(
+    String text = "";
+
+    if (value % 5 == 0) {
+      text = "${value.toInt()}";
+    }
+
+    return Container(
+        margin: const EdgeInsets.all(5), child: Text(text, style: style));
+  }
+
+  LineChartData mainData(
+      List<LineChartBarData>? lineChartBarData,
+      double minX,
+      double maxX,
+      double minY,
+      double? leftSideInterval,
+      double maxY,
+      List<FlSpot>? spots,
+      bool showDot,
+      bool? lineChartBarGradient,
+      bool? barWidth,
+      Color? lineColor,
+      bool? belowBarArea,
+      List<Color>? belowBarAreaColor) {
+    return LineChartData(
+      //* Grid
+      gridData: FlGridData(
+        show: true,
+        //* show Vertical Line
+        drawVerticalLine: false,
+        //* show Horizontal Line
+        drawHorizontalLine: true,
+        //* drawer of the vertical line
+        getDrawingVerticalLine: (value) {
+          return FlLine(color: Colors.grey, strokeWidth: 1);
+        },
+        //* drawer of the horizontal line
+        getDrawingHorizontalLine: (value) {
+          return FlLine(color: Colors.grey, strokeWidth: 1);
+        },
+      ),
+
+      //* Show the chart
+      titlesData: FlTitlesData(
         show: true,
         //* Disable the right side
-        rightTitles: SideTitles(showTitles: false),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
         //* Disable the top side
-        topTitles: SideTitles(showTitles: false),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
 
         //* Bottom side
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          interval: 1,
-          getTextStyles: (context, value) => const TextStyle(
-              // color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
-          getTitles: (value) {
-            if (value == maxX) {
-              return "current";
-            }
-            return "";
-          },
+        bottomTitles: AxisTitles(
+          axisNameWidget: const Text("Date",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            interval: 1,
+            getTitlesWidget: bottomTileWidget,
+
+            // getTextStyles: (context, value) => const TextStyle(
+            //   // color: Color(0xff68737d),
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 16),
+            // getTitles: (value) {
+            //   if (value == maxX) {
+            //     return "current";
+            //   }
+            //   return "";
+            // },
+          ),
         ),
 
         //* Left Side
-        leftTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 35,
-          interval: leftSideInterval ?? 1,
-          getTextStyles: (context, value) => const TextStyle(
-            // color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-          getTitles: (value) {
-            if (value % 5 == 0) {
-              return "${value.toInt()}";
-            }
-            return "";
-          },
-          margin: 5,
-        )),
+        leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 35,
+                interval: leftSideInterval ?? 1,
+                getTitlesWidget: leftTileWidget
+                // getTextStyles: (context, value) => const TextStyle(
+                //   // color: Color(0xff67727d),
+                //   fontWeight: FontWeight.bold,
+                //   fontSize: 15,
+                // ),
+                // getTitles: (value) {
+                //   if (value % 5 == 0) {
+                //     return "${value.toInt()}";
+                //   }
+                //   return "";
+                // },
+                // margin: 5,
+                )),
+      ),
 
-    //* Border of the chart
-    borderData: FlBorderData(
-        show: true,
-        border: Border.all(
-          // color: const Color(0xff37434d),
-          width: 3,
-        )),
+      //* Border of the chart
+      borderData: FlBorderData(
+          show: true,
+          border: Border.all(
+            // color: const Color(0xff37434d),
+            width: 3,
+          )),
 
-    //* Show the title of each side
-    axisTitleData: FlAxisTitleData(
-      show: true,
-      bottomTitle: AxisTitle(
-          showTitle: false,
-          titleText: "Date",
-          textStyle:
-              const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-    ),
+      //* Show the title of each side
 
-    //* Value of the chart
-    minX: minX,
-    maxX: maxX,
-    minY: minY,
-    maxY: maxY,
+      // axisTitleData: FlAxisTitleData(
+      //   show: true,
+      //   bottomTitle: AxisTitle(
+      //       showTitle: false,
+      //       titleText: "Date",
+      //       textStyle:
+      //           const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      // ),
 
-    //* Data spot
-    lineBarsData: lineChartBarData ??
-        [
-          LineChartBarData(
-              //* Spots
-              spots: spots,
-              isCurved: true,
-              colors: lineColor ?? [const Color.fromARGB(255, 246, 245, 245)],
+      //* Value of the chart
+      minX: minX,
+      maxX: maxX,
+      minY: minY,
+      maxY: maxY,
 
-              //* Gradient from the bottom
-              gradientFrom: lineChartBarGradient == true
-                  ? const Offset(0, 1)
-                  : const Offset(0, 0),
-              //* to the top
-              gradientTo: lineChartBarGradient == true
-                  ? const Offset(0, 0)
-                  : const Offset(1, 1),
-              //* bar width
-              barWidth: barWidth == true ? 3 : 0,
+      //* Data spot
+      lineBarsData: lineChartBarData ??
+          [
+            LineChartBarData(
+                //* Spots
+                spots: spots,
+                isCurved: true,
+                color: lineColor ?? const Color.fromARGB(255, 246, 245, 245),
 
-              //* about the dots of the chart
-              dotData: FlDotData(show: showDot),
+                //* Gradient from the bottom
+                // gradientFrom: lineChartBarGradient == true
+                //     ? const Offset(0, 1)
+                //     : const Offset(0, 0),
+                // //* to the top
+                // gradientTo: lineChartBarGradient == true
+                //     ? const Offset(0, 0)
+                //     : const Offset(1, 1),
+                //* bar width
+                barWidth: barWidth == true ? 3 : 0,
 
-              //* About the below area of the line
-              belowBarData: belowBarArea == true
-                  ? BarAreaData(
-                      show: true,
-                      gradientFrom: const Offset(
-                        0,
-                        1,
-                      ),
-                      gradientTo: const Offset(0, 0),
-                      colors: belowBarAreaColor
-                          ?.map((color) => color.withOpacity(0.5))
-                          .toList(),
-                    )
-                  : null)
-        ],
-  );
+                //* about the dots of the chart
+                dotData: FlDotData(show: showDot),
+
+                //* About the below area of the line
+                belowBarData: belowBarArea == true
+                    ? BarAreaData(
+                        show: true,
+                        gradient: LinearGradient(
+                            colors: belowBarAreaColor!
+                                .map((color) => color.withOpacity(0.5))
+                                .toList())
+                        // gradientFrom: const Offset(
+                        //   0,
+                        //   1,
+                        // ),
+                        // gradientTo: const Offset(0, 0),
+                        // colors: belowBarAreaColor
+                        //     ?.map((color) => color.withOpacity(0.5))
+                        //     .toList(),
+                        )
+                    : null)
+          ],
+    );
+  }
 }

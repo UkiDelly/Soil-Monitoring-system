@@ -20,7 +20,6 @@ class User {
     var response = await http.post(Uri.parse(url),
         body: {'username': username, 'password': password});
 
-    print(response.statusCode);
     if (response.statusCode == 200) {
       var item = jsonDecode(response.body);
       LoginPreferences.saveToken(item['data']['authToken']);

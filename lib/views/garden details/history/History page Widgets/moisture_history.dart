@@ -24,7 +24,7 @@ class MoistureHistory extends StatelessWidget {
         maxY: 100,
         spots: moistureSpot ?? spots,
         showDot: true,
-        lineColor: [Colors.lightBlueAccent],
+        lineColor: Colors.lightBlueAccent,
         lineChartBarWidth: true,
         width: width);
 
