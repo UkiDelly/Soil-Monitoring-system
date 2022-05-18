@@ -36,7 +36,7 @@ dependencies:
   transition:
   simple_gradient_text: ^1.2.2
   animated_widgets: ^1.1.0
-  syncfusion_flutter_gauges: ^19.4.50
+  syncfusion_flutter_gauges: ^20.1.56
   provider:
   http:
   flutter_riverpod:

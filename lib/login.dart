@@ -152,15 +152,17 @@ class __LoginState extends State<_Login> {
                       controller: passwordController,
                       textInputAction: TextInputAction.next,
                       obscureText: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelText: "Enter Password",
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Color(0xff669D6B), width: 3)),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 3)),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Color(0xff669D6B), width: 3)),
-                          errorBorder: OutlineInputBorder(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 3)),
+                          errorBorder: const OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.red, width: 3))),
                       validator: (password) {
@@ -214,12 +216,12 @@ class __LoginState extends State<_Login> {
                     //* if the token is given
                     if (user.token != false) {
                       //* move to the main page
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                              child: MobileHome(
-                                  token: user.token, userId: user.userId),
-                              type: PageTransitionType.fade));
+                      Navigator.of(context).pushReplacement(PageTransition(
+                          child: MobileHome(
+                            token: user.token,
+                            userId: user.userId,
+                          ),
+                          type: PageTransitionType.fade));
 
                       //* if failed to login
                     } else if (user.token == false) {

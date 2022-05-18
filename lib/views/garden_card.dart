@@ -39,7 +39,7 @@ class _GardenCardState extends State<GardenCard> {
             onClosed: (data) {
               setState(() {});
             },
-            openColor: mainColor,
+            openColor: Theme.of(context).colorScheme.primary,
             //Color when the Container is closed
             closedColor: mainColor,
             //Shape of the close Container
