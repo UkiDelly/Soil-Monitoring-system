@@ -65,12 +65,12 @@ class Login extends StatelessWidget {
                       child: const SignInPage(),
                       type: PageTransitionType.rightToLeft));
             },
+            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
             child: const Text(
               "Sign In!",
               style:
                   TextStyle(decoration: TextDecoration.underline, fontSize: 25),
             ),
-            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
           ),
         ],
       ),
@@ -118,12 +118,16 @@ class __LoginState extends State<_Login> {
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             labelText: "User name",
-                            border: const OutlineInputBorder(
+                            border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: Color(0xff669D6B), width: 3)),
-                            focusedBorder: const OutlineInputBorder(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 3)),
+                            focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: Color(0xff669D6B), width: 3)),
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 3)),
                             errorBorder: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.red, width: 3)),
@@ -216,6 +220,7 @@ class __LoginState extends State<_Login> {
                     //* if the token is given
                     if (user.token != false) {
                       //* move to the main page
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).pushReplacement(PageTransition(
                           child: MobileHome(
                             token: user.token,

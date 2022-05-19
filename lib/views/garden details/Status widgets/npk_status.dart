@@ -15,8 +15,11 @@ class NPKstatus extends StatelessWidget {
       //300
       width: width,
       child: Card(
+        // color: Theme.of(context).cardColor,
         clipBehavior: Clip.hardEdge,
         elevation: 10,
+        // shape of the card
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -46,8 +49,6 @@ class NPKstatus extends StatelessWidget {
             )
           ],
         ),
-        // shape of the card
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );
   }

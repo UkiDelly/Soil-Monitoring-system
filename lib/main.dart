@@ -36,23 +36,22 @@ class _MyAppState extends ConsumerState<MyApp> {
 
         //* Theme settings of the app
         theme: ThemeData(
-          backgroundColor: const Color.fromARGB(255, 246, 245, 245),
           fontFamily: "ReadexPro",
           colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xff669D6B), brightness: Brightness.light),
+              primary: mainColor,
+              seedColor: mainColor,
+              brightness: Brightness.light),
         ),
         // brightness: Brightness.light),
         darkTheme: ThemeData(
-          backgroundColor: const Color(0xff303030),
           fontFamily: "ReadexPro",
           colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xff669D6B), brightness: Brightness.dark),
-          // brightness: Brightness.dark
+              primary: mainDarkColor,
+              seedColor: mainDarkColor,
+              brightness: Brightness.dark),
         ),
         debugShowCheckedModeBanner: false,
         title: "Soil Monitoring System",
-        home:
-            // const TestPage()
-            const Login());
+        home: const Login());
   }
 }

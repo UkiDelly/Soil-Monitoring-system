@@ -25,12 +25,12 @@ class MobileHome extends StatelessWidget {
           elevation: 0,
           actions: [
             TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
               child: const Text(
                 "Log out",
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: () => Navigator.pop(context),
-              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
             )
           ],
         ),

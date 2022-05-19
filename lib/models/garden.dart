@@ -20,11 +20,11 @@ class Garden {
       var item = jsonDecode(response.body);
 
       // get the garden list
-      List _temp = item['data'];
+      List temp = item['data'];
 
       gardenList.clear();
       //find the garden made by the login user
-      for (var item in _temp) {
+      for (var item in temp) {
         if (item['createdBy'] == userId) {
           gardenList.add(item);
         }
@@ -44,24 +44,24 @@ class Garden {
       "plant": plant,
     };
 
-    const _url = "https://soil-analysis-usls.herokuapp.com/v1/garden/create";
+    const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/create";
     // "http://localhost:3000/v1/garden/create";
-    var response = await http.post(Uri.parse(_url),
+    var response = await http.post(Uri.parse(url),
         body: body, headers: {'Authorization': 'Bearer $token'});
 
     // get the gardenId from the response
     if (response.statusCode == 200) {
       var item = jsonDecode(response.body);
-      String _gardenId = item['data']['insertedId'];
+      String gardenId = item['data']['insertedId'];
 
       //* create as new sensor
-      const _url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
+      const url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
       // "http://localhost:3000/v1/sensor/create";
-      response = await http.post(Uri.parse(_url), body: {
+      response = await http.post(Uri.parse(url), body: {
         "name": name,
         "notes": notes,
         "plant": plant,
-        "gardenId": _gardenId,
+        "gardenId": gardenId,
       }, headers: {
         'Authorization': 'Bearer $token'
       });
@@ -73,9 +73,9 @@ class Garden {
         //* get the sensorId
         String sensorId = item['data']['id'];
 
-        final _url =
+        final url =
             "https://soil-analysis-usls.herokuapp.com/v1/sensor/addSensorData/$sensorId";
-        response = await http.put(Uri.parse(_url),
+        response = await http.put(Uri.parse(url),
             headers: {
               'Authorization': "Bearer $token",
               'Content-Type': 'application/json'

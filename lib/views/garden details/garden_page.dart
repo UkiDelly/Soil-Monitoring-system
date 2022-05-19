@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:thesis/main.dart';
 import '../../loading.dart';
 import '../../models/history.dart';
 import '../../models/fertilizer.dart';
@@ -13,6 +12,7 @@ import 'Status widgets/ph_level.dart';
 import 'Status widgets/tempurature.dart';
 import 'history/history_page.dart';
 
+// ignore: must_be_immutable
 class GardenPage extends StatefulWidget {
   String gardenId, gardenName, token, notes, plant;
   GardenPage(
@@ -49,11 +49,10 @@ class _GardenPageState extends State<GardenPage> {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDarkMode ? mainDarkColor : mainColor,
-
       extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
         actions: [
           // Add sensor
@@ -99,11 +98,11 @@ class _GardenPageState extends State<GardenPage> {
                 return const SizedBox();
               } else if (snapshot.hasData) {
                 //Conver object to list
-                var _sensorList = snapshot.data as List;
-                int pages = _sensorList.length;
+                var sensorList = snapshot.data as List;
+                int pages = sensorList.length;
 
                 for (int i = 0; i < pages; i++) {
-                  history.add(HistoryOfSensorData(sensorList: _sensorList[i]));
+                  history.add(HistoryOfSensorData(sensorList: sensorList[i]));
                   history[i].createHistory();
                 }
 
@@ -112,10 +111,10 @@ class _GardenPageState extends State<GardenPage> {
 
                 for (int i = 0; i < pages; i++) {
                   // add all last sensor data
-                  nAverage += _sensorList[i].last['nitrogen'];
-                  pAverage += _sensorList[i].last['phosphorous'];
-                  kAverage += _sensorList[i].last['potassium'];
-                  phAverage += _sensorList[i].last['pH'];
+                  nAverage += sensorList[i].last['nitrogen'];
+                  pAverage += sensorList[i].last['phosphorous'];
+                  kAverage += sensorList[i].last['potassium'];
+                  phAverage += sensorList[i].last['pH'];
                 }
 
                 //division to get the average
@@ -133,7 +132,7 @@ class _GardenPageState extends State<GardenPage> {
                     const Divider(indent: 10, endIndent: 10, thickness: 3),
 
                     //Pages
-                    _showSensor(_sensorList),
+                    _showSensor(sensorList),
 
                     const SizedBox(
                       height: 10,
@@ -240,19 +239,19 @@ class _GardenPageState extends State<GardenPage> {
     );
   }
 
-  Widget _showSensor(_sensorList) {
+  Widget _showSensor(sensorList) {
     return Column(
       children: [
         ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 550),
           child: PageView.builder(
               controller: _pageController,
-              itemCount: _sensorList.length,
+              itemCount: sensorList.length,
               itemBuilder: ((context, index) {
                 //create history
 
-                var _lastData = _sensorList[index].last;
-                return _sensor(_lastData, context);
+                var lastData = sensorList[index].last;
+                return _sensor(lastData, context);
               })),
         ),
 
@@ -260,7 +259,7 @@ class _GardenPageState extends State<GardenPage> {
         Center(
           child: SmoothPageIndicator(
             controller: _pageController,
-            count: _sensorList.length,
+            count: sensorList.length,
             effect: const ExpandingDotsEffect(
                 dotHeight: 10,
                 dotWidth: 10,
@@ -272,25 +271,25 @@ class _GardenPageState extends State<GardenPage> {
     );
   }
 
-  Widget _sensor(var _lastSensorData, _) {
+  Widget _sensor(var lastSensorData, _) {
     // sensor values
 
-    SingleSensorData _singleSensorData = SingleSensorData(
+    SingleSensorData singleSensorData = SingleSensorData(
         npk: {
-          'Nitrogen': _lastSensorData['nitrogen'].toDouble(),
-          'Potassium': _lastSensorData['potassium'].toDouble(),
-          'Phosphorous': _lastSensorData['phosphorous'].toDouble(),
+          'Nitrogen': lastSensorData['nitrogen'].toDouble(),
+          'Potassium': lastSensorData['potassium'].toDouble(),
+          'Phosphorous': lastSensorData['phosphorous'].toDouble(),
         },
-        temp: _lastSensorData['temperature'].toDouble(),
-        ph: _lastSensorData['pH'].toDouble(),
-        humidity: _lastSensorData['humidity'].toDouble(),
-        moisture: _lastSensorData['moisture'].toDouble());
+        temp: lastSensorData['temperature'].toDouble(),
+        ph: lastSensorData['pH'].toDouble(),
+        humidity: lastSensorData['humidity'].toDouble(),
+        moisture: lastSensorData['moisture'].toDouble());
 
     double width = MediaQuery.of(_).size.width * 0.49;
     return Column(
       children: [
         NPKstatus(
-            dataMap: _singleSensorData.npk,
+            dataMap: singleSensorData.npk,
             width: MediaQuery.of(_).size.width * 0.9),
         const SizedBox(
           height: 10,
@@ -305,7 +304,7 @@ class _GardenPageState extends State<GardenPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 //Temperature
-                Temp(temp: _singleSensorData.temp, width: width),
+                Temp(temp: singleSensorData.temp, width: width),
 
                 //
                 const SizedBox(
@@ -313,7 +312,7 @@ class _GardenPageState extends State<GardenPage> {
                 ),
 
                 //Humidity
-                Humidity(humidity: _singleSensorData.humidity, width: width)
+                Humidity(humidity: singleSensorData.humidity, width: width)
               ],
             ),
 
@@ -323,7 +322,7 @@ class _GardenPageState extends State<GardenPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 //Ph
-                PhLevel(ph: _singleSensorData.ph, width: width),
+                PhLevel(ph: singleSensorData.ph, width: width),
 
                 //
                 const SizedBox(
@@ -331,8 +330,7 @@ class _GardenPageState extends State<GardenPage> {
                 ),
 
                 //Moisture
-                MoistureLevel(
-                    moisture: _singleSensorData.moisture, width: width)
+                MoistureLevel(moisture: singleSensorData.moisture, width: width)
               ],
             )
           ],

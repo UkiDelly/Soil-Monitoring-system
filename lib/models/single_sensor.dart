@@ -67,8 +67,7 @@ class Sensor {
     return sensorList;
   }
 
-  addSennsor(){
-    const _url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
-    
+  addSennsor() {
+    const url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
   }
 }

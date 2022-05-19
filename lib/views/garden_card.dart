@@ -4,8 +4,6 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:thesis/main.dart';
-
 import 'garden details/garden_page.dart';
 
 class GardenCard extends StatefulWidget {
@@ -41,7 +39,7 @@ class _GardenCardState extends State<GardenCard> {
             },
             openColor: Theme.of(context).colorScheme.primary,
             //Color when the Container is closed
-            closedColor: mainColor,
+            closedColor: Theme.of(context).colorScheme.primary,
             //Shape of the close Container
             closedShape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -72,8 +70,10 @@ class _GardenCardState extends State<GardenCard> {
           padding: const EdgeInsets.all(8.0),
           child: Text(widget.gardenName,
               textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              )),
         ),
       ),
     );

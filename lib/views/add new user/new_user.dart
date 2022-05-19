@@ -16,7 +16,6 @@ class SignInPage extends StatelessWidget {
     bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: isDarkMode ? mainDarkColor : mainColor,
         title: const Text("Register"),
         titleTextStyle:
             const TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
