@@ -4,9 +4,9 @@ import 'package:ndialog/ndialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/loading.dart';
 
-import 'models/user.dart';
-import 'views/add new user/new_user.dart';
-import 'views/mobile_main.dart';
+import '../../models/user.dart';
+import '../add new user/new_user.dart';
+import '../mobile_main.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
