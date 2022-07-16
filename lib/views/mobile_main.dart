@@ -118,6 +118,8 @@ class _GardenListState extends State<GardenList> {
                                   fontSize: 40, fontWeight: FontWeight.bold)),
                             ),
                           ),
+
+                          // Add new Garden page
                           IconButton(
                               splashColor: Colors.white.withOpacity(0),
                               highlightColor: Colors.white.withOpacity(0),

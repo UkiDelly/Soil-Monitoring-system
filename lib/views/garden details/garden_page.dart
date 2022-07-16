@@ -243,7 +243,7 @@ class _GardenPageState extends State<GardenPage> {
     return Column(
       children: [
         ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 550),
+          constraints: const BoxConstraints(maxHeight: 530),
           child: PageView.builder(
               controller: _pageController,
               itemCount: sensorList.length,

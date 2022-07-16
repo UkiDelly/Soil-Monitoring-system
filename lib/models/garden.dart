@@ -55,48 +55,57 @@ class Garden {
       String gardenId = item['data']['insertedId'];
 
       //* create as new sensor
-      const url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
-      // "http://localhost:3000/v1/sensor/create";
-      response = await http.post(Uri.parse(url), body: {
-        "name": name,
-        "notes": notes,
-        "plant": plant,
-        "gardenId": gardenId,
-      }, headers: {
-        'Authorization': 'Bearer $token'
-      });
-
-      //* create inital sensor data
-      if (response.statusCode == 200) {
-        item = jsonDecode(response.body);
-
-        //* get the sensorId
-        String sensorId = item['data']['id'];
-
-        final url =
-            "https://soil-analysis-usls.herokuapp.com/v1/sensor/addSensorData/$sensorId";
-        response = await http.put(Uri.parse(url),
-            headers: {
-              'Authorization': "Bearer $token",
-              'Content-Type': 'application/json'
-            },
-            body: jsonEncode({
-              "nitrogen": 0,
-              "phosphorous": 0,
-              "potassium": 0,
-              "pH": 0,
-              "temperature": 0,
-              "moisture": 0,
-              "humidity": 0
-            }));
-        if (response.statusCode == 200) {
-          return true;
-        }
-
-        return false;
+      for (int i = 1; i <= 3; i++) {
+        _createSensor(gardenId, i, name: name, notes: notes, plant: plant);
       }
-      return false;
+      return true;
     }
     return false;
+  }
+
+  _createSensor(String gardenId, int i,
+      {required String name, String? notes, required String plant}) async {
+    const url = "https://soil-analysis-usls.herokuapp.com/v1/sensor/create";
+    // "http://localhost:3000/v1/sensor/create";
+    var response = await http.post(Uri.parse(url), body: {
+      "name": name + i.toString(),
+      "notes": notes,
+      "plant": plant,
+      "gardenId": gardenId,
+    }, headers: {
+      'Authorization': 'Bearer $token'
+    });
+
+    //* create inital sensor data
+    if (response.statusCode == 200) {
+      var item = jsonDecode(response.body);
+
+      //* get the sensorId
+      String sensorId = item['data']['id'];
+
+      final url =
+          "https://soil-analysis-usls.herokuapp.com/v1/sensor/addSensorData/$sensorId";
+      response = await http.put(Uri.parse(url),
+          headers: {
+            'Authorization': "Bearer $token",
+            'Content-Type': 'application/json'
+          },
+          body: jsonEncode({
+            "nitrogen": 0,
+            "phosphorous": 0,
+            "potassium": 0,
+            "pH": 0,
+            "temperature": 0,
+            "moisture": 0,
+            "humidity": 0
+          }));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 }

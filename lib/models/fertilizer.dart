@@ -27,6 +27,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
   List status = [];
   List fertilizer = [];
 
+  // identify the plant and get the fertilizer recommendation.
   getRecommendation() {
     switch (widget.plant) {
       case "Rice":

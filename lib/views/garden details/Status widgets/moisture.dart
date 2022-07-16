@@ -39,7 +39,7 @@ class _MoistureLevelState extends State<MoistureLevel> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               /// value
               Text(
-                "${widget.moisture}",
+                "${widget.moisture/1000}",
                 style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,

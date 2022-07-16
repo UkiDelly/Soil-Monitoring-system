@@ -205,8 +205,6 @@ class __LoginState extends State<_Login> {
                     loadingWidget: const Center(child: LoadingPage()),
                   );
 
-                  loadingDialog.show();
-
                   //* Create a user class
                   User user = User(
                       username: usernameController.text,
@@ -217,6 +215,8 @@ class __LoginState extends State<_Login> {
 
                   //* if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
+                    loadingDialog.show();
+
                     //* if the token is given
                     if (user.token != false) {
                       //* move to the main page

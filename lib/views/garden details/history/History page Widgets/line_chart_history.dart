@@ -66,7 +66,7 @@ class HistoryChart {
           children: [
             title,
             Container(
-              padding: const EdgeInsets.fromLTRB(5, 5, 40, 5),
+              padding: const EdgeInsets.fromLTRB(10, 5, 40, 0),
               width: MediaQuery.of(_).size.width - 30,
               height: 300,
               child: SizedBox(
@@ -172,23 +172,12 @@ class HistoryChart {
         //* Bottom side
         bottomTitles: AxisTitles(
           axisNameWidget: const Text("Date",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 22,
+            reservedSize: 20,
             interval: 1,
             getTitlesWidget: bottomTileWidget,
-
-            // getTextStyles: (context, value) => const TextStyle(
-            //   // color: Color(0xff68737d),
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 16),
-            // getTitles: (value) {
-            //   if (value == maxX) {
-            //     return "current";
-            //   }
-            //   return "";
-            // },
           ),
         ),
 
@@ -196,22 +185,9 @@ class HistoryChart {
         leftTitles: AxisTitles(
             sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 35,
+                reservedSize: 40,
                 interval: leftSideInterval ?? 1,
-                getTitlesWidget: leftTileWidget
-                // getTextStyles: (context, value) => const TextStyle(
-                //   // color: Color(0xff67727d),
-                //   fontWeight: FontWeight.bold,
-                //   fontSize: 15,
-                // ),
-                // getTitles: (value) {
-                //   if (value % 5 == 0) {
-                //     return "${value.toInt()}";
-                //   }
-                //   return "";
-                // },
-                // margin: 5,
-                )),
+                getTitlesWidget: leftTileWidget)),
       ),
 
       //* Border of the chart
@@ -221,17 +197,6 @@ class HistoryChart {
             // color: const Color(0xff37434d),
             width: 3,
           )),
-
-      //* Show the title of each side
-
-      // axisTitleData: FlAxisTitleData(
-      //   show: true,
-      //   bottomTitle: AxisTitle(
-      //       showTitle: false,
-      //       titleText: "Date",
-      //       textStyle:
-      //           const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-      // ),
 
       //* Value of the chart
       minX: minX,

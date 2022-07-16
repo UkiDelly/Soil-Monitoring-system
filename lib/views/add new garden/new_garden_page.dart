@@ -180,7 +180,10 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
             const Center(
               child: Text(
                 "Name",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
 
@@ -190,7 +193,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 width: 300,
                 child: TextFormField(
                   style: TextStyle(
-                      color: isDarkMode ? Colors.black : Colors.white),
+                      color: isDarkMode ? Colors.white : Colors.black),
                   controller: nameController,
                   decoration: const InputDecoration(
                     hintText: "Enter a name",
