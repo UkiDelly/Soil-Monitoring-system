@@ -4,9 +4,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:thesis/main.dart';
-import 'package:thesis/views/add%20new%20garden/plants.dart';
-import '../../loading.dart';
+
+import '../loading.dart';
 import '../../models/garden.dart';
+import 'plants.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
   Function() callback;
@@ -38,7 +39,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   @override
   void initState() {
     super.initState();
-    var brightness = SchedulerBinding.instance!.window.platformBrightness;
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
     isDarkMode = brightness == Brightness.dark;
   }
 

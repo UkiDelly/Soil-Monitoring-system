@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:thesis/main.dart';
 
-import 'garden details/garden_page.dart';
+import '../Garden Detail/garden_page.dart';
+
+
 
 class GardenCard extends StatefulWidget {
   String gardenId, gardenName, notes, plant, token;

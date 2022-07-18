@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'models/user.dart';
-import 'views/add new user/new_user.dart';
-import 'views/mobile_main.dart';
+import '../../models/user.dart';
+import '../Garden List/mobile_main.dart';
+import '../Register/new_user.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);

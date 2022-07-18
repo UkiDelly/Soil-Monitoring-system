@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/loading.dart';
-import '../models/garden.dart';
-import 'add new garden/new_garden_page.dart';
+import 'package:thesis/views/loading.dart';
+import '../../models/garden.dart';
+
+import '../New Garden/new_garden_page.dart';
 import 'garden_card.dart';
 
 // ignore: must_be_immutable

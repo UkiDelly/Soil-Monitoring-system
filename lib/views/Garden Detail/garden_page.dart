@@ -3,7 +3,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/main.dart';
 
-import '../../loading.dart';
+import '../loading.dart';
 import '../../models/history.dart';
 import '../../models/fertilizer.dart';
 import '../../models/single_sensor.dart';

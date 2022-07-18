@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ndialog/ndialog.dart';
 
-import '../loading.dart';
+import '../views/loading.dart';
 import '../settings/preferences.dart';
 
 class User {
