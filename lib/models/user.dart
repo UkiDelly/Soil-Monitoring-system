@@ -6,7 +6,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:ndialog/ndialog.dart';
 
 import '../views/loading.dart';
-import '../settings/preferences.dart';
 
 class User {
   String username, password;
@@ -34,7 +33,6 @@ class User {
     print(response.statusCode);
     if (response.statusCode == 200) {
       var item = jsonDecode(response.body);
-      LoginPreferences.saveToken(item['data']['authToken']);
 
       // decode the token to get th userId
       var decodeToken = Jwt.parseJwt(item['data']['authToken']);

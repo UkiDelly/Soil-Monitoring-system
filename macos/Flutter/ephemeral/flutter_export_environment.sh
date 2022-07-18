@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/daehyeon/Documents/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/daehyeon/Documents/coding_files/Thesis/thesis_application"
+export "FLUTTER_ROOT=C:\Users\daehy\Documents\Flutter SDK\flutter_windows_2.10.3-stable\flutter"
+export "FLUTTER_APPLICATION_PATH=D:\Coding files\soil_monitoring_system"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"

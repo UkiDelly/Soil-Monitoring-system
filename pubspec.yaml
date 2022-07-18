@@ -29,29 +29,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg:
+  flutter_svg: 
   page_transition:
   timelines:
   pie_chart:
   transition:
-  simple_gradient_text: ^1.2.2
-  animated_widgets: ^1.1.0
-  syncfusion_flutter_gauges: ^19.4.50
+  simple_gradient_text: 
+  animated_widgets: 
+  syncfusion_flutter_gauges: 
   provider:
   http:
   flutter_riverpod:
-  animated_text_kit: ^4.2.1
-  shared_preferences: 
+  animated_text_kit:
   ndialog: 
   smooth_page_indicator: 
-  fluttertoast: ^8.0.9
+  fluttertoast: 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  animations: ^2.0.2
-  fl_chart: ^0.45.0
-  jwt_decode: ^0.3.1
+  animations: 
+  fl_chart: 
+  jwt_decode: 
 
 dev_dependencies:
   flutter_test:

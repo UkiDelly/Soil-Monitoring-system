@@ -3,14 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/views/Login/login.dart';
 
-import 'settings/preferences.dart';
-
 void main() async {
   //? disable rotate
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  await LoginPreferences.init();
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
