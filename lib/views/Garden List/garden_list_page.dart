@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:thesis/views/Garden%20List/widget/garden_list.dart';
 
 // ignore: must_be_immutable
@@ -8,8 +7,6 @@ class GardenListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //? Set the system status color to black since the background is light
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -32,10 +29,52 @@ class GardenListPage extends StatelessWidget {
         body: SafeArea(
           bottom: false,
           child: Column(
-            children: const [
+            children: [
+              //
+              const SizedBox(
+                height: 10,
+              ),
+
+              //* Logo
+              //Logo
+              Center(
+                child: Hero(
+                  tag: 'logo',
+                  child: Image.asset(
+                    'assets/Logo/Logo.png',
+                    height: 100,
+                  ),
+                ),
+              ),
 
               //
-              GardenList()
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //
+
+                  // My Garden
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      "My Garden",
+                      style: TextStyle(fontSize: 45),
+                    ),
+                  ),
+
+                  //* Create new garden button
+                  IconButton(
+                      iconSize: 50,
+                      splashColor: Colors.transparent,
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.add,
+                      ))
+                ],
+              ),
+
+              //* Garden list
+              const GardenList()
             ],
           ),
         ),

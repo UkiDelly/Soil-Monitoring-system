@@ -4,7 +4,11 @@
 
 import 'dart:convert';
 
-import 'package:thesis/models/enum.dart';
+import 'enum.dart';
+
+Garden gardenFromJson(String str) => Garden.fromJson(json.decode(str));
+
+String gardenToJson(Garden data) => json.encode(data.toJson());
 
 class Garden {
   Garden({
@@ -13,7 +17,6 @@ class Garden {
     this.notes,
     required this.plant,
     this.createdBy,
-    this.createdAt,
   });
 
   final id;
@@ -21,11 +24,6 @@ class Garden {
   final notes;
   final Plant plant;
   final createdBy;
-  final createdAt;
-
-  factory Garden.fromRawJson(str) => Garden.fromJson(str);
-
-  String toRawJson() => json.encode(toJson());
 
   factory Garden.fromJson(Map<String, dynamic> json) => Garden(
         id: json["_id"],
@@ -33,14 +31,13 @@ class Garden {
         notes: json["notes"],
         plant: stringToEnum(json["plant"]),
         createdBy: json["createdBy"],
-        createdAt: json["createdAt"],
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "name": name,
         "notes": notes,
         "plant": enumToString(plant),
         "createdBy": createdBy,
-        "createdAt": createdAt,
       };
 }

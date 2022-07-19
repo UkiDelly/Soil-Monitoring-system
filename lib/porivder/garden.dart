@@ -17,11 +17,11 @@ final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
     var item = jsonDecode(response.body)['data'];
     for (var garden in item) {
       if (garden['createdBy'] == ref.watch(userIDProvider)) {
-        print(garden);
+        gardens.add(Garden.fromJson(garden));
+
         // gardens.add(Garden.fromJson(garden));
       }
     }
-    print(gardens);
   }
 
   return gardens;
