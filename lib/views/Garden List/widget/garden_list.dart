@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thesis/main.dart';
 import 'package:thesis/porivder/garden.dart';
 
 import '../../../models/garden.dart';
@@ -9,6 +10,9 @@ class GardenList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 다크모드인지 확인
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
     // Provider에서 값 가져오기
     AsyncValue<List<Garden>> data = ref.watch(gardnenListProvider);
 
@@ -32,13 +36,16 @@ class GardenList extends ConsumerWidget {
                   decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
                       borderRadius: const BorderRadius.all(Radius.circular(25)),
+                      border: Border.all(width: 3),
 
                       // 그림자
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                            offset: Offset(0, 5),
+                            offset: const Offset(0, 10),
+                            blurStyle: BlurStyle.normal,
                             blurRadius: 5,
-                            color: Colors.grey),
+                            
+                            color: isDarkMode ? mainColor : mainDarkColor),
                       ]),
                   //
                   child: Center(

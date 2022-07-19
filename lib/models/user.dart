@@ -1,11 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:ndialog/ndialog.dart';
-
-import '../views/loading.dart';
 
 class User {
   String username, password;
@@ -20,16 +16,7 @@ class User {
   get userId => _userId;
   get token => _token;
 
-  login({context}) async {
-    //show dialog
-    CustomProgressDialog loadingDialog = CustomProgressDialog(
-      context,
-      blur: 10,
-      dismissable: false,
-      loadingWidget: const Center(child: LoadingPage()),
-    );
-    loadingDialog.show();
-
+  login() async {
     const url = "https://soil-analysis-usls.herokuapp.com/v1/user/login";
     // "http://localhost:3000/v1/user/login";
     var response = await http.post(Uri.parse(url),
@@ -50,7 +37,6 @@ class User {
 
       // No user exist
     } else if (response.statusCode == 401) {
-      loadingDialog.dismiss();
       _token = false;
 
       // Server is offline

@@ -24,6 +24,7 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController usernameController = TextEditingController(),
       passwordController = TextEditingController();
   bool? successLogin;
+  bool loading = false;
 
   @override
   void initState() {
@@ -106,19 +107,28 @@ class _LoginFormState extends State<LoginForm> {
             builder: (context, ref, child) => SizedBox(
               width: 200,
               child: ElevatedButton(
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Login",
-                    style: TextStyle(fontSize: 30),
-                  ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: loading
+                      ? const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                      : const Text(
+                          "Login",
+                          style: TextStyle(fontSize: 30),
+                        ),
                 ),
                 onPressed: () async {
+                  // show it is loading
+                  setState(() {
+                    loading = true;
+                  });
+
                   User user = User(
                       username: usernameController.text,
                       password: passwordController.text);
 
-                  await user.login(context: context);
+                  await user.login();
 
                   // if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
@@ -141,7 +151,8 @@ class _LoginFormState extends State<LoginForm> {
                               type: PageTransitionType.fade));
                     } else if (user.token == false) {
                       setState(() {
-                        successLogin == false;
+                        successLogin = false;
+                        loading = false;
                       });
                     }
                   }
