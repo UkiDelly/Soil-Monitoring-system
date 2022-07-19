@@ -58,7 +58,8 @@ class GardenListPage extends StatelessWidget {
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       "My Garden",
-                      style: TextStyle(fontSize: 45),
+                      style:
+                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                     ),
                   ),
 

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:thesis/main.dart';
-
-import '../../Garden Detail/garden_page.dart';
-
-
+import 'package:thesis/models/enum.dart';
+import 'package:thesis/porivder/garden.dart';
+import 'package:thesis/views/Garden%20Detail/new_garden_page.dart';
 
 class GardenCard extends StatefulWidget {
-  String gardenId, gardenName, notes, plant, token;
+  String gardenId, gardenName, notes, token;
+  Plant plant;
   int index;
 
   GardenCard(
@@ -39,7 +39,7 @@ class _GardenCardState extends State<GardenCard> {
             closedElevation: 5,
             // When the Container is closed
             onClosed: (data) {
-              setState(() {});
+              didChangeDependencies();
             },
             openColor: mainColor,
             //Color when the Container is closed
@@ -54,13 +54,18 @@ class _GardenCardState extends State<GardenCard> {
             openBuilder: (_, closeContainer) {
               return Consumer(
                 builder: (ctx, ref, child) {
-                  return GardenPage(
-                    token: widget.token,
-                    gardenId: widget.gardenId,
+                  ref
+                      .watch(gardenIDProvider.notifier)
+                      .update((state) => widget.gardenId);
+                  return GardenDetail(
                     gardenName: widget.gardenName,
                     notes: widget.notes,
-                    plant: widget.plant,
                   );
+                  // GardenPage(
+                  //   gardenName: widget.gardenName,
+                  //   notes: widget.notes,
+                  //   plant: widget.plant,
+                  // );
                 },
               );
             }));

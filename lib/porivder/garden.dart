@@ -6,6 +6,10 @@ import 'package:thesis/porivder/user_id.dart';
 
 import '../models/garden.dart';
 
+// garden id
+final gardenIDProvider = StateProvider<String>((ref) => "");
+
+// garden list
 final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
   // fetch data
   const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/list";

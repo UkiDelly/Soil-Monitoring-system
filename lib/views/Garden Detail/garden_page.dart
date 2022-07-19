@@ -1,12 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/main.dart';
+import 'package:thesis/porivder/garden.dart';
+import 'package:thesis/porivder/token.dart';
+import 'package:thesis/views/Garden%20Detail/widgets/garden_name.dart';
 
+import '../../models/enum.dart';
 import '../loading.dart';
 import '../../models/history.dart';
 import '../../models/fertilizer.dart';
-import '../../models/single_sensor.dart';
+import '../../models/sensor_data.dart';
 import 'Status widgets/humidity.dart';
 import 'Status widgets/moisture.dart';
 import 'Status widgets/npk_status.dart';
@@ -14,33 +21,42 @@ import 'Status widgets/ph_level.dart';
 import 'Status widgets/tempurature.dart';
 import 'history/history_page.dart';
 
-class GardenPage extends StatefulWidget {
-  String gardenId, gardenName, token, notes, plant;
+class GardenPage extends ConsumerStatefulWidget {
+  String gardenName, notes;
+  Plant plant;
   GardenPage(
       {Key? key,
-      required this.gardenId,
       required this.gardenName,
-      required this.token,
       required this.notes,
       required this.plant})
       : super(key: key);
 
   @override
-  State<GardenPage> createState() => _GardenPageState();
+  ConsumerState<GardenPage> createState() => _GardenPageState();
 }
 
-class _GardenPageState extends State<GardenPage> {
+class _GardenPageState extends ConsumerState<GardenPage> {
   final PageController _pageController = PageController(initialPage: 0);
   int pages = 1;
   var getData;
   List<HistoryOfSensorData> history = [];
   late Sensor sensorData;
 
+  // stream data
+  StreamController sensorDataStream = StreamController();
+
   @override
   void initState() {
     super.initState();
-    sensorData = Sensor(gardenId: widget.gardenId, token: widget.token);
-    getData = sensorData.getSensorData(widget.plant);
+    sensorData = Sensor(
+        gardenId: ref.watch(gardenIDProvider),
+        token: ref.watch(tokenProvider),
+        plant: widget.plant);
+
+    // get sensor
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      sensorData.getSensorData(sensorDataStream);
+    });
   }
 
   @override
@@ -92,8 +108,8 @@ class _GardenPageState extends State<GardenPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          child: FutureBuilder(
-            future: getData,
+          child: StreamBuilder(
+            stream: getData,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -105,6 +121,7 @@ class _GardenPageState extends State<GardenPage> {
                 //Conver object to list
                 var _sensorList = snapshot.data as List;
 
+                //* Create history
                 for (int i = 0; i < pages; i++) {
                   history.add(HistoryOfSensorData(sensorList: _sensorList[i]));
                   history[i].createHistory();
@@ -131,7 +148,11 @@ class _GardenPageState extends State<GardenPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Garden Name, notes
-                    gardenInfo(isDarkMode),
+                    GardenInfo(
+                      gardenName: widget.gardenName,
+                      notes: widget.notes,
+                      isDarkMode: isDarkMode,
+                    ),
 
                     const Divider(indent: 10, endIndent: 10, thickness: 3),
 
@@ -169,7 +190,7 @@ class _GardenPageState extends State<GardenPage> {
                       pAverage: pAverage,
                       kAverage: kAverage,
                       phAverage: phAverage,
-                      plant: widget.plant,
+                      plant: enumToString(widget.plant),
                     )
                   ],
                 );
@@ -185,60 +206,6 @@ class _GardenPageState extends State<GardenPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget gardenInfo(isDarkMode) {
-    return Column(
-      children: [
-        Center(
-            child: Text(
-          widget.gardenName,
-          style: const TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
-        )),
-        const SizedBox(
-          height: 10,
-        ),
-
-        //Notes
-        Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            decoration: BoxDecoration(
-                color: isDarkMode ? const Color(0xff424242) : Colors.white,
-                borderRadius: BorderRadius.circular(12.5)),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      "notes",
-                      style: TextStyle(
-                          color: isDarkMode ? Colors.white : Colors.black,
-                          fontSize: 17),
-                    ),
-                  ),
-                  Divider(
-                    color: isDarkMode ? Colors.white : Colors.black,
-                    indent: 5,
-                    endIndent: 5,
-                    thickness: 2,
-                  ),
-                  Text(
-                    widget.notes,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.black,
-                        fontSize: 20),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -352,7 +319,7 @@ class _GardenPageState extends State<GardenPage> {
           child: Column(children: [
             SizedBox(width: 250, child: Image.asset(sensorData.path)),
             Text(
-              widget.plant,
+              enumToString(widget.plant).toUpperCase(),
               style: const TextStyle(fontSize: 50),
             )
           ]),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/main.dart';
 import 'package:thesis/porivder/garden.dart';
+import 'package:thesis/porivder/token.dart';
+import 'package:thesis/views/Garden%20List/widget/garden_card.dart';
 
 import '../../../models/garden.dart';
 
@@ -28,33 +30,40 @@ class GardenList extends ConsumerWidget {
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 //
-                return Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width - 10,
-                  //
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: const BorderRadius.all(Radius.circular(25)),
-                      border: Border.all(width: 3),
+                return GardenCard(
+                    index: index,
+                    gardenId: data[index].id,
+                    gardenName: data[index].name,
+                    notes: data[index].notes,
+                    plant: data[index].plant,
+                    token: ref.watch(tokenProvider));
+                // Container(
+                //   margin: const EdgeInsets.all(10),
+                //   padding: const EdgeInsets.all(10),
+                //   width: MediaQuery.of(context).size.width - 10,
+                //   //
+                //   decoration: BoxDecoration(
+                //       color: Theme.of(context).colorScheme.primary,
+                //       borderRadius: const BorderRadius.all(Radius.circular(25)),
+                //       border: Border.all(width: 3),
 
-                      // 그림자
-                      boxShadow: [
-                        BoxShadow(
-                            offset: const Offset(0, 10),
-                            blurStyle: BlurStyle.normal,
-                            blurRadius: 5,
-                            
-                            color: isDarkMode ? mainColor : mainDarkColor),
-                      ]),
-                  //
-                  child: Center(
-                      child: Text(
-                    data[index].name,
-                    style: const TextStyle(
-                        fontSize: 40, fontWeight: FontWeight.bold),
-                  )),
-                );
+                //       // 그림자
+                //       boxShadow: [
+                //         BoxShadow(
+                //             offset: const Offset(0, 10),
+                //             blurStyle: BlurStyle.normal,
+                //             blurRadius: 5,
+
+                //             color: isDarkMode ? mainColor : mainDarkColor),
+                //       ]),
+                //   //
+                //   child: Center(
+                //       child: Text(
+                //     data[index].name,
+                //     style: const TextStyle(
+                //         fontSize: 40, fontWeight: FontWeight.bold),
+                //   )),
+                // );
               },
             ),
           );
