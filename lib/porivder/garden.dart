@@ -1,0 +1,28 @@
+import 'dart:convert';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'package:thesis/porivder/user_id.dart';
+
+import '../models/garden.dart';
+
+final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
+  // fetch data
+  const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/list";
+  var response = await http.get(Uri.parse(url));
+
+  List<Garden> gardens = [];
+
+  if (response.statusCode == 200) {
+    var item = jsonDecode(response.body)['data'];
+    for (var garden in item) {
+      if (garden['createdBy'] == ref.watch(userIDProvider)) {
+        print(garden);
+        // gardens.add(Garden.fromJson(garden));
+      }
+    }
+    print(gardens);
+  }
+
+  return gardens;
+});
