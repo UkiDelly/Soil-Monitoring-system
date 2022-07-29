@@ -51,6 +51,6 @@ class Garden {
     var response = await http.post(Uri.parse(url),
         headers: {"Authorization": "Bearer $token"}, body: toJson());
 
-    print(response.statusCode);
+
   }
 }

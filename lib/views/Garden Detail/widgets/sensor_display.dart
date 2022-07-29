@@ -5,7 +5,8 @@ import 'package:thesis/models/sensor_data.dart';
 import 'package:thesis/porivder/sensor_data.dart';
 
 class ShowSensorData extends ConsumerStatefulWidget {
-  const ShowSensorData({Key? key}) : super(key: key);
+  Function(List<Datum> sensorDataList) callback;
+  ShowSensorData({Key? key, required this.callback}) : super(key: key);
 
   @override
   ConsumerState<ShowSensorData> createState() => _ShowSensorDataState();
@@ -15,11 +16,6 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
   // Page
   PageController pageController = PageController(initialPage: 0);
   int pages = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +38,11 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                   controller: pageController,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
+                    // callback after build
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      widget.callback(data[index]);
+                    });
+                    
                     // get the last data
                     SingleSensorData latestData = SingleSensorData(
                         n: data[index].last.nitrogen,
@@ -49,7 +50,8 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                         k: data[index].last.potassium,
                         ph: data[index].last.pH,
                         temp: data[index].last.temperature,
-                        moisture: data[index].last.moisture,
+                        moisture: double.parse(
+                            data[index].last.moisture.toStringAsFixed(2)),
                         humidity: data[index].last.humidity);
 
                     return Column(
@@ -76,7 +78,7 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 latestData.pH(screenWidth * 0.5),
-                                latestData.temperature(screenWidth * 0.5)
+                                latestData.moistureLevel(screenWidth * 0.5)
                               ],
                             )
                           ],

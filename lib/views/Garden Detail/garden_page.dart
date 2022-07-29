@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:thesis/models/history.dart';
+import 'package:thesis/models/sensor_data.dart';
+import 'package:thesis/views/Garden%20Detail/history/history_page.dart';
 import 'package:thesis/views/Garden%20Detail/widgets/garden_name.dart';
 import 'package:thesis/views/Garden%20Detail/widgets/plant_card.dart';
 import 'package:thesis/views/Garden%20Detail/widgets/sensor_display.dart';
 
 import '../../models/garden.dart';
 
-class GardenDetail extends StatelessWidget {
+class GardenDetail extends StatefulWidget {
   final Garden garden;
   const GardenDetail({
     Key? key,
     required this.garden,
   }) : super(key: key);
+
+  @override
+  State<GardenDetail> createState() => _GardenDetailState();
+}
+
+class _GardenDetailState extends State<GardenDetail> {
+  List<Datum> sensorDataList = [];
+
+  // callBack
+  getSensorDataList(List<Datum> sensorDataList) {
+
+    setState(() {
+      this.sensorDataList = sensorDataList;
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +51,11 @@ class GardenDetail extends StatelessWidget {
           //* History button
           IconButton(
               iconSize: 30,
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).push(PageTransition(
+                  child: HistoryPage(
+                      historyData:
+                          HistoryOfSensorData(sensorList: sensorDataList)),
+                  type: PageTransitionType.rightToLeft)),
               icon: const Icon(
                 Icons.history,
               )),
@@ -48,8 +72,8 @@ class GardenDetail extends StatelessWidget {
             children: [
               //* Garden Name
               GardenInfo(
-                gardenName: garden.name,
-                notes: garden.notes,
+                gardenName: widget.garden.name,
+                notes: widget.garden.notes,
                 isDarkMode: isDarkMode,
               ),
 
@@ -64,8 +88,10 @@ class GardenDetail extends StatelessWidget {
               //* Sensor Data
               SizedBox(
                 width: MediaQuery.of(context).size.width - 10,
-                height: 530,
-                child: const ShowSensorData(),
+                height: 550,
+                child: ShowSensorData(
+                  callback: getSensorDataList,
+                ),
               ),
 
               //
@@ -81,7 +107,7 @@ class GardenDetail extends StatelessWidget {
                 "Plant",
                 style: TextStyle(fontSize: 45),
               ),
-              GardenDetailPlantCard(plant: garden.plant)
+              GardenDetailPlantCard(plant: widget.garden.plant)
 
               //* Recommendation
             ],

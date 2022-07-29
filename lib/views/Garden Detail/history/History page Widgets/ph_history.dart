@@ -46,10 +46,9 @@ class PhHistory extends StatelessWidget {
       showDot: false,
       belowBarArea: true,
       lineChartBarWidth: false,
-      belowBarColors: gradientColors,
+      belowBarAreaColor: gradientColors,
       lineChartBarGradient: true,
       width: width,
-      
     );
 
     return phHistory.historyChart(context);

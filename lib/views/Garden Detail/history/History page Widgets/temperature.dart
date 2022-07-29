@@ -39,7 +39,7 @@ class TempHistory extends StatelessWidget {
         showDot: false,
         lineChartBarWidth: false,
         belowBarArea: true,
-        belowBarColors: colors,
+        belowBarAreaColor: colors,
         width: width);
     return tempHistory.historyChart(context);
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thesis/main.dart';
+import 'package:thesis/models/history.dart';
 
 import 'History page Widgets/humidity_history.dart';
 import 'History page Widgets/moisture_history.dart';
@@ -9,7 +10,7 @@ import 'History page Widgets/ph_history.dart';
 import 'History page Widgets/temperature.dart';
 
 class HistoryPage extends StatelessWidget {
-  var historyData;
+  HistoryOfSensorData historyData;
   HistoryPage({Key? key, required this.historyData}) : super(key: key);
 
   @override
@@ -43,7 +44,7 @@ class HistoryPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _History extends StatefulWidget {
-  var sensorData;
+  HistoryOfSensorData sensorData;
   _History({Key? key, required this.sensorData}) : super(key: key);
 
   @override
@@ -54,6 +55,7 @@ class __HistoryState extends State<_History> {
   @override
   void initState() {
     super.initState();
+    widget.sensorData.createHistory();
   }
 
   @override

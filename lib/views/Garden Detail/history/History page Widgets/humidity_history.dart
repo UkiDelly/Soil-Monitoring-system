@@ -24,7 +24,7 @@ class HumidityHistory extends StatelessWidget {
         maxY: 100,
         spots: humiditySpot ?? spots,
         showDot: true,
-        // lineColor: [Colors.black87],
+        lineColor: Colors.black87,
         lineChartBarWidth: true,
         width: width);
 

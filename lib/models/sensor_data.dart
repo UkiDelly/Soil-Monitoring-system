@@ -58,7 +58,7 @@ class Datum {
         potassium: json["potassium"].toDouble(),
         pH: json["pH"].toDouble(),
         temperature: json["temperature"].toDouble(),
-        moisture: json["moisture"].toDouble(),
+        moisture: json["moisture"].toDouble() * 0.001,
         humidity: json["humidity"].toDouble(),
         createdAt: DateTime.parse(json["createdAt"]),
       );
@@ -76,7 +76,7 @@ class SingleSensorData {
       required this.moisture,
       required this.humidity});
 
-  npk(double width) {
+  NPKstatus npk(double width) {
     return NPKstatus(dataMap: {
       "Nitrogen": n,
       "Phosphorous": p,
@@ -84,28 +84,28 @@ class SingleSensorData {
     }, width: width);
   }
 
-  pH(double width) {
+  PhLevel pH(double width) {
     return PhLevel(
       ph: ph,
       width: width,
     );
   }
 
-  temperature(double width) {
+  Temp temperature(double width) {
     return Temp(
       temp: temp,
       width: width,
     );
   }
 
-  moistureLevel(double width) {
+  MoistureLevel moistureLevel(double width) {
     return MoistureLevel(
       moisture: moisture,
       width: width,
     );
   }
 
-  humidityLevel(double width) {
+  Humidity humidityLevel(double width) {
     return Humidity(
       humidity: humidity,
       width: width,

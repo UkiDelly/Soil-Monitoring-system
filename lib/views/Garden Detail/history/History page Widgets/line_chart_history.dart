@@ -29,7 +29,7 @@ class HistoryChart {
   bool? belowBarArea = false;
 
   //* Colors below the bar if belowBarArea is true
-  List<Color>? belowBarColors = [];
+  List<Color>? belowBarAreaColor = [];
 
   //* or whole LineChartBarData
   List<LineChartBarData>? lineChartBarData = [];
@@ -37,22 +37,23 @@ class HistoryChart {
   //* width of the Container
   late double? width;
   //
-  HistoryChart(
-      {required this.title,
-      required this.minX,
-      required this.maxX,
-      required this.minY,
-      this.leftSideInterval,
-      required this.maxY,
-      this.spots,
-      required this.showDot,
-      this.lineChartBarGradient,
-      this.lineChartBarWidth,
-      this.lineColor,
-      this.belowBarArea,
-      this.belowBarColors,
-      this.lineChartBarData,
-      this.width});
+  HistoryChart({
+    required this.title,
+    required this.minX,
+    required this.maxX,
+    required this.minY,
+    this.leftSideInterval,
+    required this.maxY,
+    this.spots,
+    required this.showDot,
+    this.lineChartBarGradient,
+    this.lineChartBarWidth,
+    this.lineColor,
+    this.belowBarArea,
+    this.belowBarAreaColor,
+    this.lineChartBarData,
+    this.width,
+  });
   //
   Widget historyChart(_) {
     return SizedBox(
@@ -72,20 +73,19 @@ class HistoryChart {
               child: SizedBox(
                 child: Center(
                   child: LineChart(mainData(
-                    lineChartBarData,
-                    minX,
-                    maxX,
-                    minY,
-                    leftSideInterval,
-                    maxY,
-                    spots,
-                    showDot,
-                    lineChartBarGradient,
-                    lineChartBarWidth,
-                    lineColor,
-                    belowBarArea,
-                    belowBarColors,
-                  )),
+                      lineChartBarData,
+                      minX,
+                      maxX,
+                      minY,
+                      leftSideInterval,
+                      maxY,
+                      spots,
+                      showDot,
+                      lineChartBarGradient,
+                      lineChartBarWidth,
+                      lineColor,
+                      belowBarArea,
+                      belowBarAreaColor)),
                 ),
               ),
             )
@@ -141,20 +141,27 @@ LineChartData mainData(
         //* Bottom side
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 22,
-            interval: 1,
-            // getTextStyles: (context, value) => const TextStyle(
-            //     // color: Color(0xff68737d),
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 16),
-            // getTitles: (value) {
-            //   if (value == maxX) {
-            //     return "current";
-            //   }
-            //   return "";
-            // },
-          ),
+              showTitles: true,
+              reservedSize: 22,
+              interval: 1,
+              getTitlesWidget: ((value, meta) {
+                if (value == maxX) {
+                  return const Text("current");
+                }
+
+                return const SizedBox();
+              })
+              // getTextStyles: (context, value) => const TextStyle(
+              //     // color: Color(0xff68737d),
+              //     fontWeight: FontWeight.bold,
+              //     fontSize: 16),
+              // getTitles: (value) {
+              //   if (value == maxX) {
+              //     return "current";
+              //   }
+              //   return "";
+              // },
+              ),
         ),
 
         //* Left Side
@@ -163,6 +170,7 @@ LineChartData mainData(
           showTitles: true,
           reservedSize: 35,
           interval: leftSideInterval ?? 1,
+
           // getTextStyles: (context, value) => const TextStyle(
           //   // color: Color(0xff67727d),
           //   fontWeight: FontWeight.bold,
@@ -228,6 +236,7 @@ LineChartData mainData(
               belowBarData: belowBarArea == true
                   ? BarAreaData(
                       show: true,
+                      gradient: LinearGradient(colors: belowBarAreaColor!)
                       // gradientFrom: const Offset(
                       //   0,
                       //   1,
@@ -236,7 +245,7 @@ LineChartData mainData(
                       // color: belowBarAreaColor
                       //     ?.map((color) => color.withOpacity(0.5))
                       //     .toList(),
-                    )
+                      )
                   : null)
         ],
   );
