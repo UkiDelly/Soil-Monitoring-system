@@ -10,7 +10,6 @@ final sensorProvider = StreamProvider<List<List<Datum>>>((ref) async* {
   final url =
       "https://soil-analysis-usls.herokuapp.com/v1/sensor/getGardenSensorData/${ref.watch(gardenIDProvider)}";
 
-    
   var response = await http.get(Uri.parse(url),
       headers: {'Authorization': 'Bearer ${ref.watch(tokenProvider)}'});
 

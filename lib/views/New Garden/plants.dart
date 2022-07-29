@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-//make a call back
-typedef GetPlant = void Function(String params);
+import '../../models/enum.dart';
 
 class PlantCard extends StatefulWidget {
-  final GetPlant callback;
+  final Function(Plant plant) callback;
   const PlantCard({Key? key, required this.callback}) : super(key: key);
 
   @override
@@ -27,7 +26,7 @@ class _PlantCardState extends State<PlantCard> {
             onTap: () => setState(() {
               //when click, select this plant and call the callback to get the name
               selectedIndex = 0;
-              widget.callback("Rice");
+              widget.callback(Plant.rice);
             }),
 
             //* Rice
@@ -66,7 +65,7 @@ class _PlantCardState extends State<PlantCard> {
             onTap: (() => setState(() {
                   //when click, select this plant and call the callback to get the name
                   selectedIndex = 1;
-                  widget.callback("Corn");
+                  widget.callback(Plant.corn);
                 })),
 
             //* Corn
@@ -104,7 +103,7 @@ class _PlantCardState extends State<PlantCard> {
           InkWell(
             onTap: (() => setState(() {
                   selectedIndex = 2;
-                  widget.callback("Cassava");
+                  widget.callback(Plant.cassava);
                 })),
             child: Container(
               padding: const EdgeInsets.all(10),

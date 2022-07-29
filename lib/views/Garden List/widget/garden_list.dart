@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/main.dart';
 import 'package:thesis/porivder/garden.dart';
 import 'package:thesis/porivder/token.dart';
 import 'package:thesis/views/Garden%20List/widget/garden_card.dart';
@@ -30,12 +29,10 @@ class GardenList extends ConsumerWidget {
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 //
+
                 return GardenCard(
                     index: index,
-                    gardenId: data[index].id,
-                    gardenName: data[index].name,
-                    notes: data[index].notes,
-                    plant: data[index].plant,
+                    garden: data[index],
                     token: ref.watch(tokenProvider));
                 // Container(
                 //   margin: const EdgeInsets.all(10),

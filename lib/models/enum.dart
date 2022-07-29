@@ -34,3 +34,19 @@ Plant stringToEnum(String plant) {
   return Plant.none;
 }
 
+String enumToPath(Plant plant) {
+  switch (plant) {
+    case Plant.rice:
+      return "assets/plants/rice.png";
+
+    case Plant.corn:
+      return "assets/plants/cron.png";
+
+    case Plant.cassava:
+      return "assets/plants/cassava.png";
+
+    default:
+      break;
+  }
+  return "";
+}

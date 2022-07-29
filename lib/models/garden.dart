@@ -3,7 +3,8 @@
 //     final garden = gardenFromJson(jsonString);
 
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
+import 'package:thesis/porivder/token.dart';
 import 'enum.dart';
 
 Garden gardenFromJson(String str) => Garden.fromJson(json.decode(str));
@@ -15,15 +16,19 @@ class Garden {
     this.id,
     required this.name,
     this.notes,
-    required this.plant,
+    this.plant,
     this.createdBy,
   });
 
   final id;
   final String name;
   final notes;
-  final Plant plant;
+  late final plant;
   final createdBy;
+
+  set setPlant(Plant plant) {
+    this.plant = plant;
+  }
 
   factory Garden.fromJson(Map<String, dynamic> json) => Garden(
         id: json["_id"],
@@ -34,10 +39,18 @@ class Garden {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
         "name": name,
         "notes": notes,
         "plant": enumToString(plant),
-        "createdBy": createdBy,
       };
+
+  createGarden() async {
+    const url = "https://soil-analysis-usls.herokuapp.com//v1/garden/create";
+    final token = tokenProvider;
+
+    var response = await http.post(Uri.parse(url),
+        headers: {"Authorization": "Bearer $token"}, body: toJson());
+
+    print(response.statusCode);
+  }
 }

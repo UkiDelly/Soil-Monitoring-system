@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:thesis/main.dart';
+import 'package:thesis/models/enum.dart';
+import 'package:thesis/views/New%20Garden/widgets/inputs.dart';
 
 import '../loading.dart';
 import '../../models/garden.dart';
@@ -24,23 +24,19 @@ class AddNewGarden extends ConsumerStatefulWidget {
 }
 
 class _AddNewGardenState extends ConsumerState<AddNewGarden> {
-  //text controller
-  var nameController = TextEditingController(),
-      noteController = TextEditingController();
-  String selectedPlants = '';
-  late bool isDarkMode;
+  //
+  late Garden garden;
 
-  getPlantName(plantName) {
+  //
+  callBack(Garden garden) {
     setState(() {
-      selectedPlants = plantName;
+      this.garden = garden;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
-    isDarkMode = brightness == Brightness.dark;
   }
 
   @override
@@ -78,7 +74,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
+                  if (newGardenInputFormKey.currentState!.validate()) {
                     // show load
                     CustomProgressDialog loadingDialog = CustomProgressDialog(
                       context,
@@ -88,18 +84,14 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                     );
                     loadingDialog.show();
 
-                    if (selectedPlants == '') {
+                    //
+                    if (garden.plant == Plant.none) {
                       _showToast(context, "Please select a plant.");
                       return;
                     }
-                    Garden garden =
-                        Garden(token: widget.token, userId: widget.userId);
 
                     // create new Garden
-                    bool created = await garden.createGarden(
-                        name: nameController.text,
-                        notes: noteController.text,
-                        plant: selectedPlants);
+                    bool created = await garden.createGarden();
 
                     loadingDialog.dismiss();
 
@@ -121,7 +113,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
           ],
         ),
 
-        backgroundColor: isDarkMode ? const Color(0xff4f7c53) : mainColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
 
         body: SingleChildScrollView(
           child: Center(
@@ -133,7 +125,9 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                   height: 10,
                 ),
 
-                inputs(),
+                NewGardenInput(
+                  callBack: (Garden garden) => callBack(garden),
+                ),
 
                 const Divider(
                   indent: 10,
@@ -155,7 +149,11 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10),
                   child: PlantCard(
-                    callback: ((String plantName) => getPlantName(plantName)),
+                    callback: ((plant) {
+                      setState(() {
+                        garden.setPlant = plant;
+                      });
+                    }),
                   ),
                 )
               ],
@@ -164,91 +162,6 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
         ),
       ),
     );
-  }
-
-  final _formKey = GlobalKey<FormState>();
-  Widget inputs() {
-    return Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            // Name
-            const Center(
-              child: Text(
-                "Name",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-            ),
-
-            // Name text field
-            Center(
-              child: SizedBox(
-                width: 300,
-                child: TextFormField(
-                  style: TextStyle(
-                      color: isDarkMode ? Colors.black : Colors.white),
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    hintText: "Enter a name",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.red, width: 3),
-                    ),
-                  ),
-                  validator: (name) {
-                    if (name == "") {
-                      return "Please enter a name";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
-
-            const Center(
-              child: Text(
-                "Notes",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-            ),
-
-            // notes
-            Center(
-              child: TextFormField(
-                style: const TextStyle(color: Colors.black),
-                controller: noteController,
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: "Enter a note",
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  filled: true,
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.9,
-                  ),
-                  fillColor: Colors.white,
-                  enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                  focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                ),
-              ),
-            ),
-          ],
-        ));
   }
 }
 

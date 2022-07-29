@@ -5,23 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:thesis/main.dart';
-import 'package:thesis/models/enum.dart';
 import 'package:thesis/porivder/garden.dart';
-import 'package:thesis/views/Garden%20Detail/new_garden_page.dart';
+import 'package:thesis/views/Garden%20Detail/garden_page.dart';
+
+import '../../../models/garden.dart';
 
 class GardenCard extends StatefulWidget {
-  String gardenId, gardenName, notes, token;
-  Plant plant;
+  final String token;
+  final Garden garden;
+
   int index;
 
   GardenCard(
       {Key? key,
       required this.index,
-      required this.gardenId,
-      required this.gardenName,
-      required this.notes,
-      required this.plant,
-      required this.token})
+      required this.token,
+      required this.garden})
       : super(key: key);
 
   @override
@@ -35,7 +34,7 @@ class _GardenCardState extends State<GardenCard> {
         padding: const EdgeInsets.all(8.0),
         // Open Container
         child: OpenContainer(
-            transitionDuration: const Duration(milliseconds: 300),
+            transitionDuration: const Duration(milliseconds: 1500),
             closedElevation: 5,
             // When the Container is closed
             onClosed: (data) {
@@ -54,18 +53,13 @@ class _GardenCardState extends State<GardenCard> {
             openBuilder: (_, closeContainer) {
               return Consumer(
                 builder: (ctx, ref, child) {
+                  // save the garden id
                   ref
                       .watch(gardenIDProvider.notifier)
-                      .update((state) => widget.gardenId);
+                      .update((state) => widget.garden.id);
                   return GardenDetail(
-                    gardenName: widget.gardenName,
-                    notes: widget.notes,
+                    garden: widget.garden,
                   );
-                  // GardenPage(
-                  //   gardenName: widget.gardenName,
-                  //   notes: widget.notes,
-                  //   plant: widget.plant,
-                  // );
                 },
               );
             }));
@@ -77,7 +71,7 @@ class _GardenCardState extends State<GardenCard> {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(widget.gardenName,
+          child: Text(widget.garden.name,
               textAlign: TextAlign.center,
               style:
                   const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
