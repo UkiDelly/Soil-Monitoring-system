@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/porivder/garden.dart';
+import 'package:thesis/provider/garden.dart';
 import 'package:http/http.dart' as http;
-import 'package:thesis/porivder/token.dart';
+import 'package:thesis/provider/token.dart';
 
 import '../models/sensor_data.dart';
 

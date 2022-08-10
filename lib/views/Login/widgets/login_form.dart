@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/porivder/garden.dart';
-import 'package:thesis/porivder/token.dart';
-import 'package:thesis/porivder/user_id.dart';
+import 'package:thesis/provider/garden.dart';
+import 'package:thesis/provider/token.dart';
+import 'package:thesis/provider/user_id.dart';
 import 'package:thesis/views/Garden%20List/garden_list_page.dart';
 
 import '../../../models/user.dart';
@@ -133,7 +133,7 @@ class _LoginFormState extends State<LoginForm> {
                   // if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
                     if (user.token != false) {
-                      // save the user id and token into the porivder
+                      // save the user id and token into the provider
                       ref
                           .watch(userIDProvider.notifier)
                           .update((state) => user.userId);

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:thesis/main.dart';
-import 'package:thesis/porivder/garden.dart';
+import 'package:thesis/provider/garden.dart';
 import 'package:thesis/views/Garden%20Detail/garden_page.dart';
 
 import '../../../models/garden.dart';

@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:thesis/porivder/token.dart';
+import 'package:thesis/provider/token.dart';
 import 'enum.dart';
 
 Garden gardenFromJson(String str) => Garden.fromJson(json.decode(str));
@@ -50,7 +50,5 @@ class Garden {
 
     var response = await http.post(Uri.parse(url),
         headers: {"Authorization": "Bearer $token"}, body: toJson());
-
-
   }
 }

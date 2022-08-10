@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/models/sensor_data.dart';
-import 'package:thesis/porivder/sensor_data.dart';
+import 'package:thesis/provider/sensor_data.dart';
 
 class ShowSensorData extends ConsumerStatefulWidget {
   Function(List<Datum> sensorDataList) callback;
@@ -42,7 +42,7 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       widget.callback(data[index]);
                     });
-                    
+
                     // get the last data
                     SingleSensorData latestData = SingleSensorData(
                         n: data[index].last.nitrogen,

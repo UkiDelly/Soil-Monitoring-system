@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/porivder/garden.dart';
-import 'package:thesis/porivder/token.dart';
+import 'package:thesis/provider/garden.dart';
+import 'package:thesis/provider/token.dart';
 import 'package:thesis/views/Garden%20List/widget/garden_card.dart';
 
 import '../../../models/garden.dart';
