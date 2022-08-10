@@ -22,6 +22,7 @@ class _PlantCardState extends State<PlantCard> {
       padding: const EdgeInsets.all(5),
       child: Row(
         children: [
+          //
           InkWell(
             onTap: () => setState(() {
               //when click, select this plant and call the callback to get the name
@@ -45,11 +46,14 @@ class _PlantCardState extends State<PlantCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  //
                   SizedBox(
                       height: 200,
                       child: Image.asset(
                         'assets/plants/rice.png',
                       )),
+
+                  //
                   const Text(
                     "Rice",
                     style: TextStyle(fontSize: 50),
@@ -58,9 +62,13 @@ class _PlantCardState extends State<PlantCard> {
               ),
             ),
           ),
+
+          //
           const SizedBox(
             width: 15,
           ),
+
+          //
           InkWell(
             onTap: (() => setState(() {
                   //when click, select this plant and call the callback to get the name
@@ -84,11 +92,13 @@ class _PlantCardState extends State<PlantCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  //
                   SizedBox(
                       height: 200,
                       child: Image.asset(
                         'assets/plants/corn.png',
                       )),
+                  //
                   const Text(
                     "Corn",
                     style: TextStyle(fontSize: 50),
@@ -97,9 +107,13 @@ class _PlantCardState extends State<PlantCard> {
               ),
             ),
           ),
+
+          //
           const SizedBox(
             width: 15,
           ),
+
+          //
           InkWell(
             onTap: (() => setState(() {
                   selectedIndex = 2;
@@ -120,11 +134,14 @@ class _PlantCardState extends State<PlantCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  //
                   SizedBox(
                       height: 200,
                       child: Image.asset(
                         'assets/plants/cassava.png',
                       )),
+
+                  //
                   const Text(
                     "Cassava",
                     style: TextStyle(fontSize: 50),

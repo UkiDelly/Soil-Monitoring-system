@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:thesis/models/enum.dart';
-import 'package:thesis/models/garden.dart';
 
 class NewGardenInput extends StatefulWidget {
-  final Function(Garden garden) callBack;
+  final Function(String name, String? notes) callBack;
   const NewGardenInput({
     Key? key,
     required this.callBack,
@@ -29,19 +27,13 @@ class _NewGardenInputState extends State<NewGardenInput> {
     isDarkMode = brightness == Brightness.dark;
   }
 
-  doneEnter() {
-    Garden garden = Garden(
-        name: nameController.text,
-        notes: noteController.text,
-        plant: Plant.none);
-
-    widget.callBack(garden);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
         key: newGardenInputFormKey,
+        
+        onChanged: () =>
+            widget.callBack(nameController.text, noteController.text),
         child: Column(
           children: [
             // Name

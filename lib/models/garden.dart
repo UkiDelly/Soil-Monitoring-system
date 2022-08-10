@@ -16,19 +16,15 @@ class Garden {
     this.id,
     required this.name,
     this.notes,
-    this.plant,
+    required this.plant,
     this.createdBy,
   });
 
-  final id;
+  final String? id;
   final String name;
-  final notes;
-  late final plant;
-  final createdBy;
-
-  set setPlant(Plant plant) {
-    this.plant = plant;
-  }
+  final String? notes;
+  final Plant plant;
+  final String? createdBy;
 
   factory Garden.fromJson(Map<String, dynamic> json) => Garden(
         id: json["_id"],
@@ -50,7 +46,5 @@ class Garden {
 
     var response = await http.post(Uri.parse(url),
         headers: {"Authorization": "Bearer $token"}, body: toJson());
-
-
   }
 }

@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
               style: TextStyle(fontSize: 25)),
           TextButton(
             onPressed: () {
-//? Register Page
+              //? Register Page
               Navigator.push(
                   _,
                   PageTransition(

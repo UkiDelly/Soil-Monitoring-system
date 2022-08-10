@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/models/sensor_data.dart';
 import 'package:thesis/porivder/sensor_data.dart';
+import 'package:thesis/views/Garden%20Detail/Status%20widgets/humidity.dart';
+import 'package:thesis/views/Garden%20Detail/Status%20widgets/moisture.dart';
+import 'package:thesis/views/Garden%20Detail/Status%20widgets/npk_status.dart';
+import 'package:thesis/views/Garden%20Detail/Status%20widgets/ph_level.dart';
+import 'package:thesis/views/Garden%20Detail/Status%20widgets/tempurature.dart';
 
 class ShowSensorData extends ConsumerStatefulWidget {
   Function(List<Datum> sensorDataList) callback;
@@ -15,7 +20,6 @@ class ShowSensorData extends ConsumerStatefulWidget {
 class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
   // Page
   PageController pageController = PageController(initialPage: 0);
-  int pages = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +29,11 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
     //
     return sensorData.when(
         data: (data) {
-          // set the pages again
-          setState(() {
-            pages = data.length;
-          });
-
           return Column(
             children: [
               Expanded(
                 child: PageView.builder(
-                  itemCount: pages,
+                  itemCount: data.length,
                   controller: pageController,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
@@ -42,7 +41,7 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       widget.callback(data[index]);
                     });
-                    
+
                     // get the last data
                     SingleSensorData latestData = SingleSensorData(
                         n: data[index].last.nitrogen,
@@ -57,7 +56,9 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                     return Column(
                       children: [
                         //* NPK
-                        latestData.npk(screenWidth * 50),
+                        NPKstatus(
+                            dataMap: latestData.getNPK,
+                            width: screenWidth * 50),
 
                         //
                         Row(
@@ -68,8 +69,15 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 //* temperature
-                                latestData.temperature(screenWidth * 0.45),
-                                latestData.humidityLevel(screenWidth * 0.45)
+                                Temp(
+                                    temp: latestData.temp,
+                                    width: screenWidth * 0.45),
+
+                                //* Humidity
+                                Humidity(
+                                  humidity: latestData.humidity,
+                                  width: screenWidth * 0.45,
+                                )
                               ],
                             ),
 
@@ -77,8 +85,15 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                latestData.pH(screenWidth * 0.5),
-                                latestData.moistureLevel(screenWidth * 0.5)
+                                //* Ph
+                                PhLevel(
+                                    ph: latestData.ph,
+                                    width: screenWidth * 0.5),
+
+                                //* Moisture
+                                MoistureLevel(
+                                    moisture: latestData.moisture,
+                                    width: screenWidth * 0.5),
                               ],
                             )
                           ],
@@ -99,7 +114,7 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                   child: SmoothPageIndicator(
                       effect: const WormEffect(activeDotColor: Colors.black),
                       controller: pageController,
-                      count: pages))
+                      count: data.length))
             ],
           );
         },

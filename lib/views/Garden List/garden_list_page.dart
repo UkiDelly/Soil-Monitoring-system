@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:thesis/porivder/garden.dart';
+import 'package:thesis/porivder/user_id.dart';
 import 'package:thesis/views/Garden%20List/widget/garden_list.dart';
+import 'package:thesis/views/New%20Garden/new_garden_page.dart';
+
+import '../../porivder/token.dart';
 
 // ignore: must_be_immutable
 class GardenListPage extends StatelessWidget {
@@ -64,13 +71,23 @@ class GardenListPage extends StatelessWidget {
                   ),
 
                   //* Create new garden button
-                  IconButton(
-                      iconSize: 50,
-                      splashColor: Colors.transparent,
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.add,
-                      ))
+                  Consumer(
+                    builder: (context, ref, child) => IconButton(
+                        iconSize: 50,
+                        splashColor: Colors.transparent,
+
+                        //
+                        onPressed: () => Navigator.of(context)
+                            .push(PageTransition(
+                                child: AddNewGarden(
+                                    userId: ref.watch(userIDProvider),
+                                    token: ref.watch(tokenProvider)),
+                                type: PageTransitionType.rightToLeft))
+                            .then((value) => ref.refresh(gardnenListProvider)),
+                        icon: const Icon(
+                          Icons.add,
+                        )),
+                  )
                 ],
               ),
 

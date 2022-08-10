@@ -8,8 +8,6 @@ import 'package:thesis/views/Garden%20List/garden_list_page.dart';
 
 import '../../../models/user.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
@@ -25,6 +23,8 @@ class _LoginFormState extends State<LoginForm> {
       passwordController = TextEditingController();
   bool? successLogin;
   bool loading = false;
+  //
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -40,6 +40,7 @@ class _LoginFormState extends State<LoginForm> {
               key: _formKey,
               child: Column(
                 children: [
+                  //
                   //User name
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
@@ -68,6 +69,7 @@ class _LoginFormState extends State<LoginForm> {
                         },
                       )),
 
+                  //
                   const SizedBox(
                     height: 10,
                   ),
@@ -100,9 +102,13 @@ class _LoginFormState extends State<LoginForm> {
                   )
                 ],
               )),
+
+          //
           const SizedBox(
             height: 30,
           ),
+
+          //
           Consumer(
             builder: (context, ref, child) => SizedBox(
               width: 200,
@@ -124,6 +130,7 @@ class _LoginFormState extends State<LoginForm> {
                     loading = true;
                   });
 
+                  // create user instance
                   User user = User(
                       username: usernameController.text,
                       password: passwordController.text);

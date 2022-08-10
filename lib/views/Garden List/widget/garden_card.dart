@@ -56,7 +56,7 @@ class _GardenCardState extends State<GardenCard> {
                   // save the garden id
                   ref
                       .watch(gardenIDProvider.notifier)
-                      .update((state) => widget.garden.id);
+                      .update((state) => widget.garden.id!);
                   return GardenDetail(
                     garden: widget.garden,
                   );
