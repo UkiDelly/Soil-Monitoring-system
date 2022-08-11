@@ -4,12 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:thesis/views/Garden%20Detail/Status%20widgets/humidity.dart';
-import 'package:thesis/views/Garden%20Detail/Status%20widgets/moisture.dart';
-import 'package:thesis/views/Garden%20Detail/Status%20widgets/npk_status.dart';
-import 'package:thesis/views/Garden%20Detail/Status%20widgets/ph_level.dart';
-import 'package:thesis/views/Garden%20Detail/Status%20widgets/tempurature.dart';
-
 class SensorData {
   SensorData({
     required this.data,
@@ -62,10 +56,15 @@ class Datum {
         humidity: json["humidity"].toDouble(),
         createdAt: DateTime.parse(json["createdAt"]),
       );
+
+  @override
+  String toString() {
+    return "Datum(id: $sensorId, nitrogen: $nitrogen, phosphorous: $phosphorous, potassium: $potassium, pH: $pH, temperature: $temperature, moisture: $moisture, humidity: $humidity, createdAt: $createdAt,)";
+  }
 }
 
 class SingleSensorData {
-  final n, p, k, ph, temp, moisture, humidity;
+  final double n, p, k, ph, temp, moisture, humidity;
 
   SingleSensorData(
       {required this.n,
@@ -76,39 +75,14 @@ class SingleSensorData {
       required this.moisture,
       required this.humidity});
 
-  NPKstatus npk(double width) {
-    return NPKstatus(dataMap: {
-      "Nitrogen": n,
-      "Phosphorous": p,
-      "Potassium": k,
-    }, width: width);
-  }
+  get getNPK => <String, double>{
+        "Nitrogen": n,
+        "Phosphorous": p,
+        "Potassium": k,
+      };
 
-  PhLevel pH(double width) {
-    return PhLevel(
-      ph: ph,
-      width: width,
-    );
-  }
-
-  Temp temperature(double width) {
-    return Temp(
-      temp: temp,
-      width: width,
-    );
-  }
-
-  MoistureLevel moistureLevel(double width) {
-    return MoistureLevel(
-      moisture: moisture,
-      width: width,
-    );
-  }
-
-  Humidity humidityLevel(double width) {
-    return Humidity(
-      humidity: humidity,
-      width: width,
-    );
+  @override
+  String toString() {
+    return "SingleSensorData(n: $n, p: $p, k: $k, ph: $ph, temperature: $temp, moisture: $moisture, humidity: $humidity)";
   }
 }

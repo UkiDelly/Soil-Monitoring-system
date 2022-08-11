@@ -124,6 +124,7 @@ class PhLevel extends StatelessWidget {
                     // Pointer of the gauge
                     pointers: <GaugePointer>[
                       MarkerPointer(
+                        color: Colors.black,
                         animationDuration: 500,
                         value: ph,
                         markerOffset: -10,

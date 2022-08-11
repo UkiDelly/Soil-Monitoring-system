@@ -3,20 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:thesis/models/enum.dart';
+import 'package:thesis/models/garden.dart';
 import 'package:thesis/views/New%20Garden/widgets/inputs.dart';
 
 import '../loading.dart';
-import '../../models/garden.dart';
 import 'plants.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
-  Function() callback;
   String token, userId;
-  AddNewGarden(
-      {required this.callback,
-      required this.userId,
-      required this.token,
-      Key? key})
+  AddNewGarden({required this.userId, required this.token, Key? key})
       : super(key: key);
 
   @override
@@ -25,14 +20,9 @@ class AddNewGarden extends ConsumerStatefulWidget {
 
 class _AddNewGardenState extends ConsumerState<AddNewGarden> {
   //
-  late Garden garden;
-
-  //
-  callBack(Garden garden) {
-    setState(() {
-      this.garden = garden;
-    });
-  }
+  String name = "";
+  String? notes;
+  Plant plant = Plant.none;
 
   @override
   void initState() {
@@ -62,7 +52,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
-              onPressed: () => Navigator.pop(context)),
+              onPressed: () => Navigator.of(context).pop()),
           leadingWidth: 90,
 
           elevation: 0,
@@ -73,7 +63,10 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
+
+                //
                 onPressed: () async {
+                  // check if the inputs are validate
                   if (newGardenInputFormKey.currentState!.validate()) {
                     // show load
                     CustomProgressDialog loadingDialog = CustomProgressDialog(
@@ -83,6 +76,10 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                       loadingWidget: const Center(child: LoadingPage()),
                     );
                     loadingDialog.show();
+
+                    //
+                    Garden garden =
+                        Garden(name: name, notes: notes, plant: plant);
 
                     //
                     if (garden.plant == Plant.none) {
@@ -126,7 +123,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 ),
 
                 NewGardenInput(
-                  callBack: (Garden garden) => callBack(garden),
+                  callBack: (name, notes) => setState(() {}),
                 ),
 
                 const Divider(
@@ -151,7 +148,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                   child: PlantCard(
                     callback: ((plant) {
                       setState(() {
-                        garden.setPlant = plant;
+                        this.plant = plant;
                       });
                     }),
                   ),

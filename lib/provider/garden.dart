@@ -30,3 +30,7 @@ final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
 
   return gardens;
 });
+
+class GardenNotifier extends StateNotifier<List<Garden>> {
+  GardenNotifier() : super([]);
+}

@@ -13,7 +13,7 @@ class GardenList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // 다크모드인지 확인
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
+
     // Provider에서 값 가져오기
     AsyncValue<List<Garden>> data = ref.watch(gardnenListProvider);
 
@@ -34,33 +34,6 @@ class GardenList extends ConsumerWidget {
                     index: index,
                     garden: data[index],
                     token: ref.watch(tokenProvider));
-                // Container(
-                //   margin: const EdgeInsets.all(10),
-                //   padding: const EdgeInsets.all(10),
-                //   width: MediaQuery.of(context).size.width - 10,
-                //   //
-                //   decoration: BoxDecoration(
-                //       color: Theme.of(context).colorScheme.primary,
-                //       borderRadius: const BorderRadius.all(Radius.circular(25)),
-                //       border: Border.all(width: 3),
-
-                //       // 그림자
-                //       boxShadow: [
-                //         BoxShadow(
-                //             offset: const Offset(0, 10),
-                //             blurStyle: BlurStyle.normal,
-                //             blurRadius: 5,
-
-                //             color: isDarkMode ? mainColor : mainDarkColor),
-                //       ]),
-                //   //
-                //   child: Center(
-                //       child: Text(
-                //     data[index].name,
-                //     style: const TextStyle(
-                //         fontSize: 40, fontWeight: FontWeight.bold),
-                //   )),
-                // );
               },
             ),
           );

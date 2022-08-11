@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GardenInfo extends StatelessWidget {
-  final String gardenName, notes;
+  final String gardenName;
+  final String? notes;
   final isDarkMode;
   const GardenInfo(
       {Key? key,
@@ -49,13 +50,14 @@ class GardenInfo extends StatelessWidget {
                     endIndent: 5,
                     thickness: 2,
                   ),
-                  Text(
-                    notes,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.black,
-                        fontSize: 20),
-                  ),
+                  if (notes != null)
+                    Text(
+                      notes!,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: isDarkMode ? Colors.white : Colors.black,
+                          fontSize: 20),
+                    ),
                 ],
               ),
             ),
