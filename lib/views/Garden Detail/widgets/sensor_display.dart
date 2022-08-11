@@ -9,49 +9,53 @@ import 'package:thesis/views/Garden%20Detail/Status%20widgets/npk_status.dart';
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/ph_level.dart';
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/tempurature.dart';
 
-class ShowSensorData extends ConsumerStatefulWidget {
-  Function(List<Datum> sensorDataList) callback;
+class ShowSensorData extends ConsumerWidget {
+  final Function(List<Datum> sensorDataList, List<Datum> lastSensorData)
+      callback;
   ShowSensorData({Key? key, required this.callback}) : super(key: key);
 
-  @override
-  ConsumerState<ShowSensorData> createState() => _ShowSensorDataState();
-}
-
-class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
   // Page
-  PageController pageController = PageController(initialPage: 0);
+  final PageController pageController = PageController(initialPage: 0);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // get the sensor list
-    AsyncValue<List<List<Datum>>> sensorData = ref.watch(sensorProvider);
+    AsyncValue<SensorData> sensorData = ref.watch(sensorProvider);
     double screenWidth = MediaQuery.of(context).size.width;
     //
     return sensorData.when(
         data: (data) {
+          List<Datum> _temp = [
+            data.data[0].last,
+            data.data[1].last,
+            data.data[2].last
+          ];
+
+          //
           return Column(
             children: [
               Expanded(
                 child: PageView.builder(
-                  itemCount: data.length,
+                  itemCount: data.data.length,
                   controller: pageController,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     // callback after build
+
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      widget.callback(data[index]);
+                      callback(data.data[index], _temp);
                     });
 
                     // get the last data
                     SingleSensorData latestData = SingleSensorData(
-                        n: data[index].last.nitrogen,
-                        p: data[index].last.phosphorous,
-                        k: data[index].last.potassium,
-                        ph: data[index].last.pH,
-                        temp: data[index].last.temperature,
+                        n: data.data[index].last.nitrogen,
+                        p: data.data[index].last.phosphorous,
+                        k: data.data[index].last.potassium,
+                        ph: data.data[index].last.pH,
+                        temp: data.data[index].last.temperature,
                         moisture: double.parse(
-                            data[index].last.moisture.toStringAsFixed(2)),
-                        humidity: data[index].last.humidity);
+                            data.data[index].last.moisture.toStringAsFixed(2)),
+                        humidity: data.data[index].last.humidity);
 
                     return Column(
                       children: [
@@ -114,7 +118,7 @@ class _ShowSensorDataState extends ConsumerState<ShowSensorData> {
                   child: SmoothPageIndicator(
                       effect: const WormEffect(activeDotColor: Colors.black),
                       controller: pageController,
-                      count: data.length))
+                      count: data.data.length))
             ],
           );
         },

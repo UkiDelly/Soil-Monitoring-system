@@ -10,8 +10,8 @@ import 'History page Widgets/ph_history.dart';
 import 'History page Widgets/temperature.dart';
 
 class HistoryPage extends StatelessWidget {
-  HistoryOfSensorData historyData;
-  HistoryPage({Key? key, required this.historyData}) : super(key: key);
+  final HistoryOfSensorData historyData;
+  const HistoryPage({Key? key, required this.historyData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

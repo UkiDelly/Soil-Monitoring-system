@@ -56,6 +56,11 @@ class Datum {
         humidity: json["humidity"].toDouble(),
         createdAt: DateTime.parse(json["createdAt"]),
       );
+
+  @override
+  String toString() {
+    return "Datum(id: $sensorId, nitrogen: $nitrogen, phosphorous: $phosphorous, potassium: $potassium, pH: $pH, temperature: $temperature, moisture: $moisture, humidity: $humidity, createdAt: $createdAt,)";
+  }
 }
 
 class SingleSensorData {
@@ -76,5 +81,8 @@ class SingleSensorData {
         "Potassium": k,
       };
 
-  // Map<String, double> npk() {
+  @override
+  String toString() {
+    return "SingleSensorData(n: $n, p: $p, k: $k, ph: $ph, temperature: $temp, moisture: $moisture, humidity: $humidity)";
+  }
 }

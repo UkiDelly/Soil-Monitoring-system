@@ -5,7 +5,7 @@ import 'package:thesis/porivder/token.dart';
 
 import '../models/sensor_data.dart';
 
-final sensorProvider = StreamProvider<List<List<Datum>>>((ref) async* {
+final sensorProvider = StreamProvider<SensorData>((ref) async* {
   // fetch data
   final url =
       "https://soil-analysis-usls.herokuapp.com/v1/sensor/getGardenSensorData/${ref.watch(gardenIDProvider)}";
@@ -15,5 +15,5 @@ final sensorProvider = StreamProvider<List<List<Datum>>>((ref) async* {
 
   SensorData sensorData = SensorData.fromRawJson(response.body);
 
-  yield sensorData.data;
+  yield sensorData;
 });
