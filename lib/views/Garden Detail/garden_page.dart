@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/models/fertilizer.dart';
 import 'package:thesis/models/history.dart';
 import 'package:thesis/models/sensor_data.dart';
-import 'package:thesis/views/Garden%20Detail/history/history_page.dart';
+
 import 'package:thesis/views/Garden%20Detail/widgets/garden_name.dart';
 import 'package:thesis/views/Garden%20Detail/widgets/plant_card.dart';
 import 'package:thesis/views/Garden%20Detail/widgets/sensor_display.dart';
 
 import '../../models/garden.dart';
+import '../History/history_page.dart';
 
 class GardenDetail extends StatefulWidget {
   final Garden garden;
@@ -22,13 +24,29 @@ class GardenDetail extends StatefulWidget {
 
 class _GardenDetailState extends State<GardenDetail> {
   List<Datum> sensorDataList = [];
+  List<Datum> lastSensorData = [];
+
+  double nAverage = 0, pAverage = 0, kAverage = 0, phAverage = 0;
 
   // callBack
-  getSensorDataList(List<Datum> sensorDataList) {
+  getSensorDataList(List<Datum> sensorDataList, List<Datum> lastSensorData) {
+    // get the average..
+    for (Datum date in lastSensorData) {
+      nAverage += date.nitrogen;
+      pAverage += date.phosphorous;
+      kAverage += date.potassium;
+      phAverage += date.pH;
+    }
 
     setState(() {
+      // get the average
+      nAverage /= nAverage;
+      pAverage /= pAverage;
+      kAverage /= kAverage;
+      phAverage /= phAverage;
+
       this.sensorDataList = sensorDataList;
-      
+      this.lastSensorData = lastSensorData;
     });
   }
 
@@ -107,9 +125,15 @@ class _GardenDetailState extends State<GardenDetail> {
                 "Plant",
                 style: TextStyle(fontSize: 45),
               ),
-              GardenDetailPlantCard(plant: widget.garden.plant)
+              GardenDetailPlantCard(plant: widget.garden.plant),
 
               //* Recommendation
+              FertilizerCards(
+                  nAverage: nAverage,
+                  pAverage: pAverage,
+                  kAverage: kAverage,
+                  phAverage: phAverage,
+                  plant: widget.garden.plant)
             ],
           ),
         ),

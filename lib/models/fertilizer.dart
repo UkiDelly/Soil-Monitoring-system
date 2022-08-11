@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'Plants/cassave.dart';
 import 'Plants/corn.dart';
 import 'Plants/rice.dart';
+import 'enum.dart';
 
 // ignore: must_be_immutable
 class FertilizerCards extends StatefulWidget {
   double nAverage, pAverage, kAverage, phAverage;
-  String plant;
+  Plant plant;
   FertilizerCards(
       {Key? key,
       required this.nAverage,
@@ -28,7 +29,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
 
   getRecommendation() {
     switch (widget.plant) {
-      case "Rice":
+      case Plant.rice:
         matrix = Rice(
             nitrogen: widget.nAverage,
             phosphorous: widget.pAverage,
@@ -44,7 +45,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
         fertilizer.add(matrix.getPh());
 
         break;
-      case "Corn":
+      case Plant.corn:
         matrix = Corn(
             nitrogen: widget.nAverage,
             phosphorous: widget.pAverage,
@@ -60,7 +61,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
         fertilizer.add(matrix.getPh());
         break;
 
-      case "Cassava":
+      case Plant.cassava:
         matrix = Cassave(
             nitrogen: widget.nAverage,
             phosphorous: widget.pAverage,
@@ -73,6 +74,10 @@ class _FertilizerCardsState extends State<FertilizerCards> {
         status.add(matrix.getPotassium()['status']);
         fertilizer.add(matrix.getPotassium()['fertilizer']);
         fertilizer.add(matrix.getPh());
+        break;
+
+      default:
+        return null;
     }
 
     setState(() {
@@ -103,7 +108,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
               width: 10,
             ),
 
-            // Notrigen
+            // Nitrogen
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
@@ -131,8 +136,15 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text("Fertilizer: ${fertilizer[0]}",
-                        style: const TextStyle(fontSize: 25)),
+                    const Text("Fertilizer", style: TextStyle(fontSize: 25)),
+                    Text(
+                      "wet: ${fertilizer[0]['wet']}",
+                      style: const TextStyle(
+                          fontSize: 20, color: Colors.orangeAccent),
+                    ),
+                    Text("dry: ${fertilizer[0]['dry']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.lightBlueAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -173,8 +185,15 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text("Fertilizer: ${fertilizer[1]}",
-                        style: const TextStyle(fontSize: 25)),
+                    const Text("Fertilizer", style: TextStyle(fontSize: 25)),
+                    Text(
+                      "wet: ${fertilizer[1]['wet']}",
+                      style: const TextStyle(
+                          fontSize: 20, color: Colors.orangeAccent),
+                    ),
+                    Text("dry: ${fertilizer[1]['dry']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.lightBlueAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -214,8 +233,15 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text("Fertilizer: ${fertilizer[0]}",
-                        style: const TextStyle(fontSize: 25)),
+                   const Text("Fertilizer", style: TextStyle(fontSize: 25)),
+                    Text(
+                      "wet: ${fertilizer[2]['wet']}",
+                      style: const TextStyle(
+                          fontSize: 20, color: Colors.orangeAccent),
+                    ),
+                    Text("dry: ${fertilizer[2]['dry']}",
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.lightBlueAccent)),
                     const Spacer(
                       flex: 2,
                     )
