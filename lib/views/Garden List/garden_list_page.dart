@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:thesis/porivder/garden.dart';
-import 'package:thesis/porivder/user_id.dart';
+
 import 'package:thesis/views/Garden%20List/widget/garden_list.dart';
 import 'package:thesis/views/New%20Garden/new_garden_page.dart';
 
-import '../../porivder/token.dart';
+import '../../provider/garden.dart';
+import '../../provider/token.dart';
+import '../../provider/user_id.dart';
 
 // ignore: must_be_immutable
 class GardenListPage extends StatelessWidget {

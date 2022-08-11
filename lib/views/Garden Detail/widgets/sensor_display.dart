@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:thesis/models/sensor_data.dart';
-import 'package:thesis/porivder/sensor_data.dart';
+
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/humidity.dart';
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/moisture.dart';
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/npk_status.dart';
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/ph_level.dart';
 import 'package:thesis/views/Garden%20Detail/Status%20widgets/tempurature.dart';
+
+import '../../../provider/sensor_data.dart';
 
 class ShowSensorData extends ConsumerWidget {
   final Function(List<Datum> sensorDataList, List<Datum> lastSensorData)
