@@ -3,6 +3,7 @@
 //     final garden = gardenFromJson(jsonString);
 
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/provider/token.dart';
 import 'enum.dart';
@@ -44,7 +45,12 @@ class Garden {
     const url = "https://soil-analysis-usls.herokuapp.com//v1/garden/create";
     final token = tokenProvider;
 
-    var response = await http.post(Uri.parse(url),
-        headers: {"Authorization": "Bearer $token"}, body: toJson());
+    var response = Dio().post(
+        "https://soil-analysis-usls.herokuapp.com//v1/garden/create",
+        data: toJson(),
+        options: Options(headers: {'Authorization': 'Bearer $token'}));
+
+    // var response = await http.post(Uri.parse(url),
+    //     headers: {"Authorization": "Bearer $token"}, body: toJson());
   }
 }

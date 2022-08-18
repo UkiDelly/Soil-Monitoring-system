@@ -39,6 +39,7 @@ dependencies:
   syncfusion_flutter_gauges: 
   provider:
   http:
+  dio:
   flutter_riverpod:
   animated_text_kit:
   ndialog: 

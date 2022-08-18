@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:thesis/provider/user_id.dart';
@@ -13,12 +14,14 @@ final gardenIDProvider = StateProvider<String>((ref) => "");
 final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
   // fetch data
   const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/list";
-  var response = await http.get(Uri.parse(url));
+
+  var response = await Dio().get(url);
+  // var response = await http.get(Uri.parse(url));
 
   List<Garden> gardens = [];
 
   if (response.statusCode == 200) {
-    var item = jsonDecode(response.body)['data'];
+    var item = response.data['data'];
     for (var garden in item) {
       if (garden['createdBy'] == ref.watch(userIDProvider)) {
         gardens.add(Garden.fromJson(garden));
