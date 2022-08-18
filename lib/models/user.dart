@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 class User {
@@ -19,11 +17,14 @@ class User {
   login() async {
     const url = "https://soil-analysis-usls.herokuapp.com/v1/user/login";
 
-    var response = await http.post(Uri.parse(url),
-        body: {'username': username, 'password': password});
+    var response = await Dio()
+        .post(url, data: {'username': username, 'password': password});
+
+    // var response = await http.post(Uri.parse(url),
+    //     body: {'username': username, 'password': password});
 
     if (response.statusCode == 200) {
-      var item = jsonDecode(response.body);
+      var item = response.data;
 
       // decode the token to get th userId
       var decodeToken = Jwt.parseJwt(item['data']['authToken']);
@@ -46,8 +47,11 @@ class User {
   register() async {
     const url = "https://soil-analysis-usls.herokuapp.com/v1/user/create";
 
-    var response = await http.post(Uri.parse(url),
-        body: {'name': name, 'username': username, 'password': password});
+    var response = await Dio().post(url,
+        data: {'name': name, 'username': username, 'password': password});
+
+    // var response = await http.post(Uri.parse(url),
+    //     body: {'name': name, 'username': username, 'password': password});
     if (response.statusCode == 200) {
       return true;
     }
