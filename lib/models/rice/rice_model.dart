@@ -1,14 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part "cassave_model.freezed.dart";
+part "rice_model.freezed.dart";
 
 @freezed
-class CassaveModel with _$CassaveModel {
-  const CassaveModel._();
+class RiceModel with _$RiceModel {
+  const RiceModel._();
 
-  factory CassaveModel(
+  factory RiceModel(
       {required double nitrogen,
       required double phosphorous,
       required double potassium,
-      required double ph}) = _CassaveModel;
+      required double ph}) = _RiceModel;
 }
