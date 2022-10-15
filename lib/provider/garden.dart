@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:thesis/provider/user_id.dart';
+import 'package:thesis/provider/user/user_provider.dart';
 
 import '../models/garden.dart';
 
@@ -20,7 +20,7 @@ final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
   if (response.statusCode == 200) {
     var item = jsonDecode(response.body)['data'];
     for (var garden in item) {
-      if (garden['createdBy'] == ref.watch(userIDProvider)) {
+      if (garden['createdBy'] == ref.watch(userIdProvider)) {
         gardens.add(Garden.fromJson(garden));
 
         // gardens.add(Garden.fromJson(garden));

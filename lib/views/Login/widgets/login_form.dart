@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/models/user/user_model.dart';
 import 'package:thesis/provider/garden.dart';
-import 'package:thesis/provider/token.dart';
-import 'package:thesis/provider/user_id.dart';
-import 'package:thesis/views/Garden%20List/garden_list_page.dart';
+import 'package:thesis/provider/secure_storage/secure_storage.dart';
+import 'package:thesis/provider/user/user_provider.dart';
 
-import '../../../models/user.dart';
+import 'package:thesis/views/Garden%20List/garden_list_page.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -19,8 +19,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   //
-  TextEditingController usernameController = TextEditingController(),
-      passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController(), passwordController = TextEditingController();
   bool? successLogin;
   bool loading = false;
   //
@@ -49,18 +48,12 @@ class _LoginFormState extends State<LoginForm> {
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             labelText: "User name",
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(0xff669D6B), width: 3)),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(0xff669D6B), width: 3)),
-                            errorBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 3)),
-                            errorText: successLogin == false
-                                ? "No user exist!"
-                                : null),
+                            border:
+                                const OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                            focusedBorder:
+                                const OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                            errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 3)),
+                            errorText: successLogin == false ? "No user exist!" : null),
                         validator: (username) {
                           if (username == "") {
                             return "Please enter a username";
@@ -83,15 +76,9 @@ class _LoginFormState extends State<LoginForm> {
                       obscureText: true,
                       decoration: const InputDecoration(
                           labelText: "Enter Password",
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xff669D6B), width: 3)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xff669D6B), width: 3)),
-                          errorBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 3))),
+                          border: OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                          errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 3))),
                       validator: (password) {
                         if (password == "") {
                           return "Please enter a password";
@@ -130,37 +117,30 @@ class _LoginFormState extends State<LoginForm> {
                     loading = true;
                   });
 
-                  // create user instance
-                  User user = User(
-                      username: usernameController.text,
-                      password: passwordController.text);
+                  UserModel user2 = UserModel(username: usernameController.text, password: passwordController.text);
 
-                  await user.login();
+                  ref.watch(userLoginProvider(user2));
+                  final storage = ref.watch(secureStorageProvider);
+
+                  bool tokenExist = await storage.containsKey(key: 'token');
 
                   // if the text of the field is validate
                   if (_formKey.currentState!.validate()) {
-                    if (user.token != false) {
+                    if (tokenExist) {
                       // save the user id and token into the provider
-                      ref
-                          .watch(userIDProvider.notifier)
-                          .update((state) => user.userId);
-                      ref
-                          .watch(tokenProvider.notifier)
-                          .update((state) => user.token);
 
                       ref.refresh(gardnenListProvider);
 
                       //* Go to the garden list
                       Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                              child: const GardenListPage(),
-                              type: PageTransitionType.fade));
-                    } else if (user.token == false) {
-                      setState(() {
-                        successLogin = false;
-                        loading = false;
-                      });
+                          context, PageTransition(child: const GardenListPage(), type: PageTransitionType.fade));
+                    } else {
+                      () {
+                        setState(() {
+                          successLogin = false;
+                          loading = false;
+                        });
+                      };
                     }
                   }
                 },

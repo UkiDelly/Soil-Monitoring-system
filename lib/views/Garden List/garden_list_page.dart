@@ -7,7 +7,7 @@ import 'package:thesis/views/New%20Garden/new_garden_page.dart';
 
 import '../../provider/garden.dart';
 import '../../provider/token.dart';
-import '../../provider/user_id.dart';
+import '../../provider/user/user_provider.dart';
 
 // ignore: must_be_immutable
 class GardenListPage extends StatelessWidget {
@@ -66,8 +66,7 @@ class GardenListPage extends StatelessWidget {
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       "My Garden",
-                      style:
-                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
                     ),
                   ),
 
@@ -80,9 +79,7 @@ class GardenListPage extends StatelessWidget {
                         //
                         onPressed: () => Navigator.of(context)
                             .push(PageTransition(
-                                child: AddNewGarden(
-                                    userId: ref.watch(userIDProvider),
-                                    token: ref.watch(tokenProvider)),
+                                child: AddNewGarden(userId: ref.watch(userIdProvider), token: ref.watch(tokenProvider)),
                                 type: PageTransitionType.rightToLeft))
                             .then((value) => ref.refresh(gardnenListProvider)),
                         icon: const Icon(

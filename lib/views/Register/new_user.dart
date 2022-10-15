@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesis/main.dart';
 
-import '../../models/user.dart';
+import '../../models/user/user_model.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -16,8 +15,7 @@ class SignInPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: isDarkMode ? mainDarkColor : mainColor,
         title: const Text("Register"),
-        titleTextStyle:
-            const TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
+        titleTextStyle: const TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
       ),
       body: const Center(child: RegisterInput()),
     );
@@ -55,8 +53,7 @@ class _RegisterInputState extends State<RegisterInput> {
                     prefixIcon: Icon(Icons.person),
                     hintText: "Enter your full name",
                     filled: true,
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: mainColor))),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mainColor))),
 
                 //validator
                 validator: (name) {
@@ -77,9 +74,7 @@ class _RegisterInputState extends State<RegisterInput> {
                       prefixIcon: Icon(Icons.alternate_email),
                       hintText: "Enter user name",
                       filled: true,
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: mainColor))), //validator
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mainColor))), //validator
                   validator: (username) {
                     if (username == "") {
                       return "Please enter a user name";
@@ -111,8 +106,7 @@ class _RegisterInputState extends State<RegisterInput> {
                                     showPassword = !showPassword;
                                   }),
                               icon: const Icon(Icons.visibility)),
-                      enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: mainColor))),
+                      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: mainColor))),
                   validator: (password) {
                     if (password == "") {
                       return "Please enter a password";
@@ -126,21 +120,21 @@ class _RegisterInputState extends State<RegisterInput> {
               //Register button
               ElevatedButton(
                   onPressed: () async {
-                    User user = User(
+                    UserModel user = UserModel(
                         name: nameController.text,
                         username: usernameController.text,
                         password: passwordController.text);
-                    bool register = await user.register();
+                    // bool register = await user.register();
                     if (_formKey.currentState!.validate()) {
-                      if (register) {
-                        await Fluttertoast.showToast(
-                            msg: "Successfully Register!",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: mainColor,
-                            fontSize: 20.0);
-                      } else {}
+                      // if (register) {
+                      //   await Fluttertoast.showToast(
+                      //       msg: "Successfully Register!",
+                      //       toastLength: Toast.LENGTH_LONG,
+                      //       gravity: ToastGravity.BOTTOM,
+                      //       timeInSecForIosWeb: 1,
+                      //       backgroundColor: mainColor,
+                      //       fontSize: 20.0);
+                      // } else {}
                     }
                   },
                   child: const Padding(
