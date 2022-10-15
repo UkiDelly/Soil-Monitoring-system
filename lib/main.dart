@@ -9,7 +9,11 @@ void main() async {
 
   //* unable to rotate
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -17,21 +21,22 @@ void main() async {
 const mainColor = Color(0xff669D6B);
 const mainDarkColor = Color(0xff4c7750);
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Soil Analysis System',
       theme: ThemeData(
         fontFamily: "ReadexPro",
         colorScheme: ColorScheme.fromSeed(
-            primary: mainColor,
-            seedColor: mainColor,
-            surface: Colors.white,
-            brightness: Brightness.light),
+          primary: mainColor,
+          seedColor: mainColor,
+          surface: Colors.white,
+          brightness: Brightness.light,
+        ),
       ),
       darkTheme: ThemeData(
         fontFamily: "ReadexPro",
