@@ -13,7 +13,6 @@ final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
   // fetch data
   final url = "$baseUrl/${GardenRepo.gardenList}";
   Response response = await dio.get(url);
-
   List<Garden> gardens = [];
 
   if (response.statusCode == 200) {

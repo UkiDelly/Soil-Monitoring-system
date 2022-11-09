@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/provider/secure_storage/secure_storage.dart';
-
 import 'package:thesis/views/Garden%20List/widget/garden_list.dart';
 import 'package:thesis/views/Login/login.dart';
 import 'package:thesis/views/New%20Garden/new_garden_page.dart';
@@ -15,6 +15,8 @@ class GardenListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -22,6 +24,9 @@ class GardenListPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           toolbarOpacity: 0,
           elevation: 0,
+          systemOverlayStyle: brightness == Brightness.light
+              ? SystemUiOverlayStyle.dark
+              : SystemUiOverlayStyle.light,
           actions: [
             Consumer(
               builder: (context, ref, child) {
@@ -33,7 +38,8 @@ class GardenListPage extends StatelessWidget {
                   ),
                   onPressed: () async {
                     await storage.delete(key: 'token');
-                    Navigator.of(context).push(PageTransition(child: const LoginPage(), type: PageTransitionType.fade));
+                    Navigator.of(context).push(
+                        PageTransition(child: const LoginPage(), type: PageTransitionType.fade));
                   },
                   style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
                 );
@@ -84,7 +90,8 @@ class GardenListPage extends StatelessWidget {
                       iconSize: 50,
                       splashColor: Colors.transparent,
                       onPressed: () => Navigator.of(context)
-                          .push(PageTransition(child: const AddNewGarden(), type: PageTransitionType.rightToLeft))
+                          .push(PageTransition(
+                              child: const AddNewGarden(), type: PageTransitionType.rightToLeft))
                           .then(
                             (value) => ref.refresh(gardnenListProvider),
                           ),

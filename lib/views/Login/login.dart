@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/views/Login/widgets/login_form.dart';
 
@@ -9,6 +10,12 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+
+    if (brightness == Brightness.light) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -50,21 +57,16 @@ class LoginPage extends StatelessWidget {
       child: Column(
         children: [
           //
-          const Text("You don't have an account?",
-              style: TextStyle(fontSize: 25)),
+          const Text("You don't have an account?", style: TextStyle(fontSize: 25)),
           TextButton(
             onPressed: () {
               //? Register Page
-              Navigator.push(
-                  _,
-                  PageTransition(
-                      child: const SignInPage(),
-                      type: PageTransitionType.rightToLeft));
+              Navigator.push(_,
+                  PageTransition(child: const SignInPage(), type: PageTransitionType.rightToLeft));
             },
             child: const Text(
               "Sign In!",
-              style:
-                  TextStyle(decoration: TextDecoration.underline, fontSize: 25),
+              style: TextStyle(decoration: TextDecoration.underline, fontSize: 25),
             ),
             style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
           ),

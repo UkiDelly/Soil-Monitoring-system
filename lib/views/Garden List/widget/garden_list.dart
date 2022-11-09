@@ -11,7 +11,8 @@ class GardenList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 다크모드인지 확인
-    // var brightness = MediaQuery.of(context).platformBrightness;
+
+  
 
     // Provider에서 값 가져오기
     AsyncValue<List<Garden>> data = ref.watch(gardnenListProvider);
