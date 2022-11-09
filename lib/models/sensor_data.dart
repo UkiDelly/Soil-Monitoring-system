@@ -11,12 +11,11 @@ class SensorData {
 
   final List<List<Datum>> data;
 
-  factory SensorData.fromRawJson(String str) =>
-      SensorData.fromJson(json.decode(str));
+  factory SensorData.fromRawJson(String str) => SensorData.fromJson(json.decode(str));
 
   factory SensorData.fromJson(Map<String, dynamic> json) => SensorData(
-        data: List<List<Datum>>.from(json["data"]
-            .map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+        data: List<List<Datum>>.from(
+            json["data"].map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
       );
 }
 

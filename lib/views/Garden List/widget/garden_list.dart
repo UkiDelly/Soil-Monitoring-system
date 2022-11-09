@@ -15,7 +15,7 @@ class GardenList extends ConsumerWidget {
   
 
     // Provider에서 값 가져오기
-    AsyncValue<List<Garden>> data = ref.watch(gardnenListProvider);
+    AsyncValue<List<Garden>> data = ref.watch(gardenListProvider);
 
     return data.when(
 

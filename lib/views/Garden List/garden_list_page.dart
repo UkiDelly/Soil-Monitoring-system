@@ -93,7 +93,7 @@ class GardenListPage extends StatelessWidget {
                           .push(PageTransition(
                               child: const AddNewGarden(), type: PageTransitionType.rightToLeft))
                           .then(
-                            (value) => ref.refresh(gardnenListProvider),
+                            (value) => ref.refresh(gardenListProvider),
                           ),
                       icon: const Icon(
                         Icons.add,

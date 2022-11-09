@@ -9,7 +9,7 @@ class Cassave {
     required this.ph,
   });
 
-  Map<String, dynamic> getNitrogen() {
+  Map<String, String> getNitrogen() {
     double fertilizer;
 
     if (nitrogen <= 2) {
@@ -32,7 +32,7 @@ class Cassave {
     };
   }
 
-  Map<String, dynamic> getPhosphorous() {
+  Map<String, String> getPhosphorous() {
     double fertilizer;
 
     if (phosphorous <= 10) {
@@ -55,7 +55,7 @@ class Cassave {
     };
   }
 
-  Map<String, dynamic> getPotassium() {
+  Map<String, String> getPotassium() {
     double fertilizer;
     if (potassium <= 75) {
       fertilizer = (90 / 0.60) / 50;

@@ -8,7 +8,7 @@ import '../../common/base_api.dart';
 import '../../models/garden.dart';
 import '../../repository/garden_repository.dart';
 
-final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
+final gardenListProvider = FutureProvider<List<Garden>>((ref) async {
   final dio = ref.watch(dioProvider);
   // fetch data
   final url = "$baseUrl/${GardenRepo.gardenList}";

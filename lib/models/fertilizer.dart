@@ -27,7 +27,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
   List status = [];
   List fertilizer = [];
 
-  getRecommendation() {
+  getRecommendation() { 
     switch (widget.plant) {
       case Plant.rice:
         matrix = Rice(
@@ -110,8 +110,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
 
             // Nitrogen
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: isDarkMode ? const Color(0xff424242) : Colors.white,
               elevation: 5,
               child: SizedBox(
@@ -127,24 +126,20 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const Spacer(),
                     const Text(
                       "46-0-0(UREA)",
-                      style:
-                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
-                    Text("Status : ${status[0]}",
-                        style: const TextStyle(fontSize: 20)),
+                    Text("Status : ${status[0]}", style: const TextStyle(fontSize: 20)),
                     const SizedBox(
                       height: 10,
                     ),
                     const Text("Fertilizer", style: TextStyle(fontSize: 25)),
                     Text(
                       "wet: ${fertilizer[0]['wet']}",
-                      style: const TextStyle(
-                          fontSize: 20, color: Colors.orangeAccent),
+                      style: const TextStyle(fontSize: 20, color: Colors.orangeAccent),
                     ),
                     Text("dry: ${fertilizer[0]['dry']}",
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.lightBlueAccent)),
+                        style: const TextStyle(fontSize: 20, color: Colors.lightBlueAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -158,8 +153,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
 
             // Phosphorous
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: isDarkMode ? const Color(0xff424242) : Colors.white,
               elevation: 5,
               child: Container(
@@ -176,24 +170,20 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const Text(
                       "0-18-0 (SUPER PHOSPATE)",
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
-                    Text("Status : ${status[1]}",
-                        style: const TextStyle(fontSize: 20)),
+                    Text("Status : ${status[1]}", style: const TextStyle(fontSize: 20)),
                     const SizedBox(
                       height: 10,
                     ),
                     const Text("Fertilizer", style: TextStyle(fontSize: 25)),
                     Text(
                       "wet: ${fertilizer[1]['wet']}",
-                      style: const TextStyle(
-                          fontSize: 20, color: Colors.orangeAccent),
+                      style: const TextStyle(fontSize: 20, color: Colors.orangeAccent),
                     ),
                     Text("dry: ${fertilizer[1]['dry']}",
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.lightBlueAccent)),
+                        style: const TextStyle(fontSize: 20, color: Colors.lightBlueAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -207,8 +197,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
 
             // Potassium
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: isDarkMode ? const Color(0xff424242) : Colors.white,
               elevation: 5,
               child: SizedBox(
@@ -224,24 +213,20 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const Text(
                       "0-0-60 (MURIATE OF POTASH)",
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
-                    Text("Status : ${status[0]}",
-                        style: const TextStyle(fontSize: 20)),
+                    Text("Status : ${status[0]}", style: const TextStyle(fontSize: 20)),
                     const SizedBox(
                       height: 10,
                     ),
-                   const Text("Fertilizer", style: TextStyle(fontSize: 25)),
+                    const Text("Fertilizer", style: TextStyle(fontSize: 25)),
                     Text(
                       "wet: ${fertilizer[2]['wet']}",
-                      style: const TextStyle(
-                          fontSize: 20, color: Colors.orangeAccent),
+                      style: const TextStyle(fontSize: 20, color: Colors.orangeAccent),
                     ),
                     Text("dry: ${fertilizer[2]['dry']}",
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.lightBlueAccent)),
+                        style: const TextStyle(fontSize: 20, color: Colors.lightBlueAccent)),
                     const Spacer(
                       flex: 2,
                     )
@@ -252,8 +237,7 @@ class _FertilizerCardsState extends State<FertilizerCards> {
 
             // Ph
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: isDarkMode ? const Color(0xff424242) : Colors.white,
               elevation: 5,
               child: SizedBox(
@@ -269,13 +253,11 @@ class _FertilizerCardsState extends State<FertilizerCards> {
                     const Text(
                       "ORGANIC FERTILIZIER",
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
                     Text("Fertilizer: ${fertilizer[3]}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 25)),
+                        textAlign: TextAlign.center, style: const TextStyle(fontSize: 25)),
                     const Spacer(
                       flex: 2,
                     )
