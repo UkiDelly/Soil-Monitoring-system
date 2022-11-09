@@ -11,17 +11,11 @@ import 'package:thesis/views/Garden%20Detail/garden_page.dart';
 import '../../../models/garden.dart';
 
 class GardenCard extends StatefulWidget {
-  final String token;
   final Garden garden;
 
   int index;
 
-  GardenCard(
-      {Key? key,
-      required this.index,
-      required this.token,
-      required this.garden})
-      : super(key: key);
+  GardenCard({Key? key, required this.index, required this.garden}) : super(key: key);
 
   @override
   _GardenCardState createState() => _GardenCardState();
@@ -44,8 +38,7 @@ class _GardenCardState extends State<GardenCard> {
             //Color when the Container is closed
             closedColor: mainColor,
             //Shape of the close Container
-            closedShape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             // If close,
             closedBuilder: (_, openContainer) => _contents(),
 
@@ -54,9 +47,7 @@ class _GardenCardState extends State<GardenCard> {
               return Consumer(
                 builder: (ctx, ref, child) {
                   // save the garden id
-                  ref
-                      .watch(gardenIDProvider.notifier)
-                      .update((state) => widget.garden.id!);
+                  ref.watch(gardenIDProvider.notifier).update((state) => widget.garden.id!);
                   return GardenDetail(
                     garden: widget.garden,
                   );
@@ -72,9 +63,7 @@ class _GardenCardState extends State<GardenCard> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(widget.garden.name,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+              textAlign: TextAlign.center, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
         ),
       ),
     );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thesis/provider/garden.dart';
-import 'package:thesis/provider/token.dart';
 import 'package:thesis/views/Garden%20List/widget/garden_card.dart';
 
 import '../../../models/garden.dart';
+import '../../../provider/garden/garden.dart';
 
 class GardenList extends ConsumerWidget {
   const GardenList({Key? key}) : super(key: key);
@@ -12,7 +11,7 @@ class GardenList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 다크모드인지 확인
-    var brightness = MediaQuery.of(context).platformBrightness;
+    // var brightness = MediaQuery.of(context).platformBrightness;
 
     // Provider에서 값 가져오기
     AsyncValue<List<Garden>> data = ref.watch(gardnenListProvider);
@@ -31,9 +30,9 @@ class GardenList extends ConsumerWidget {
                 //
 
                 return GardenCard(
-                    index: index,
-                    garden: data[index],
-                    token: ref.watch(tokenProvider));
+                  index: index,
+                  garden: data[index],
+                );
               },
             ),
           );
@@ -47,7 +46,6 @@ class GardenList extends ConsumerWidget {
         },
 
         //? 로딩중일시
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()));
+        loading: () => const Center(child: CircularProgressIndicator.adaptive()));
   }
 }

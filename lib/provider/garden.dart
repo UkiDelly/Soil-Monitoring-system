@@ -2,34 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:thesis/common/base_api.dart';
 import 'package:thesis/provider/user/user_provider.dart';
+import 'package:thesis/repository/garden_repository.dart';
 
 import '../models/garden.dart';
 
 // garden id
 final gardenIDProvider = StateProvider<String>((ref) => "");
 
-// garden list
-final gardnenListProvider = FutureProvider<List<Garden>>((ref) async {
-  // fetch data
-  const url = "https://soil-analysis-usls.herokuapp.com/v1/garden/list";
-  var response = await http.get(Uri.parse(url));
 
-  List<Garden> gardens = [];
-
-  if (response.statusCode == 200) {
-    var item = jsonDecode(response.body)['data'];
-    for (var garden in item) {
-      if (garden['createdBy'] == ref.watch(userIdProvider)) {
-        gardens.add(Garden.fromJson(garden));
-
-        // gardens.add(Garden.fromJson(garden));
-      }
-    }
-  }
-
-  return gardens;
-});
 
 class GardenNotifier extends StateNotifier<List<Garden>> {
   GardenNotifier() : super([]);

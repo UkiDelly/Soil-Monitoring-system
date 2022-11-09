@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:thesis/provider/secure_storage/secure_storage.dart';
 
 import 'package:thesis/views/Garden%20List/widget/garden_list.dart';
+import 'package:thesis/views/Login/login.dart';
 import 'package:thesis/views/New%20Garden/new_garden_page.dart';
 
-import '../../provider/garden.dart';
-import '../../provider/token.dart';
-import '../../provider/user/user_provider.dart';
+import '../../provider/garden/garden.dart';
 
 // ignore: must_be_immutable
 class GardenListPage extends StatelessWidget {
@@ -23,13 +23,21 @@ class GardenListPage extends StatelessWidget {
           toolbarOpacity: 0,
           elevation: 0,
           actions: [
-            TextButton(
-              child: const Text(
-                "Log out",
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+            Consumer(
+              builder: (context, ref, child) {
+                final storage = ref.watch(secureStorageProvider);
+                return TextButton(
+                  child: const Text(
+                    "Log out",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () async {
+                    await storage.delete(key: 'token');
+                    Navigator.of(context).push(PageTransition(child: const LoginPage(), type: PageTransitionType.fade));
+                  },
+                  style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                );
+              },
             )
           ],
         ),
@@ -73,18 +81,17 @@ class GardenListPage extends StatelessWidget {
                   //* Create new garden button
                   Consumer(
                     builder: (context, ref, child) => IconButton(
-                        iconSize: 50,
-                        splashColor: Colors.transparent,
-
-                        //
-                        onPressed: () => Navigator.of(context)
-                            .push(PageTransition(
-                                child: AddNewGarden(userId: ref.watch(userIdProvider), token: ref.watch(tokenProvider)),
-                                type: PageTransitionType.rightToLeft))
-                            .then((value) => ref.refresh(gardnenListProvider)),
-                        icon: const Icon(
-                          Icons.add,
-                        )),
+                      iconSize: 50,
+                      splashColor: Colors.transparent,
+                      onPressed: () => Navigator.of(context)
+                          .push(PageTransition(child: const AddNewGarden(), type: PageTransitionType.rightToLeft))
+                          .then(
+                            (value) => ref.refresh(gardnenListProvider),
+                          ),
+                      icon: const Icon(
+                        Icons.add,
+                      ),
+                    ),
                   )
                 ],
               ),

@@ -1,12 +1,16 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:thesis/models/user/user_model.dart';
-import 'package:thesis/provider/garden.dart';
+import 'package:thesis/provider/dio/dio_provider.dart';
 import 'package:thesis/provider/secure_storage/secure_storage.dart';
 import 'package:thesis/provider/user/user_provider.dart';
 
-import 'package:thesis/views/Garden%20List/garden_list_page.dart';
+import '../../../common/base_api.dart';
+import '../../../repository/user_repository.dart';
+import '../../Garden List/garden_list_page.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -19,7 +23,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   //
-  TextEditingController usernameController = TextEditingController(), passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController(),
+      passwordController = TextEditingController();
   bool? successLogin;
   bool loading = false;
   //
@@ -48,11 +53,12 @@ class _LoginFormState extends State<LoginForm> {
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             labelText: "User name",
-                            border:
-                                const OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
-                            focusedBorder:
-                                const OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
-                            errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 3)),
+                            border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red, width: 3)),
                             errorText: successLogin == false ? "No user exist!" : null),
                         validator: (username) {
                           if (username == "") {
@@ -76,9 +82,12 @@ class _LoginFormState extends State<LoginForm> {
                       obscureText: true,
                       decoration: const InputDecoration(
                           labelText: "Enter Password",
-                          border: OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
-                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
-                          errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 3))),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff669D6B), width: 3)),
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 3))),
                       validator: (password) {
                         if (password == "") {
                           return "Please enter a password";
@@ -96,8 +105,8 @@ class _LoginFormState extends State<LoginForm> {
           ),
 
           //
-          Consumer(
-            builder: (context, ref, child) => SizedBox(
+          Consumer(builder: (context, ref, child) {
+            return SizedBox(
               width: 200,
               child: ElevatedButton(
                 child: Padding(
@@ -112,41 +121,42 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                 ),
                 onPressed: () async {
-                  // show it is loading
                   setState(() {
                     loading = true;
                   });
-
-                  UserModel user2 = UserModel(username: usernameController.text, password: passwordController.text);
-
-                  ref.watch(userLoginProvider(user2));
+                  final url = '$baseUrl/${UserRepo.login}';
+                  UserModel user = UserModel(
+                      username: usernameController.text, password: passwordController.text);
+                  final dio = ref.watch(dioProvider);
                   final storage = ref.watch(secureStorageProvider);
 
-                  bool tokenExist = await storage.containsKey(key: 'token');
+                  try {
+                    Response res = await dio
+                        .post(url, data: {'username': user.username, 'password': user.password});
 
-                  // if the text of the field is validate
-                  if (_formKey.currentState!.validate()) {
-                    if (tokenExist) {
-                      // save the user id and token into the provider
+                    final token = res.data['data']['authToken'];
+                    await storage.write(key: 'token', value: token);
 
-                      ref.refresh(gardnenListProvider);
+                    final decodedToken = Jwt.parseJwt(token);
+                    ref.read(userIdProvider.notifier).update((state) => decodedToken['_id']);
 
-                      //* Go to the garden list
-                      Navigator.pushReplacement(
-                          context, PageTransition(child: const GardenListPage(), type: PageTransitionType.fade));
-                    } else {
-                      () {
-                        setState(() {
-                          successLogin = false;
-                          loading = false;
-                        });
-                      };
-                    }
+                    Navigator.pushReplacement(
+                      context,
+                      PageTransition(child: const GardenListPage(), type: PageTransitionType.fade),
+                    );
+                  } catch (e) {
+                    successLogin = false;
+                    loading = false;
+                  } finally {
+                    setState(() {
+                      loading;
+                      successLogin;
+                    });
                   }
                 },
               ),
-            ),
-          ),
+            );
+          }),
           const SizedBox(
             height: 20,
           ),

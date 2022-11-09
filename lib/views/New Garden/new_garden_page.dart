@@ -10,9 +10,7 @@ import '../loading.dart';
 import 'plants.dart';
 
 class AddNewGarden extends ConsumerStatefulWidget {
-  String token, userId;
-  AddNewGarden({required this.userId, required this.token, Key? key})
-      : super(key: key);
+  const AddNewGarden({Key? key}) : super(key: key);
 
   @override
   ConsumerState<AddNewGarden> createState() => _AddNewGardenState();
@@ -47,10 +45,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
               style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
               child: const Text(
                 "Cancel",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
               ),
               onPressed: () => Navigator.of(context).pop()),
           leadingWidth: 90,
@@ -78,8 +73,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                     loadingDialog.show();
 
                     //
-                    Garden garden =
-                        Garden(name: name, notes: notes, plant: plant);
+                    Garden garden = Garden(name: name, notes: notes, plant: plant);
 
                     //
                     if (garden.plant == Plant.none) {
@@ -102,10 +96,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 },
                 child: const Text(
                   "Add",
-                  style: TextStyle(
-                      color: Color(0xfffefefe),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Color(0xfffefefe), fontSize: 20, fontWeight: FontWeight.bold),
                 ))
           ],
         ),
@@ -135,9 +126,7 @@ class _AddNewGardenState extends ConsumerState<AddNewGarden> {
                 // Choose plant
                 const Padding(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text("Plant",
-                      style:
-                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
+                  child: Text("Plant", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
                 ),
 
                 //
